@@ -15,7 +15,7 @@ public class AirPlain : VehicleBase, IAirPlain
 	public uint NumberOfEngines
 	{
 		get => _numberOfEngines;
-		set
+		private set
 		{
 			if (IsValidNumberOfEngines(value))
 				_numberOfEngines = value;

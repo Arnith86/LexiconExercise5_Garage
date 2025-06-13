@@ -5,13 +5,9 @@ namespace LexiconExcercise5.Garage.TestProject.Vehicles;
 
 public class AirPlaneTests
 {
-	// VALID license plate examples matching expected format (3 letters followed by 3 digits)
+	// VALID base class attributes
 	private const string _c_LicensePlate = "BBK159";
-	
-	// VALID vehicle colors
 	private const VehicleColor _c_Color = VehicleColor.Yellow;
-
-	// VALID numbers of wheels 
 	private const uint _c_Wheel = 6;
 	
 	// VALID engine values. Includes edge cases 0 and 10 and a couple of middle cases. 
