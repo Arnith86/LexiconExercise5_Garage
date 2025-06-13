@@ -1,4 +1,5 @@
 ﻿using LexiconExercise5_Garage.Vehicles;
+using LexiconExercise5_Garage.Vehicles.FlyingVehicles;
 
 namespace LexiconExcercise5.Garage.TestProject.Vehicles;
 
@@ -47,35 +48,5 @@ public class AirPlaneTests
 		Assert.Throws<ArgumentOutOfRangeException>(() => 
 			new AirPlain(_c_LicensePlate, _c_Color, _c_Wheel, _c_ExcessiveEngines11)
 		);
-	}
-
-
-	public class AirPlain : VehicleBase, IAirPlain
-	{
-		private uint _numberOfEngines = 0;
-
-		public uint NumberOfEngines
-		{
-			get => _numberOfEngines;
-			set
-			{
-				if (IsValidNumberOfEngines(value))
-					_numberOfEngines = value;
-			}
-		}
-
-		private bool IsValidNumberOfEngines(uint value)
-		{
-			if (value < 0 || value > 10)
-				throw new ArgumentOutOfRangeException(nameof(value), "Number of engines should be within the range of 0 - 10");
-			return true;
-		}
-
-		public AirPlain(string licensePlate, VehicleColor color, uint wheels, uint numberOfEngines)
-			: base(licensePlate, color, wheels)
-		{
-			NumberOfEngines = numberOfEngines;
-		}
-
 	}
 }
