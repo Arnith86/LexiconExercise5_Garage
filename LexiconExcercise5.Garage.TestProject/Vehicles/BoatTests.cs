@@ -53,7 +53,7 @@ public class BoatTests
 	}
 
 	/// <summary>
-	/// Used to clean up after finished test. 
+	/// Cleans up the mock registry after each test run.
 	/// </summary>
 	public void Dispose()
 	{
