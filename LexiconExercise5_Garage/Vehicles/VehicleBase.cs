@@ -1,5 +1,6 @@
+using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.RegularExpressions;
+//using System.Text.RegularExpressions;
 
 namespace LexiconExercise5_Garage.Vehicles;
 
@@ -9,9 +10,13 @@ namespace LexiconExercise5_Garage.Vehicles;
 /// </summary>
 public abstract class VehicleBase
 {
-	// Regular expression to validate license plate format (3 letters followed by 3 digits).
-	private readonly Regex _validLicensePlateStructure = new Regex(@"^[a-zA-Z]{3}[0-9]{3}$");
+	//// Todo: extract to a file or SQLite. 
+	//protected static HashSet<string> _registeredLicensePlates = new HashSet<string>();
+
+	//// Regular expression to validate license plate format (3 letters followed by 3 digits).
+	//private readonly Regex _validLicensePlateStructure = new Regex(@"^[a-zA-Z]{3}[0-9]{3}$");
 	private string _licensePlate;
+	private readonly Func<string, bool> _licensePlateValidator;
 	private VehicleColor _color;
 	private uint _wheels;
 
@@ -22,7 +27,7 @@ public abstract class VehicleBase
 	/// <exception cref="ArgumentNullException">Thrown if the value is null or whitespace.</exception>
 	/// <exception cref="ArgumentOutOfRangeException">Thrown if the value is not exactly six characters.</exception>
 	/// <exception cref="ArgumentException">Thrown if the value does not match the expected format.</exception>
-
+	/// <exception cref="InvalidOperationException">Thrown if the value already exist in registry.</exception>
 	public string LicensePlate
 	{
 		get => _licensePlate;
@@ -30,7 +35,7 @@ public abstract class VehicleBase
 		[MemberNotNull(nameof(_licensePlate))]
 		set
 		{
-			if (IsValidLicensePlate(value)) 
+			if (_licensePlateValidator(value)) 
 				_licensePlate = value;
 		}
 	}
@@ -58,31 +63,44 @@ public abstract class VehicleBase
 	/// <summary>
 	/// Initializes a new instance of the <see cref="VehicleBase"/> class with specified license plate, color, and wheels.
 	/// </summary>
+	/// <param name="licensePlateValidator">Validates license plates entries</param>
 	/// <param name="licensePlate">The vehicle's license plate.</param>
 	/// <param name="color">The color of the vehicle.</param>
 	/// <param name="wheels">The number of wheels the vehicle has.</param>
 	/// <exception cref="ArgumentNullException">Thrown if the license plate is null or whitespace.</exception>
 	/// <exception cref="ArgumentOutOfRangeException">Thrown if the license plate has incorrect length or if wheels are out of range.</exception>
 	/// <exception cref="ArgumentException">Thrown if the license plate has an invalid structure.</exception>
-	public VehicleBase(string licensePlate, VehicleColor color, uint wheels)
+	public VehicleBase(
+		Func<string, bool> licensePlateValidator, 
+		string licensePlate, 
+		VehicleColor color, 
+		uint wheels)
 	{
+		_licensePlateValidator = licensePlateValidator;
 		LicensePlate = licensePlate;
 		_color = color;
 		Wheels = wheels;
 	}
 
-	// ToDo: extract to validation class
-	private bool IsValidLicensePlate(string licensePlate)
-	{
-		if (string.IsNullOrWhiteSpace(licensePlate))
-			throw new ArgumentNullException(nameof(licensePlate), "A license plate value must be provided.");
-		if (licensePlate.Length != 6)
-			throw new ArgumentOutOfRangeException(nameof(licensePlate), "A license plate value must contain exactly six characters.");
-		if (!_validLicensePlateStructure.IsMatch(licensePlate))
-			throw new ArgumentException(nameof(licensePlate), "A license plate value must only contain letters and digits in this format aaa123 or AAA123.");
+	//// ToDo: extract to validation class
+	//private bool IsValidLicensePlate(string licensePlate)
+	//{
+	//	if (string.IsNullOrWhiteSpace(licensePlate))
+	//		throw new ArgumentNullException(nameof(licensePlate), "A license plate value must be provided.");
+	//	if (licensePlate.Length != 6)
+	//		throw new ArgumentOutOfRangeException(nameof(licensePlate), "A license plate value must contain exactly six characters.");
+	//	if (!_validLicensePlateStructure.IsMatch(licensePlate))
+	//		throw new ArgumentException(nameof(licensePlate), "A license plate value must only contain letters and digits in this format aaa123 or AAA123.");
+	//	if (IsUniqueLicensePlate(licensePlate) is false)
+	//		throw new InvalidOperationException("License plate already exists.");
+	//	return true;
+	//}
 
-		return true;
-	}
+	//// ToDo: extract to validation class
+	//// ToDo: use contains instead. more efficient 
+	//private bool IsUniqueLicensePlate(string licensePlate) => 
+	//	!_registeredLicensePlates.Any(l => l == licensePlate);
+	
 
 	// ToDo: extract to validation class
 	private bool IsWheelsValid(uint value)

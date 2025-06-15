@@ -1,13 +1,18 @@
+using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 using LexiconExercise5_Garage.Vehicles;
 
 namespace LexiconExcercise5.Garage.TestProject.Vehicles;
 
-public class VehicleBaseClassTest
+[Collection("NonParallelGroup")]
+public class VehicleBaseClassTest : IDisposable
 {
-	// VALID license plate examples matching expected format (3 letters followed by 3 digits)
+	private MockLicensePlateRegistry _c_MockLicensePlateRegistry = new MockLicensePlateRegistry();
+
+	// VALID unique license plate examples matching expected format (3 letters followed by 3 digits)
 	private const string _c_LicensePlateCaps = "BBK159";
 	private const string _c_LicensePlateLow = "azm129";
 	private const string _c_LicensePlateMix = "uRE832";
+	private const string _c_LicensePlateUnique = "ZZZ999";
 
 	// INVALID license plate examples to cover various failure cases:
 	// - Wrong order (digits before letters)
@@ -20,6 +25,11 @@ public class VehicleBaseClassTest
 	private const string _c_LicensePlateMixedPlacements = "u3E3b2";
 	private const string _c_LicensePlateIsNull = null;
 	private const string _c_LicensePlateIsEmpty = "";
+
+
+	// INVALID duplicate license plate
+	private const string _c_LicensePlateDuplicate = "AAA111";
+
 
 	// VALID vehicle colors for testing property assignments
 	private const VehicleColor _c_GREEN = VehicleColor.Green;
@@ -53,11 +63,67 @@ public class VehicleBaseClassTest
 	public void LicensePlate_SetViaConstructor_ValidValues_ShouldPass(string licensePlate)
 	{
 		// Arrange & Act 
-		var testVehicle = new TestVehicle(licensePlate, _c_GREEN, _c_4Wheel);
+		var testVehicle = new MockVehicle(
+			_c_MockLicensePlateRegistry.IsValidLicensePlate,
+			licensePlate,
+			_c_GREEN,
+			_c_4Wheel
+		);
+
 		// Assert
 		Assert.Equal(licensePlate, testVehicle.LicensePlate);
+
+		Dispose();
 	}
 
+	/// <summary>
+	/// Tests that valid unique license plate is accepted and correctly assigned.
+	/// </summary>
+	[Fact]
+	public void LicensePlate_SetViaConstructor_Unique_ValidValue_ShouldPass()
+	{
+		// Arrange
+		string expectedLicensePlate = _c_LicensePlateUnique;
+
+		// "uRE832", "azm129", "BBK159", added to registry 
+		_c_MockLicensePlateRegistry.FillRegistry();
+
+		// Act 
+		var testVehicle = new MockVehicle(
+			_c_MockLicensePlateRegistry.IsValidLicensePlate,
+			expectedLicensePlate,
+			_c_GREEN,
+			_c_4Wheel
+		);
+
+		// Assert
+		Assert.Equal(expectedLicensePlate, testVehicle.LicensePlate);
+
+		Dispose();
+	}
+
+	/// <summary>
+	/// Test that constructor assignment of licensePlate with a value that already exist in the registry. 
+	/// </summary>
+	[Fact]
+	public void LicensePlate_SetViaConstructor_NotUnique_InValidValue_ShouldThrowInvalidOperationException()
+	{
+		// Arrange
+		// "uRE832", "azm129", "BBK159", added to registry. 
+		_c_MockLicensePlateRegistry.FillRegistry();
+
+		// Act & Assert
+		Assert.Throws<InvalidOperationException>(() =>
+			new MockVehicle(
+				_c_MockLicensePlateRegistry.IsValidLicensePlate,
+				_c_LicensePlateDuplicate,
+				_c_GREEN,
+				_c_4Wheel
+			)
+		);
+
+		Dispose();
+	}
 
 	/// <summary>
 	/// Tests that null or empty license plates throw ArgumentNullException.
@@ -69,7 +135,15 @@ public class VehicleBaseClassTest
 	{
 		// Act & Assert
 		Assert.Throws<ArgumentNullException>(() =>
-			new TestVehicle(licensePlate, _c_GREEN, _c_4Wheel));
+			new MockVehicle(
+				_c_MockLicensePlateRegistry.IsValidLicensePlate,
+				licensePlate,
+				_c_GREEN,
+				_c_4Wheel
+			)
+		);
+
+		Dispose();
 	}
 
 	/// <summary>
@@ -82,7 +156,15 @@ public class VehicleBaseClassTest
 	{
 		// Act & Assert
 		Assert.Throws<ArgumentOutOfRangeException>(() =>
-			new TestVehicle(licensePlate, _c_GREEN, _c_4Wheel));
+			new MockVehicle(
+				_c_MockLicensePlateRegistry.IsValidLicensePlate,
+				licensePlate,
+				_c_GREEN,
+				_c_4Wheel
+			)
+		);
+
+		Dispose();
 	}
 
 	/// <summary>
@@ -95,7 +177,15 @@ public class VehicleBaseClassTest
 	{
 		// Act & Assert
 		Assert.Throws<ArgumentException>(() =>
-			new TestVehicle(licensePlate, _c_GREEN, _c_4Wheel));
+			new MockVehicle(
+				_c_MockLicensePlateRegistry.IsValidLicensePlate,
+				licensePlate,
+				_c_GREEN,
+				_c_4Wheel
+			)
+		);
+
+		Dispose();
 	}
 
 
@@ -110,9 +200,17 @@ public class VehicleBaseClassTest
 	public void Color_SetViaConstructor_ValidValues_ShouldPass(VehicleColor color)
 	{
 		// Arrange & Act 
-		var testVehicle = new TestVehicle(_c_LicensePlateCaps, color, _c_4Wheel);
+		var testVehicle = new MockVehicle(
+			_c_MockLicensePlateRegistry.IsValidLicensePlate,
+			_c_LicensePlateCaps,
+			color,
+			_c_4Wheel
+		);
+
 		// Assert
 		Assert.Equal(color, testVehicle.Color);
+
+		Dispose();
 	}
 
 	/// <summary>
@@ -129,9 +227,17 @@ public class VehicleBaseClassTest
 	public void Wheels_SetViaConstructor_ValidValues_ShouldPass(uint wheels)
 	{
 		// Arrange & Act 
-		var testVehicle = new TestVehicle(_c_LicensePlateCaps, _c_RED, wheels);
+		var testVehicle = new MockVehicle(
+			_c_MockLicensePlateRegistry.IsValidLicensePlate,
+			_c_LicensePlateCaps,
+			_c_RED,
+			wheels
+		);
+
 		// Assert
 		Assert.Equal(wheels, testVehicle.Wheels);
+
+		Dispose();
 	}
 
 	/// <summary>
@@ -143,15 +249,24 @@ public class VehicleBaseClassTest
 	{
 		// Act & Assert
 		Assert.Throws<ArgumentOutOfRangeException>(() =>
-			new TestVehicle(_c_LicensePlateCaps, _c_RED, wheels));
+			new MockVehicle(
+				_c_MockLicensePlateRegistry.IsValidLicensePlate,
+				_c_LicensePlateCaps,
+				_c_RED,
+				wheels
+			)
+		);
+
+		Dispose();
 	}
 
-	// Allows testing of the abstract class VehicleBase 
-	public class TestVehicle : VehicleBase
+	/// <summary>
+	/// Used to clean up after finished test. 
+	/// </summary>
+	public void Dispose()
 	{
-		public TestVehicle(string licensePlate, VehicleColor color, uint wheels)
-			: base(licensePlate, color, wheels)
-		{
-		}
+		_c_MockLicensePlateRegistry.ClearRegistry();
+		_c_MockLicensePlateRegistry.IsValidLicensePlate("AAA111");
 	}
+
 }
