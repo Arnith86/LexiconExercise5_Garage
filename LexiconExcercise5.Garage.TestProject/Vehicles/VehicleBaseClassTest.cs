@@ -2,9 +2,10 @@ using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 using LexiconExercise5_Garage.Vehicles;
 
 namespace LexiconExcercise5.Garage.TestProject.Vehicles;
-
-// Will not run in parallel with any other class in the same collection
-[Collection("NonParallelGroup")]
+/// <summary>
+/// Contains unit tests for the <see cref="VehicleBase"/> class,
+/// </summary>
+[Collection("NonParallelGroup")] // Will not run in parallel with any other class in the same collection
 public class VehicleBaseClassTest : IDisposable
 {
 	private MockLicensePlateRegistry _c_MockLicensePlateRegistry = new MockLicensePlateRegistry();
@@ -269,5 +270,4 @@ public class VehicleBaseClassTest : IDisposable
 		_c_MockLicensePlateRegistry.ClearRegistry();
 		_c_MockLicensePlateRegistry.IsValidLicensePlate("AAA111");
 	}
-
 }

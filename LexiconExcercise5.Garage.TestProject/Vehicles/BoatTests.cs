@@ -1,13 +1,19 @@
-﻿using LexiconExercise5_Garage.Vehicles;
+﻿using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
+using LexiconExercise5_Garage.Vehicles;
 using LexiconExercise5_Garage.Vehicles.Boat;
 
+
 namespace LexiconExcercise5.Garage.TestProject.Vehicles;
+
 /// <summary>
 /// Contains unit tests for the <see cref="Boat"/> class,
 /// specifically verifying the correct assignment of the <c>FuelType</c> property.
 /// </summary>
+[Collection("NonParallelGroup")] // Will not run in parallel with any other class in the same collection
 public class BoatTests
 {
+	private MockLicensePlateRegistry _c_MockLicensePlateRegistry = new MockLicensePlateRegistry();
+
 	// VALID base class attributes
 	private const string _c_LicensePlate = "zBY283";
 	private const VehicleColor _c_Color = VehicleColor.Yellow;
@@ -32,8 +38,26 @@ public class BoatTests
 	public void FuelType_SetViaConstructor_ValidValues_ShouldPass(FuelType fuel)
 	{
 		// Arrange & Act 
-		IBoat boat = new Boat(_c_LicensePlate, _c_Color, _c_Wheel, fuel);
+		IBoat boat = new Boat(
+			_c_MockLicensePlateRegistry.IsValidLicensePlate,
+			_c_LicensePlate, 
+			_c_Color, 
+			_c_Wheel, 
+			fuel
+		);
+
 		// Assert
 		Assert.Equal(fuel, boat.FuelType);
+
+		Dispose();
+	}
+
+	/// <summary>
+	/// Used to clean up after finished test. 
+	/// </summary>
+	public void Dispose()
+	{
+		_c_MockLicensePlateRegistry.ClearRegistry();
+		_c_MockLicensePlateRegistry.IsValidLicensePlate("AAA111");
 	}
 }
