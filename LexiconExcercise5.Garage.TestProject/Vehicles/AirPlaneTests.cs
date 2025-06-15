@@ -1,10 +1,15 @@
-﻿using LexiconExercise5_Garage.Vehicles;
+﻿using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
+using LexiconExercise5_Garage.Vehicles;
 using LexiconExercise5_Garage.Vehicles.FlyingVehicles;
 
 namespace LexiconExcercise5.Garage.TestProject.Vehicles;
 
-public class AirPlaneTests
+// Will not run in parallel with any other class in the same collection
+[Collection("NonParallelGroup")]
+public class AirPlaneTests : IDisposable
 {
+	private MockLicensePlateRegistry _c_MockLicensePlateRegistry = new MockLicensePlateRegistry();
+
 	// VALID base class attributes
 	private const string _c_LicensePlate = "BBK159";
 	private const VehicleColor _c_Color = VehicleColor.Yellow;
@@ -32,17 +37,44 @@ public class AirPlaneTests
 	public void NumberOfEngines_SetViaConstructor_ValidValues_ShouldPass(uint engines)
 	{
 		//Arrange & Act
-		IAirPlain airPlain = new AirPlain(_c_LicensePlate, _c_Color, _c_Wheel,  engines);
+		IAirPlain airPlain = new AirPlain(
+			_c_MockLicensePlateRegistry.IsValidLicensePlate,
+			_c_LicensePlate, 
+			_c_Color, 
+			_c_Wheel, 
+			engines
+		);
+		
 		//Assert
 		Assert.Equal(engines, airPlain.NumberOfEngines);
+
+		Dispose();
 	}
 
 	[Fact]
 	public void NumberOfEngines_SetViaConstructor_InValidValues_ShouldThrowOutOfRangeException()
 	{
 		// Act & Assert
-		Assert.Throws<ArgumentOutOfRangeException>(() => 
-			new AirPlain(_c_LicensePlate, _c_Color, _c_Wheel, _c_ExcessiveEngines11)
+		Assert.Throws<ArgumentOutOfRangeException>(() =>
+			new AirPlain(
+				_c_MockLicensePlateRegistry.IsValidLicensePlate,
+				_c_LicensePlate,
+				_c_Color,
+				_c_Wheel,
+				_c_ExcessiveEngines11
+			)
 		);
+
+		Dispose();
 	}
+
+	/// <summary>
+	/// Used to clean up after finished test. 
+	/// </summary>
+	public void Dispose()
+	{
+		_c_MockLicensePlateRegistry.ClearRegistry();
+		_c_MockLicensePlateRegistry.IsValidLicensePlate("AAA111");
+	}
+
 }

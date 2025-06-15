@@ -33,12 +33,18 @@ public class AirPlain : VehicleBase, IAirPlain
 	/// Initializes a new instance of the <see cref="AirPlain"/> class 
 	/// with the specified license plate, color, number of wheels, and number of engines.
 	/// </summary>
+	/// <param name="licensePlateValidator">Validates license plates entries</param>
 	/// <param name="licensePlate">The license plate of the airplane.</param>
 	/// <param name="color">The color of the airplane.</param>
 	/// <param name="wheels">The number of wheels on the airplane.</param>
 	/// <param name="numberOfEngines">The number of engines on the airplane (0–10).</param>
-	public AirPlain(string licensePlate, VehicleColor color, uint wheels, uint numberOfEngines)
-		: base(licensePlate, color, wheels)
+	public AirPlain(
+		Func<string, bool> licensePlateValidator, 
+		string licensePlate, 
+		VehicleColor color, 
+		uint wheels, 
+		uint numberOfEngines)
+		: base(licensePlateValidator, licensePlate, color, numberOfEngines)
 	{
 		NumberOfEngines = numberOfEngines;
 	}

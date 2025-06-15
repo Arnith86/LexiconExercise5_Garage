@@ -3,6 +3,7 @@ using LexiconExercise5_Garage.Vehicles;
 
 namespace LexiconExcercise5.Garage.TestProject.Vehicles;
 
+// Will not run in parallel with any other class in the same collection
 [Collection("NonParallelGroup")]
 public class VehicleBaseClassTest : IDisposable
 {
