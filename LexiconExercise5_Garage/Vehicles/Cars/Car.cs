@@ -25,12 +25,18 @@ public class Car : VehicleBase, ICar
 	/// Initializes a new instance of the <see cref="Car"/> class
 	/// with the specified license plate, color, number of wheels, and sidecar status.
 	/// </summary>
+	/// <param name="licensePlateValidator">Validates license plates entries</param>
 	/// <param name="licensePlate">The license plate of the <see cref="Car"/>.</param>
 	/// <param name="color">The color of the <see cref="Car"/>.</param>
 	/// <param name="wheels">The number of wheels the <see cref="Car"/> has.</param>
 	/// <param name="nrOfSeats">Indicates how many seats the <see cref="Car"/> has.</param>
-	public Car(string licensePlate, VehicleColor color, uint wheels, uint nrOfSeats)
-		: base(licensePlate, color, wheels)
+	public Car(
+		Func<string, bool> licensePlateValidator, 
+		string licensePlate, 
+		VehicleColor color, 
+		uint wheels, 
+		uint nrOfSeats)
+		: base(licensePlateValidator, licensePlate, color, wheels)
 	{
 		NrOfSeats = nrOfSeats;
 	}
