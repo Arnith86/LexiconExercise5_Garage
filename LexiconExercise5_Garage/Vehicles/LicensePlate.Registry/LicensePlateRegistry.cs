@@ -2,6 +2,8 @@
 
 namespace LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 
+// Todo: create test for this class as well, even though all aspects are tested with the vehicle classes?
+
 /// <summary>
 /// Handles validation and registration of vehicle license plates,
 /// ensuring format correctness and uniqueness across the application.
