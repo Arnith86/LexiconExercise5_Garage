@@ -1,10 +1,18 @@
-﻿using LexiconExercise5_Garage.Vehicles;
+﻿using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
+using LexiconExercise5_Garage.Vehicles;
 using LexiconExercise5_Garage.Vehicles.Cars;
 
 namespace LexiconExcercise5.Garage.TestProject.Vehicles;
 
+/// <summary>
+/// Contains unit tests for the <see cref="Car"/> class,
+/// specifically verifying the correct behavior of the <see cref="Car.NrOfSeats"/> property.
+/// </summary>
+[Collection("NonParallelGroup")] // Ensures these tests do not run in parallel with other test classes in the same collection.
 public class CarTests
 {
+	private MockLicensePlateRegistry _c_MockLicensePlateRegistry = new MockLicensePlateRegistry();
+
 	// VALID base class attributes
 	private const string _c_LicensePlate = "BBK159";
 	private const VehicleColor _c_Color = VehicleColor.Blue;
@@ -32,9 +40,18 @@ public class CarTests
 	public void NrOfSeats_SetViaConstructor_ValidValues_ShouldPass(uint nrOfSeats)
 	{
 		//Assign & Act
-		ICar car = new Car(_c_LicensePlate, _c_Color, _c_Wheel, nrOfSeats);
+		ICar car = new Car(
+			_c_MockLicensePlateRegistry.IsValidLicensePlate,
+			_c_LicensePlate,
+			_c_Color,
+			_c_Wheel,
+			nrOfSeats
+		);
+
 		//Assert
 		Assert.Equal(nrOfSeats, car.NrOfSeats);
+
+		Dispose();
 	}
 
 	/// <summary>
@@ -45,7 +62,25 @@ public class CarTests
 	public void NrOfSeats_SetViaConstructor_InValidValue_ShouldThrowArgumentOutOfRangeException()
 	{
 		// Act & Assert
-		Assert.Throws<ArgumentOutOfRangeException>(() => 
-			new Car(_c_LicensePlate, _c_Color, _c_Wheel, _c_OutsideOfRange8NrOfSeats));
+		Assert.Throws<ArgumentOutOfRangeException>(() =>
+			new Car(
+				_c_MockLicensePlateRegistry.IsValidLicensePlate,
+				_c_LicensePlate, 
+				_c_Color, 
+				_c_Wheel, 
+				_c_OutsideOfRange8NrOfSeats
+			)
+		);
+
+		Dispose();
+	}
+
+	/// <summary>
+	/// Cleans up the mock registry after each test run.
+	/// </summary>
+	public void Dispose()
+	{
+		_c_MockLicensePlateRegistry.ClearRegistry();
+		_c_MockLicensePlateRegistry.IsValidLicensePlate("AAA111");
 	}
 }

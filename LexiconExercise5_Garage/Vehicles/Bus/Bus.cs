@@ -5,8 +5,16 @@ public class Bus : VehicleBase, IBus
 {
 	private uint _nrOfDoors = 0;
 
-	public Bus(string licensePlate, VehicleColor color, uint wheels, uint nrOfDoors)
-		: base(licensePlate, color, wheels)
+	/// <exception cref="ArgumentNullException">Thrown if the license plate is null or whitespace.</exception>
+	/// <exception cref="ArgumentOutOfRangeException">Thrown if the license plate has incorrect length or if wheels are out of range.</exception>
+	/// <exception cref="ArgumentException">Thrown if the license plate has an invalid structure.</exception>
+	public Bus(
+		Func<string, bool> licensePlateValidator, 
+		string licensePlate, 
+		VehicleColor color, 
+		uint wheels, 
+		uint nrOfDoors)
+		: base (licensePlateValidator, licensePlate, color, wheels)
 	{
 		NrOfDoors = nrOfDoors;
 	}
