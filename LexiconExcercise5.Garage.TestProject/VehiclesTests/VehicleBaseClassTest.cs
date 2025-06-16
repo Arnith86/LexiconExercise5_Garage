@@ -2,6 +2,7 @@ using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 using LexiconExercise5_Garage.Vehicles;
 
 namespace LexiconExcercise5.Garage.TestProject.Vehicles;
+
 /// <summary>
 /// Contains unit tests for the <see cref="VehicleBase"/> class,
 /// </summary>

@@ -16,16 +16,16 @@ public class MotorcycleTests
 
 	// VALID license plate examples matching expected format (3 letters followed by 3 digits)
 	private const string _c_LicensePlate = "BBK159";
-	
+
 	// VALID vehicle colors
 	private const VehicleColor _c_Color = VehicleColor.Yellow;
 
 	// VALID numbers of wheels 
 	private const uint _c_Wheel = 6;
-	
+
 	// VALID hasSideCar values
-	private const bool  _c_True = true;
-	private const bool  _c_False = false;
+	private const bool _c_True = true;
+	private const bool _c_False = false;
 
 	/// <summary>
 	/// Tests that the NumberOfEngines property accepts valid engine counts (including edge cases) 
@@ -40,8 +40,8 @@ public class MotorcycleTests
 		IMotorcycle motorcycle = new Motorcycle(
 			_c_MockLicensePlateRegistry.IsValidLicensePlate,
 			_c_LicensePlate,
-			_c_Color, 
-			_c_Wheel, 
+			_c_Color,
+			_c_Wheel,
 			hasSideCar
 		);
 

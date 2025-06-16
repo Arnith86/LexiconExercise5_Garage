@@ -1,4 +1,5 @@
-﻿namespace LexiconExercise5_Garage.Vehicles.Motorcycle;
+﻿
+namespace LexiconExercise5_Garage.Vehicles.Motorcycle;
 
 /// <summary>
 /// Represents a motorcycle vehicle.
@@ -19,10 +20,10 @@ public class Motorcycle : VehicleBase, IMotorcycle
 	/// <param name="wheels">The number of wheels the motorcycle has.</param>
 	/// <param name="hasSidecar">Indicates whether the motorcycle has a sidecar.</param>
 	public Motorcycle(
-		Func<string, bool> licensePlateValidator, 
-		string licensePlate, 
-		VehicleColor color, 
-		uint wheels, 
+		Func<string, bool> licensePlateValidator,
+		string licensePlate,
+		VehicleColor color,
+		uint wheels,
 		bool hasSidecar)
 		: base(licensePlateValidator, licensePlate, color, wheels)
 	{

@@ -17,7 +17,7 @@ public class CarTests
 	private const string _c_LicensePlate = "BBK159";
 	private const VehicleColor _c_Color = VehicleColor.Blue;
 	private const uint _c_Wheel = 4;
-	
+
 	// VALID
 	private const uint _c_EdgeCaseMin0NrOfSeats = 0;
 	private const uint _c_EdgeCaseMax7NrOfSeats = 7;
@@ -65,9 +65,9 @@ public class CarTests
 		Assert.Throws<ArgumentOutOfRangeException>(() =>
 			new Car(
 				_c_MockLicensePlateRegistry.IsValidLicensePlate,
-				_c_LicensePlate, 
-				_c_Color, 
-				_c_Wheel, 
+				_c_LicensePlate,
+				_c_Color,
+				_c_Wheel,
 				_c_OutsideOfRange8NrOfSeats
 			)
 		);
