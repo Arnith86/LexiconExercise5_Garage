@@ -43,18 +43,6 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 		}
 	}
 
-
-	/// <summary>
-	/// Resizes the internal array to the new capacity while preserving existing vehicles.
-	/// </summary>
-	private void ResizeVehicleArray(int newCapacity)
-	{
-		T[] tempArray = new T[newCapacity];
-		Array.Copy(_vehicles, tempArray, _vehicles.Length);
-		_vehicles = tempArray;
-		_capacity = newCapacity;
-	}
-
 	/// <summary>
 	/// Gets the maximum number of vehicles that can be added to the garage.
 	/// </summary>
@@ -88,6 +76,16 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 		GarageVehicleLimit = size;
 	}
 
+	/// <summary>
+	/// Resizes the internal array to the new capacity while preserving existing vehicles.
+	/// </summary>
+	private void ResizeVehicleArray(int newCapacity)
+	{
+		T[] tempArray = new T[newCapacity];
+		Array.Copy(_vehicles, tempArray, _vehicles.Length);
+		_vehicles = tempArray;
+		_capacity = newCapacity;
+	}
 
 	private bool IsCapacityToSmall(int newCapacity)
 	{
@@ -175,7 +173,7 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 	/// </summary>
 	/// <param name="licensePlate">String representing the license plate of a <see cref="VehicleBase"/>.</param>
 	/// <returns>A string representation of the vehicle if found, otherwise null.</returns>
-	public string? ShowVehicle(string licensePlate)
+	public string? GetVehicleInformation(string licensePlate)
 	{
 		// ToDo: validate inputted licensePlate value
 
@@ -188,6 +186,19 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 					comparisonType: StringComparison.OrdinalIgnoreCase // Ignores letter casing.
 				)
 			)?.ToString();
+	}
+
+	/// <summary>
+	/// Retrieves the string representation of all vehicles in the garage.
+	/// </summary>
+	/// <returns>
+	/// An <see cref="IEnumerable{string}"/> with string representations of all vehicles in garage.
+	/// If empty then no vehicles were found.
+	/// </returns>
+	public IEnumerable<string> GetAllVehiclesInformation()
+	{
+		return _vehicles.Where(vehicle => vehicle != null)
+			.Select(vehicle => vehicle.ToString());
 	}
 
 	/// <summary>

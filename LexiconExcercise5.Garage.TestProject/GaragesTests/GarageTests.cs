@@ -115,7 +115,7 @@ public class GarageTests
 	}
 
 	[Fact]
-	public void ShowVehicle_IfHasSpecifiedVehicle_ValidValue_ShouldPass_Expected_String()
+	public void GetVehicleInformation_IfHasSpecifiedVehicle_ValidValue_ShouldPass_Expected_String()
 	{
 		//Arrange
 		Garage<VehicleBase> garage = new(_c_ArraySizeEdgeCaseHighestValue);
@@ -128,13 +128,13 @@ public class GarageTests
 		//Act & Assert
 		foreach (var vehicle in oneVehiclesOfEveryKind)
 		{
-			Assert.Equal(garage.ShowVehicle(vehicle.LicensePlate), vehicle.ToString());
+			Assert.Equal(garage.GetVehicleInformation(vehicle.LicensePlate), vehicle.ToString());
 		}
 	}
 
 
 	[Fact]
-	public void ShowVehicle_IfSpecifiedVehicleNotInGarage_ValidValue_ShouldPass_Expected_null()
+	public void GetVehicleInformation_IfSpecifiedVehicleNotInGarage_ValidValue_ShouldPass_Expected_null()
 	{
 		//Arrange
 		Garage<VehicleBase> garage = new(_c_ArraySizeEdgeCaseHighestValue);
@@ -145,9 +145,41 @@ public class GarageTests
 		}
 
 		//Act & Assert
-		Assert.Null(garage.ShowVehicle("zzz999"));
+		Assert.Null(garage.GetVehicleInformation("zzz999"));
 	}
 
+	[Fact]
+	public void GetAllVehiclesInformation_VerifiesAllInformationIsRetrieved_ShouldPass_Returns_StringCollection()
+	{
+		//Arrange
+		Garage<VehicleBase> garage = new(_c_ArraySizeEdgeCaseHighestValue);
+
+		foreach (var vehicle in oneVehiclesOfEveryKind)
+		{
+			garage.AddVehicle(vehicle);
+		}
+
+		List<string> toStringCollection = garage.GetAllVehiclesInformation()!.ToList();
+
+		int index = 0;
+
+		//Act & Assert
+		foreach (var vehicle in oneVehiclesOfEveryKind)
+		{
+			Assert.Contains(vehicle.ToString(), toStringCollection[index++] );
+		}	
+	}
+
+	[Fact]
+	public void GetAllVehiclesInformation_GarageEmpty_ValidValue_ShouldPass_Returns_EmptyStringCollection()
+	{
+		//Arrange
+		Garage<VehicleBase> garage = new(_c_ArraySizeEdgeCaseHighestValue);
+		//Act
+		List<string> toStringCollection = garage.GetAllVehiclesInformation()!.ToList();
+		//Assert
+		Assert.True(toStringCollection.Count == 0);	
+	}
 
 	[Fact]
 	public void AddVehicle_EmptyGarage_ShouldPass_Expected_UsedSpaces2_Capacity4()
@@ -252,7 +284,7 @@ public class GarageTests
 	}
 
 	[Fact]
-	public void AddVehicle_ChecksIfVehicleIsAddedToEmptySpaceAfterRemove_ValidValues_ShouldPass()
+ 	public void AddVehicle_ChecksIfVehicleIsAddedToEmptySpaceAfterRemove_ValidValues_ShouldPass()
 	{
 		//Arrange
 		int expectedUsedSpaces = 4;
@@ -260,10 +292,8 @@ public class GarageTests
 
 		// Adds 4 vehicles with valid values (and unique license plates)
 		for (int i = 0; i < 4; i++)
-		{
 			garage.AddVehicle(oneVehiclesOfEveryKind[i]);
-		}
-
+		
 		// Act
 		// Removes vehicle from _vehicle[1].
 		garage.RemoveVehicle(oneVehiclesOfEveryKind[1].LicensePlate);
@@ -298,21 +328,7 @@ public class GarageTests
 		Assert.Equal(expectedUsedSpaces, garage.UsedSpaces);
 
 		Assert.Null(
-			garage.ShowVehicle(oneVehiclesOfEveryKind[1].LicensePlate)
+			garage.GetVehicleInformation(oneVehiclesOfEveryKind[1].LicensePlate)
 		);
 	}
-
-
-
-
-
-
-	///// <summary>
-	///// Clean-up method called after each test. Currently empty.
-	///// Use this to release shared resources if needed.
-	///// </summary>
-	//public void Dispose()
-	//{
-
-	//}
 }
