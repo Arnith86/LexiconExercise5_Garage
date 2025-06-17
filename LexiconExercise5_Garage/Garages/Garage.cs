@@ -1,5 +1,11 @@
 ﻿using LexiconExercise5_Garage.Vehicles;
+using LexiconExercise5_Garage.Vehicles.Boat;
+using LexiconExercise5_Garage.Vehicles.Bus;
+using LexiconExercise5_Garage.Vehicles.Cars;
+using LexiconExercise5_Garage.Vehicles.FlyingVehicles;
+using LexiconExercise5_Garage.Vehicles.Motorcycle;
 using System.Collections;
+using System.ComponentModel;
 using System.Threading.Channels;
 
 namespace LexiconExercise5_Garage.Garages;
@@ -138,13 +144,13 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 	/// </summary>
 	/// <param name="vehicle">The vehicle to add.</param>
 	/// <returns>True if the vehicle was successfully added.</returns>
-	/// <exception cref="IndexOutOfRangeException">Thrown if garage is full.</exception>
+	/// <exception cref="ArgumentOutOfRangeException">Thrown if garage is full.</exception>
 	public bool AddVehicle(T vehicle)
 	{
 		// ToDo: catch and handle this exception.
-		if (UsedSpaces == _c_GARAGE_SIZE_UPPER_LIMIT || UsedSpaces == GarageVehicleLimit)
-			throw new IndexOutOfRangeException(nameof(vehicle));
-
+		if (UsedSpaces == GarageVehicleLimit)
+			throw new ArgumentOutOfRangeException(nameof(vehicle), "Garage is full.");
+		
 		int nextIndex = UsedSpaces;
 		
 		Capacity = nextIndex + 1;
