@@ -12,7 +12,7 @@ namespace LexiconExcercise5.Garage.TestProject.GaragesTests;
 /// <summary>
 /// Contains unit tests for the <see cref="Garage{T}"/> class
 /// </summary>
-public class GarageTests 
+public class GarageTests
 {
 
 	// VALID Vehicle base class attributes
@@ -56,7 +56,7 @@ public class GarageTests
 		//Arrange & Act
 		int expectedUsedSpaces = 0;
 		int expectedCapacity = 4;
-		
+
 		Garage<TestVehicle> garage = new Garage<TestVehicle>(size);
 
 		//Assert
@@ -179,7 +179,6 @@ public class GarageTests
 	public void AddVehicle_FullGarage_ShouldThrowArgumentOutOfRangeException()
 	{
 		//Arrange & Act
-	
 		Garage<TestVehicle> garage = new Garage<TestVehicle>(_c_ArraySizeEdgeCaseHighestValue);
 
 
@@ -194,9 +193,9 @@ public class GarageTests
 				)
 			);
 		}
-		
+
 		//Assert
-		Assert.Throws<ArgumentOutOfRangeException>(() => 
+		Assert.Throws<ArgumentOutOfRangeException>(() =>
 			garage.AddVehicle(
 				new TestVehicle(
 				LicensePlateIsUnique => true,
@@ -206,6 +205,107 @@ public class GarageTests
 			)
 		);
 	}
+
+	[Fact]
+	public void AddVehicle_GarageUpperLimitReached_ShouldThrowArgumentOutOfRangeException()
+	{
+		//Arrange & Act
+		Garage<VehicleBase> garage = new Garage<VehicleBase>(_c_ArraySizeAfterLimit5);
+
+
+		// Act
+		foreach (var vehicle in oneVehiclesOfEveryKind)
+		{
+			garage.AddVehicle(vehicle);
+		}
+
+		//Assert
+		Assert.Throws<ArgumentOutOfRangeException>(() =>
+			garage.AddVehicle(
+				new TestVehicle(
+				LicensePlateIsUnique => true,
+				_c_LicensePlate,
+				_c_Color,
+				_c_Wheel)
+			)
+		);
+	}
+
+	[Fact]
+	public void AddVehicle_EveryKindOfVehicle_ShouldPass_Expected_UsedSpaces5_Capacity8()
+	{
+		//Arrange 
+		int expectedUsedSpaces = 5;
+		int expectedCapacity = 8;
+
+		Garage<VehicleBase> garage = new Garage<VehicleBase>(_c_ArraySizeAfterLimit5);
+
+		// Act
+		foreach (var vehicle in oneVehiclesOfEveryKind)
+		{
+			garage.AddVehicle(vehicle);
+		}
+
+		//Assert
+		Assert.Equal(expectedCapacity, garage.Capacity);
+		Assert.Equal(expectedUsedSpaces, garage.UsedSpaces);
+	}
+
+	[Fact]
+	public void AddVehicle_ChecksIfVehicleIsAddedToEmptySpaceAfterRemove_ValidValues_ShouldPass()
+	{
+		//Arrange
+		int expectedUsedSpaces = 4;
+		Garage<VehicleBase> garage = new(_c_ArraySizeBeforeLimit4);
+
+		// Adds 4 vehicles with valid values (and unique license plates)
+		for (int i = 0; i < 4; i++)
+		{
+			garage.AddVehicle(oneVehiclesOfEveryKind[i]);
+		}
+
+		// Act
+		// Removes vehicle from _vehicle[1].
+		garage.RemoveVehicle(oneVehiclesOfEveryKind[1].LicensePlate);
+		// Only one index that it can be placed in (_vehicle[1]).
+		garage.AddVehicle(oneVehiclesOfEveryKind[1]);
+
+		// Assert
+		// Only one a single index with null value 
+		Assert.Equal(expectedUsedSpaces, garage.UsedSpaces);
+	}
+
+	[Fact]
+	public void RemoveVehicle_ChecksIfVehicleWasRemoved_AndReturned_ValidValues_ShouldPass()
+	{
+		//Arrange
+		int expectedUsedSpaces = 4;
+
+		Garage<VehicleBase> garage = new(_c_ArraySizeEdgeCaseHighestValue);
+
+		// Act
+		foreach (var vehicle in oneVehiclesOfEveryKind)
+		{
+			garage.AddVehicle(vehicle);
+		}
+
+		//Assert
+		Assert.Equal(
+			garage.RemoveVehicle(oneVehiclesOfEveryKind[1].LicensePlate),
+			oneVehiclesOfEveryKind[1]
+		);
+
+		Assert.Equal(expectedUsedSpaces, garage.UsedSpaces);
+
+		Assert.Null(
+			garage.ShowVehicle(oneVehiclesOfEveryKind[1].LicensePlate)
+		);
+	}
+
+
+
+
+
 
 	///// <summary>
 	///// Clean-up method called after each test. Currently empty.

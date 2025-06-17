@@ -167,6 +167,8 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 
 	private bool IsSlotEmpty(int nextIndex) =>
 		_vehicles[nextIndex] != null;
+
+
 	/// <summary>
 	/// Checks if specified <see cref="VehicleBase"/> with <c>LicensePlate</c> can be found in the garage.
 	/// And returns a string representation of the vehicle.
@@ -178,8 +180,8 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 		// ToDo: validate inputted licensePlate value
 
 		return _vehicles
-			.Where(vehicle => vehicle != null)	// Guards against null indexes. 
-			.FirstOrDefault(vehicle => 
+			.Where(vehicle => vehicle != null)  // Guards against null indexes. 
+			.FirstOrDefault(vehicle =>
 				String.Equals(
 					a: vehicle.LicensePlate,
 					b: licensePlate,
@@ -187,6 +189,18 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 				)
 			)?.ToString();
 	}
+
+	/// <summary>
+	/// Removes and returns specified vehicle from the garage.
+	/// </summary>
+	/// <param name="licensePlate">Unique identifier of the vehicle to be removed.</param>
+	/// <returns>A <see cref="T"/> if found, otherwise null.</returns>
+	public T? RemoveVehicle(string licensePlate)
+	{
+		// ToDo: validate inputted licensePlate value
+
+		int index = Array.FindIndex(_vehicles, vehicle =>
+			String.Equals(
 				a: licensePlate,
 				b: vehicle.LicensePlate,
 				comparisonType: StringComparison.OrdinalIgnoreCase
