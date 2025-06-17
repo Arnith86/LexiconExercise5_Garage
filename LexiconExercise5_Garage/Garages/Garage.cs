@@ -203,7 +203,7 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 	/// <summary>
 	/// Fills the garage with vehicles of every kind with different properties.
 	/// </summary>
-	public void AddCollectionOfVehicles()
+	public void Add40VehiclesToCollection()
 	{
 		List<VehicleBase> collectionOfDifferentVehicles = new List<VehicleBase>()
 		{
@@ -231,8 +231,8 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 			new Bus(LPR => true, "abc130", VehicleColor.Green, 4, 1),
 			new Bus(LPR => true, "abc131", VehicleColor.Blue, 8, 2),
 			new Bus(LPR => true, "abc132", VehicleColor.Blue, 4, 2),
-			new Bus(LPR => true, "abc133", VehicleColor.Yellow, 12, 3),
-			new Bus(LPR => true, "abc134", VehicleColor.Yellow, 12, 3),
+			new Bus(LPR => true, "abc133", VehicleColor.Yellow, 12, 2),
+			new Bus(LPR => true, "abc134", VehicleColor.Yellow, 12, 2),
 
 			new Car(LPR => true, "abc135", VehicleColor.Red, 4, 5),
 			new Car(LPR => true, "abc136", VehicleColor.Red, 4, 6),
@@ -258,4 +258,5 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 			AddVehicle((T)vehicle);
 		}
 	}
+
 }
