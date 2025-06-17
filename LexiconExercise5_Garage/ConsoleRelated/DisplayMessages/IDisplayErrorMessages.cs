@@ -17,10 +17,5 @@
 		/// Displays an error message indicating that the input was empty.
 		/// </summary>
 		void InvalidInputEmpty();
-
-		/// <summary>
-		/// Displays an error message indicating that the input exceeded the maximum allowed length.
-		/// </summary>
-		void InvalidInputToLong();
 	}
 }

@@ -22,10 +22,6 @@ namespace LexiconExercise5_Garage.ConsoleRelated.DisplayMessages
 		}
 
 		/// <inheritdoc/>
-		public void InvalidInputNotLetter() =>
-			DisplayErrorMessage("You supplied an invalid input. \n Input must contain only letters! Please try again.");
-
-		/// <inheritdoc/>
 		public void InvalidInputEmpty() =>
 			DisplayErrorMessage("Input cannot be empty! Please try again.");
 
