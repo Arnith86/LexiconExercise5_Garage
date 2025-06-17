@@ -49,4 +49,8 @@ public class Car : VehicleBase, ICar
 		return true;
 	}
 
+	public override string ToString()
+	{
+		return $"License plate: {LicensePlate}\nColor: {Color}\nNr of wheels: {Wheels}\nSeats: {NrOfSeats}\n)";
+	}
 }

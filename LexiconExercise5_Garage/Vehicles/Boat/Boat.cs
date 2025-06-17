@@ -27,4 +27,9 @@ public class Boat : VehicleBase, IBoat
 
 	/// <inheritdoc/>
 	public FuelType FuelType { get; }
+
+	public override string ToString()
+	{
+		return $"License plate: {LicensePlate}\nColor: {Color}\nNr of wheels: {Wheels}\nFuel Type: {FuelType}\n)";
+	}
 }

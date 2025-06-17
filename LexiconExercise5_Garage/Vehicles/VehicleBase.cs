@@ -83,4 +83,11 @@ public abstract class VehicleBase
 
 		return true;
 	}
+
+	/// <summary>
+	/// Each type of vehicle will have separate properties that need to be printed.
+	/// </summary>
+	/// <returns>A string representing the vehicle types property.</returns>
+	public abstract override string ToString();
+	
 }

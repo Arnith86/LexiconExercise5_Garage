@@ -49,5 +49,9 @@ public class AirPlain : VehicleBase, IAirPlain
 		NumberOfEngines = numberOfEngines;
 	}
 
+	public override string ToString()
+	{
+		return $"License plate: {LicensePlate}\nColor: {Color}\nNr of wheels: {Wheels}\n Number of engines: {NumberOfEngines}\n)";
+	}
 }
 

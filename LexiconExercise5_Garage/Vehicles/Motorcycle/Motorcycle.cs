@@ -29,4 +29,10 @@ public class Motorcycle : VehicleBase, IMotorcycle
 	{
 		HasSidecar = hasSidecar;
 	}
+
+	/// <inheritdoc/>
+	public override string ToString()
+	{
+		return $"License plate: {LicensePlate}\nColor: {Color}\nNr of wheels: {Wheels}\n Has sidecar: {HasSidecar}\n)";
+	}
 }

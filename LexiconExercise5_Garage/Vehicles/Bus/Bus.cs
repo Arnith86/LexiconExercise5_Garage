@@ -36,4 +36,9 @@ public class Bus : VehicleBase, IBus
 
 		return true;
 	}
+
+	public override string ToString()
+	{
+		return $"License plate: {LicensePlate}\nColor: {Color}\nNr of wheels: {Wheels}\n Doors: {NrOfDoors}\n)";
+	}
 }
