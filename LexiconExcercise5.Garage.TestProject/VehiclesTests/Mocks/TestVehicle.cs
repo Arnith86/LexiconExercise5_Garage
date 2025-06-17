@@ -14,4 +14,9 @@ public class TestVehicle : VehicleBase
 		uint wheels)
 		: base(licensePlateValidator, licensePlate, color, wheels)
 	{ }
+
+	public override string ToString()
+	{
+		return $"License plate: {LicensePlate}\nColor: {Color}\nNr of wheels: {Wheels}\n)";
+	}
 }
