@@ -161,6 +161,26 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 	}
 
 	/// <summary>
+	/// Checks if specified <see cref="VehicleBase"/> with <c>LicensePlate</c> can be found in the garage.
+	/// And returns a string representation of the vehicle.
+	/// </summary>
+	/// <param name="licensePlate">String representing the license plate of a <see cref="VehicleBase"/>.</param>
+	/// <returns>A string representation of the vehicle if found, otherwise null.</returns>
+	public string? ShowVehicle(string licensePlate)
+	{
+		// ToDo: validate inputted licensePlate value
+
+		return _vehicles
+			.Where(vehicle => vehicle != null)	// Guards against null indexes. 
+			.FirstOrDefault(vehicle => 
+				String.Equals(
+					a: vehicle.LicensePlate,
+					b: licensePlate,
+					comparisonType: StringComparison.OrdinalIgnoreCase // Ignores letter casing.
+				)
+			)?.ToString();
+	}
+	/// <summary>
 	/// Returns an enumerator that iterates through the garage's stored vehicles.
 	/// </summary>
 	public IEnumerator<T> GetEnumerator()

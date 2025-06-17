@@ -1,6 +1,11 @@
 ﻿using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 using LexiconExercise5_Garage.Garages;
 using LexiconExercise5_Garage.Vehicles;
+using LexiconExercise5_Garage.Vehicles.Boat;
+using LexiconExercise5_Garage.Vehicles.Bus;
+using LexiconExercise5_Garage.Vehicles.Cars;
+using LexiconExercise5_Garage.Vehicles.FlyingVehicles;
+using LexiconExercise5_Garage.Vehicles.Motorcycle;
 
 namespace LexiconExcercise5.Garage.TestProject.GaragesTests;
 
@@ -9,6 +14,7 @@ namespace LexiconExcercise5.Garage.TestProject.GaragesTests;
 /// </summary>
 public class GarageTests 
 {
+
 	// VALID Vehicle base class attributes
 	private MockLicensePlateRegistry _c_MockLicensePlateRegistry = new MockLicensePlateRegistry();
 	private const string _c_LicensePlate = "BBK159";
@@ -26,6 +32,15 @@ public class GarageTests
 	private const int _c_ArraySizeNegative = -1;
 	private const int _c_ArraySizeOverUpperLimit524289 = 524289;
 
+	// Valid collection with a vehicle of every kind
+	List<VehicleBase> oneVehiclesOfEveryKind = new List<VehicleBase>()
+	{
+		new AirPlain(LPR => true, "abc111", VehicleColor.Red, 4, 2),
+		new Boat(LPR => true, "abc119", VehicleColor.Red, 0, FuelType.Diesel),
+		new Bus(LPR => true, "abc127", VehicleColor.Green, 4, 1),
+		new Car(LPR => true, "abc135", VehicleColor.Red, 4, 5),
+		new Motorcycle(LPR => true, "abc143", VehicleColor.Red, 2, false)
+	};
 
 
 	/// <summary>
@@ -42,7 +57,7 @@ public class GarageTests
 		int expectedUsedSpaces = 0;
 		int expectedCapacity = 4;
 		
-		Garage<MockVehicle> garage = new Garage<MockVehicle>(size);
+		Garage<TestVehicle> garage = new Garage<TestVehicle>(size);
 
 		//Assert
 		Assert.Equal(expectedCapacity, garage.Capacity);
@@ -60,7 +75,7 @@ public class GarageTests
 		int expectedUsedSpaces = 0;
 		int expectedCapacity = 8;
 
-		Garage<MockVehicle> garage = new Garage<MockVehicle>(_c_ArraySizeAfterLimit5);
+		Garage<TestVehicle> garage = new Garage<TestVehicle>(_c_ArraySizeAfterLimit5);
 
 		//Assert
 		Assert.Equal(expectedCapacity, garage.Capacity);
@@ -77,7 +92,7 @@ public class GarageTests
 		int expectedUsedSpaces = 0;
 		int expectedCapacity = 524288;
 
-		Garage<MockVehicle> garage = new Garage<MockVehicle>(_c_ArraySizeEdgeCaseHighestValue);
+		Garage<TestVehicle> garage = new Garage<TestVehicle>(_c_ArraySizeEdgeCaseHighestValue);
 
 		//Assert
 		Assert.Equal(expectedCapacity, garage.Capacity);
@@ -95,9 +110,44 @@ public class GarageTests
 	{
 		// Act & Assert
 		Assert.Throws<ArgumentOutOfRangeException>(() =>
-			new Garage<MockVehicle>(size)
+			new Garage<TestVehicle>(size)
 		);
 	}
+
+	[Fact]
+	public void ShowVehicle_IfHasSpecifiedVehicle_ValidValue_ShouldPass_Expected_String()
+	{
+		//Arrange
+		Garage<VehicleBase> garage = new(_c_ArraySizeEdgeCaseHighestValue);
+
+		foreach (var vehicle in oneVehiclesOfEveryKind)
+		{
+			garage.AddVehicle(vehicle);
+		}
+
+		//Act & Assert
+		foreach (var vehicle in oneVehiclesOfEveryKind)
+		{
+			Assert.Equal(garage.ShowVehicle(vehicle.LicensePlate), vehicle.ToString());
+		}
+	}
+
+
+	[Fact]
+	public void ShowVehicle_IfSpecifiedVehicleNotInGarage_ValidValue_ShouldPass_Expected_null()
+	{
+		//Arrange
+		Garage<VehicleBase> garage = new(_c_ArraySizeEdgeCaseHighestValue);
+
+		foreach (var vehicle in oneVehiclesOfEveryKind)
+		{
+			garage.AddVehicle(vehicle);
+		}
+
+		//Act & Assert
+		Assert.Null(garage.ShowVehicle("zzz999"));
+	}
+
 
 	[Fact]
 	public void AddVehicle_EmptyGarage_ShouldPass_Expected_UsedSpaces2_Capacity4()
@@ -106,12 +156,12 @@ public class GarageTests
 		int expectedUsedSpaces = 2;
 		int expectedCapacity = 4;
 
-		Garage<MockVehicle> garage = new Garage<MockVehicle>(_c_ArraySizeBeforeLimit4);
+		Garage<TestVehicle> garage = new Garage<TestVehicle>(_c_ArraySizeBeforeLimit4);
 
 		for (int i = 0; i < 2; i++)
 		{
 			garage.AddVehicle(
-				new MockVehicle(
+				new TestVehicle(
 					licensePlateValidator => true,
 					_c_LicensePlate,
 					_c_Color,
@@ -126,17 +176,17 @@ public class GarageTests
 	}
 
 	[Fact]
-	public void AddVehicle_FullGarage_ShouldThrowIndexOutOfRangeException()
+	public void AddVehicle_FullGarage_ShouldThrowArgumentOutOfRangeException()
 	{
 		//Arrange & Act
 	
-		Garage<MockVehicle> garage = new Garage<MockVehicle>(_c_ArraySizeEdgeCaseHighestValue);
+		Garage<TestVehicle> garage = new Garage<TestVehicle>(_c_ArraySizeEdgeCaseHighestValue);
 
 
 		for (int i = 0; i < 524288; i++)
 		{
 			garage.AddVehicle(
-				new MockVehicle(
+				new TestVehicle(
 					LicensePlateIsUnique => true,
 					_c_LicensePlate,
 					_c_Color,
@@ -146,9 +196,9 @@ public class GarageTests
 		}
 		
 		//Assert
-		Assert.Throws<IndexOutOfRangeException>(() => 
+		Assert.Throws<ArgumentOutOfRangeException>(() => 
 			garage.AddVehicle(
-				new MockVehicle(
+				new TestVehicle(
 				LicensePlateIsUnique => true,
 				_c_LicensePlate,
 				_c_Color,
@@ -163,6 +213,6 @@ public class GarageTests
 	///// </summary>
 	//public void Dispose()
 	//{
-		
+
 	//}
 }
