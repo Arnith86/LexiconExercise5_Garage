@@ -66,7 +66,7 @@ public class VehicleBaseClassTest : IDisposable
 	public void LicensePlate_SetViaConstructor_ValidValues_ShouldPass(string licensePlate)
 	{
 		// Arrange & Act 
-		var testVehicle = new MockVehicle(
+		var testVehicle = new TestVehicle(
 			_c_MockLicensePlateRegistry.IsValidLicensePlate,
 			licensePlate,
 			_c_GREEN,
@@ -92,7 +92,7 @@ public class VehicleBaseClassTest : IDisposable
 		_c_MockLicensePlateRegistry.FillRegistry();
 
 		// Act 
-		var testVehicle = new MockVehicle(
+		var testVehicle = new TestVehicle(
 			_c_MockLicensePlateRegistry.IsValidLicensePlate,
 			expectedLicensePlate,
 			_c_GREEN,
@@ -117,7 +117,7 @@ public class VehicleBaseClassTest : IDisposable
 
 		// Act & Assert
 		Assert.Throws<InvalidOperationException>(() =>
-			new MockVehicle(
+			new TestVehicle(
 				_c_MockLicensePlateRegistry.IsValidLicensePlate,
 				_c_LicensePlateDuplicate,
 				_c_GREEN,
@@ -138,7 +138,7 @@ public class VehicleBaseClassTest : IDisposable
 	{
 		// Act & Assert
 		Assert.Throws<ArgumentNullException>(() =>
-			new MockVehicle(
+			new TestVehicle(
 				_c_MockLicensePlateRegistry.IsValidLicensePlate,
 				licensePlate,
 				_c_GREEN,
@@ -159,7 +159,7 @@ public class VehicleBaseClassTest : IDisposable
 	{
 		// Act & Assert
 		Assert.Throws<ArgumentOutOfRangeException>(() =>
-			new MockVehicle(
+			new TestVehicle(
 				_c_MockLicensePlateRegistry.IsValidLicensePlate,
 				licensePlate,
 				_c_GREEN,
@@ -180,7 +180,7 @@ public class VehicleBaseClassTest : IDisposable
 	{
 		// Act & Assert
 		Assert.Throws<ArgumentException>(() =>
-			new MockVehicle(
+			new TestVehicle(
 				_c_MockLicensePlateRegistry.IsValidLicensePlate,
 				licensePlate,
 				_c_GREEN,
@@ -203,7 +203,7 @@ public class VehicleBaseClassTest : IDisposable
 	public void Color_SetViaConstructor_ValidValues_ShouldPass(VehicleColor color)
 	{
 		// Arrange & Act 
-		var testVehicle = new MockVehicle(
+		var testVehicle = new TestVehicle(
 			_c_MockLicensePlateRegistry.IsValidLicensePlate,
 			_c_LicensePlateCaps,
 			color,
@@ -230,7 +230,7 @@ public class VehicleBaseClassTest : IDisposable
 	public void Wheels_SetViaConstructor_ValidValues_ShouldPass(uint wheels)
 	{
 		// Arrange & Act 
-		var testVehicle = new MockVehicle(
+		var testVehicle = new TestVehicle(
 			_c_MockLicensePlateRegistry.IsValidLicensePlate,
 			_c_LicensePlateCaps,
 			_c_RED,
@@ -252,7 +252,7 @@ public class VehicleBaseClassTest : IDisposable
 	{
 		// Act & Assert
 		Assert.Throws<ArgumentOutOfRangeException>(() =>
-			new MockVehicle(
+			new TestVehicle(
 				_c_MockLicensePlateRegistry.IsValidLicensePlate,
 				_c_LicensePlateCaps,
 				_c_RED,
