@@ -173,4 +173,63 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 	{
 		return GetEnumerator();
 	}
+	
+	/// <summary>
+	/// Fills the garage with vehicles of every kind with different properties.
+	/// </summary>
+	public void AddCollectionOfVehicles()
+	{
+		List<VehicleBase> collectionOfDifferentVehicles = new List<VehicleBase>()
+		{
+			new AirPlain(LPR => true, "abc111", VehicleColor.Red, 4, 2),
+			new AirPlain(LPR => true, "abc112", VehicleColor.Blue, 6, 4),
+			new AirPlain(LPR => true, "abc113", VehicleColor.Green, 8, 4),
+			new AirPlain(LPR => true, "abc114", VehicleColor.Yellow, 6, 2),
+			new AirPlain(LPR => true, "abc115", VehicleColor.Red, 8, 1),
+			new AirPlain(LPR => true, "abc116", VehicleColor.Blue, 12, 1),
+			new AirPlain(LPR => true, "abc117", VehicleColor.Green, 6, 3),
+			new AirPlain(LPR => true, "abc118", VehicleColor.Red, 9, 3),
+
+			new Boat(LPR => true, "abc119", VehicleColor.Red, 0, FuelType.Diesel),
+			new Boat(LPR => true, "abc120", VehicleColor.Green, 0, FuelType.Gasoline),
+			new Boat(LPR => true, "abc121", VehicleColor.Blue, 0, FuelType.Gasoline),
+			new Boat(LPR => true, "abc122", VehicleColor.Yellow, 0, FuelType.Electric),
+			new Boat(LPR => true, "abc123", VehicleColor.Blue, 0, FuelType.None),
+			new Boat(LPR => true, "abc124", VehicleColor.Red, 0, FuelType.None),
+			new Boat(LPR => true, "abc125", VehicleColor.Green, 0, FuelType.Diesel),
+			new Boat(LPR => true, "abc126", VehicleColor.Green, 0, FuelType.Gasoline),
+
+			new Bus(LPR => true, "abc127", VehicleColor.Green, 4, 1),
+			new Bus(LPR => true, "abc128", VehicleColor.Red, 6, 2),
+			new Bus(LPR => true, "abc129", VehicleColor.Red, 6, 2),
+			new Bus(LPR => true, "abc130", VehicleColor.Green, 4, 1),
+			new Bus(LPR => true, "abc131", VehicleColor.Blue, 8, 2),
+			new Bus(LPR => true, "abc132", VehicleColor.Blue, 4, 2),
+			new Bus(LPR => true, "abc133", VehicleColor.Yellow, 12, 3),
+			new Bus(LPR => true, "abc134", VehicleColor.Yellow, 12, 3),
+
+			new Car(LPR => true, "abc135", VehicleColor.Red, 4, 5),
+			new Car(LPR => true, "abc136", VehicleColor.Red, 4, 6),
+			new Car(LPR => true, "abc137", VehicleColor.Green, 4, 6),
+			new Car(LPR => true, "abc138", VehicleColor.Blue, 4, 7),
+			new Car(LPR => true, "abc139", VehicleColor.Blue, 4, 7),
+			new Car(LPR => true, "abc140", VehicleColor.Yellow, 4, 2),
+			new Car(LPR => true, "abc141", VehicleColor.Yellow, 4, 2),
+			new Car(LPR => true, "abc142", VehicleColor.Green, 4, 5),
+
+			new Motorcycle(LPR => true, "abc143", VehicleColor.Red, 2, false),
+			new Motorcycle(LPR => true, "abc144", VehicleColor.Red, 2, false),
+			new Motorcycle(LPR => true, "abc145", VehicleColor.Green, 2, false),
+			new Motorcycle(LPR => true, "abc146", VehicleColor.Blue, 2, false),
+			new Motorcycle(LPR => true, "abc147", VehicleColor.Blue, 2, true),
+			new Motorcycle(LPR => true, "abc148", VehicleColor.Yellow, 2, true),
+			new Motorcycle(LPR => true, "abc149", VehicleColor.Yellow, 2, true),
+			new Motorcycle(LPR => true, "abc150", VehicleColor.Green, 2, true),
+		};
+
+		foreach (var vehicle in collectionOfDifferentVehicles)
+		{
+			AddVehicle((T)vehicle);
+		}
+	}
 }
