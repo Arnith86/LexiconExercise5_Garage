@@ -5,8 +5,6 @@ using LexiconExercise5_Garage.Vehicles.Cars;
 using LexiconExercise5_Garage.Vehicles.FlyingVehicles;
 using LexiconExercise5_Garage.Vehicles.Motorcycle;
 using System.Collections;
-using System.ComponentModel;
-using System.Threading.Channels;
 
 namespace LexiconExercise5_Garage.Garages;
 
@@ -150,9 +148,16 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 		// ToDo: catch and handle this exception.
 		if (UsedSpaces == GarageVehicleLimit)
 			throw new ArgumentOutOfRangeException(nameof(vehicle), "Garage is full.");
-		
+
+		// If next index is null, this is the optimal selection
 		int nextIndex = UsedSpaces;
-		
+
+		// If nextIndex already has a value, that means that there is a chance that
+		// an element has been removed earlier in the array index, this loop conducts
+		// a search for the the first empty array index, and insert the vehicle there.
+		if (IsSlotEmpty(nextIndex))
+			nextIndex = Array.IndexOf(_vehicles, null);
+
 		Capacity = nextIndex + 1;
 		_vehicles[nextIndex] = vehicle;
 		UsedSpaces++;
@@ -160,6 +165,8 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 		return true;
 	}
 
+	private bool IsSlotEmpty(int nextIndex) =>
+		_vehicles[nextIndex] != null;
 	/// <summary>
 	/// Checks if specified <see cref="VehicleBase"/> with <c>LicensePlate</c> can be found in the garage.
 	/// And returns a string representation of the vehicle.
@@ -180,6 +187,26 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 				)
 			)?.ToString();
 	}
+				a: licensePlate,
+				b: vehicle.LicensePlate,
+				comparisonType: StringComparison.OrdinalIgnoreCase
+			)
+		);
+
+		// Array.FindIndex returns -1, if not found.
+		if (index >= 0)
+		{
+			T returnVehicle = _vehicles[index];
+
+			_vehicles[index] = null!;
+			UsedSpaces--;
+
+			return returnVehicle;
+		}
+
+		return null;
+	}
+
 	/// <summary>
 	/// Returns an enumerator that iterates through the garage's stored vehicles.
 	/// </summary>
@@ -199,7 +226,7 @@ public class Garage<T> : IEnumerable<T> where T : VehicleBase
 	{
 		return GetEnumerator();
 	}
-	
+
 	/// <summary>
 	/// Fills the garage with vehicles of every kind with different properties.
 	/// </summary>
