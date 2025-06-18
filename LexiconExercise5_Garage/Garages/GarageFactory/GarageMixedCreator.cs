@@ -1,4 +1,5 @@
 ﻿using LexiconExercise5_Garage.Vehicles;
+using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 
 namespace LexiconExercise5_Garage.Garages.GarageFactory
 {
@@ -9,13 +10,16 @@ namespace LexiconExercise5_Garage.Garages.GarageFactory
 	/// The type of vehicle to be stored in the garage. Must inherit from <see cref="VehicleBase"/> 
 	/// and implement <see cref="IGarageCreator{T}"/>.
 	/// </typeparam>
-	public class GarageMixedCreator<T> where T : VehicleBase, IGarageCreator<T>
+	public class GarageMixedCreator<T> : IGarageCreator<T> where T : VehicleBase
 	{
 		/// <summary>
 		/// Creates a new instance of <see cref="Garage{T}"/> with the specified size.
 		/// </summary>
 		/// <param name="size">The maximum number of vehicles the garage can hold.</param>
+		/// <param name="licensePlateRegistry">Validates and stores a list of unique license plates</param>
 		/// <returns>A new instance of <see cref="IGarage{T}"/>.</returns>
-		public IGarage<T> CreateGarage(int size) => new Garage<T>(size);
+		public IGarage<T> CreateGarage(int size, ILicensePlateRegistry licensePlateRegistry) => 
+			new Garage<T>(size, licensePlateRegistry);
+
 	}
 }

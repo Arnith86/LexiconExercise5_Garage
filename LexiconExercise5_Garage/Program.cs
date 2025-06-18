@@ -1,12 +1,13 @@
-﻿using System.Runtime.CompilerServices;
-using LexiconExercise5_Garage.ConsoleRelated.CWritePrint;
+﻿using LexiconExercise5_Garage.ConsoleRelated.CWritePrint;
 using LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.ErrorMessages;
 using LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.FeedbackMessage;
 using LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.MenuMessages;
 using LexiconExercise5_Garage.GaragesHandler;
+using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 using LexiconExercise5_GarageAssignment.ConsoleRelated;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("LexiconExercise5_Garage.TestProject")]
 
@@ -25,6 +26,8 @@ internal class Program
 				services.AddSingleton<IDisplayErrorMessages, DisplayErrorMessages>();
 				services.AddSingleton<IDisplayMenuMessages, DisplayMenuMessages>();
 				services.AddSingleton<IDisplayFeedbackMessage, DisplayFeedBackMessage>();
+				services.AddSingleton<ILicensePlateRegistry, LicensePlateRegistry>(); 
+
 				
 
 				services.AddSingleton<GarageHandler>();
