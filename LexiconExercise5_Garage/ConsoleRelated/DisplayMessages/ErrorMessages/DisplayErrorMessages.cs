@@ -1,7 +1,6 @@
-﻿
-using LexiconExercise5_Garage.ConsoleRelated.CWritePrint;
+﻿using LexiconExercise5_Garage.ConsoleRelated.CWritePrint;
 
-namespace LexiconExercise5_Garage.ConsoleRelated.DisplayMessages
+namespace LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.ErrorMessages
 {
 	/// <summary>
 	/// This class supplies generic error messages that can be used throughout the application.

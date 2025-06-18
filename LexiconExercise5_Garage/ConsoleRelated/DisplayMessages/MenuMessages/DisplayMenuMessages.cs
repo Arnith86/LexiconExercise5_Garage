@@ -19,6 +19,7 @@ public class DisplayMenuMessages : IDisplayMenuMessages
 	/// <inheritdoc/>
 	public void DisplayMenu(string menu)
 	{
+		_consoleWP.Clear();
 		_consoleWP.ForegroundColor(ConsoleColor.Yellow);
 		_consoleWP.WriteLine(menu);
 		_consoleWP.ResetConsoleColor();
