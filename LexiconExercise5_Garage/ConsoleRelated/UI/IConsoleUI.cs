@@ -7,5 +7,6 @@
 		int RegisterMainMenuSelection();
 		int SelectGarage(List<int> garageNumbers);
 		void ShowFeedbackMessage(string message);
+		int RegisterGarageHandlingMenuSelection(int garageKey);
 	}
 }

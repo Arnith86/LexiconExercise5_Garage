@@ -13,6 +13,7 @@ public class GarageHandlerTests
 	// Valid garage sizes through constructor.
 	private const int _c_ArraySizeEdgeCaseMin1 = 1;
 	private const int _c_ArraySize2 = 2;
+	private const int _c_ArraySize64 = 64;
 	private const int _c_ArraySizeBeforeLimit4 = 4;
 	private const int _c_ArraySizeAfterLimit5 = 5;
 	private const int _c_ArraySizeEdgeCaseHighestValue = 524288;
@@ -29,8 +30,13 @@ public class GarageHandlerTests
 	private const int _c_SelectGarage_2 = 2;
 	private const int _c_ExitProgram_0 = 0;
 
-	// Garage Selection
+	// Garage Selection (which garage is selected)
 	private const int _c_Garage0Selected = 0;
+
+	// Garage Handling Menu Options.
+	private const int _c_AddMixedSetOfVehicles_1 = 1;
+	private const int _c_ExitMenu_0 = 0;
+	
 
 
 	[Theory]
@@ -91,7 +97,7 @@ public class GarageHandlerTests
 	}
 
 	[Fact]
-	public void MainMenuSelection_SelectGarageSelected_GarageSelected_ShouldPass()
+	public void MainMenuSelection_SelectGarageSelected_GarageSelected_GarageExists_ShowFeedBackMessage_ShouldPass()
 	{
 		// Arrange
 		Mock<IConsoleUI> mockConsoleUI = new();
@@ -114,4 +120,27 @@ public class GarageHandlerTests
 		// Once on garage creation, and once on successful garage selection.
 		mockConsoleUI.Verify(cUI => cUI.ShowFeedbackMessage(It.IsAny<string>()), Times.Exactly(2));
 	}
+	
+	[Fact]
+	public void MainMenuSelection_SelectGarageSelected_GarageSelected_GarageDoesNotExists_ShowError_ShouldPass()
+	{
+		// Arrange
+		Mock<IConsoleUI> mockConsoleUI = new();
+		mockConsoleUI.SetupSequence(cUI => cUI.RegisterMainMenuSelection())
+			.Returns(_c_SelectGarage_2)
+			.Returns(_c_ExitProgram_0);
+
+		List<int> garageNumbers = new List<int>() { 0 };
+
+		mockConsoleUI.Setup(cUI => cUI.SelectGarage(garageNumbers)).Returns(_c_Garage0Selected);
+
+		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object);
+
+		// Act
+		garageHandler.MainMenuSelection();
+
+		// Assert
+		mockConsoleUI.Verify(cUI => cUI.ShowError(It.IsAny<string>()), Times.Once);
+	}
+
 }

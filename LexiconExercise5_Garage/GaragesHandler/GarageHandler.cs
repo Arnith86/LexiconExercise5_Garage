@@ -1,5 +1,4 @@
 ﻿
-
 using LexiconExercise5_Garage.Garages;
 using LexiconExercise5_Garage.Vehicles;
 using LexiconExercise5_GarageAssignment.ConsoleRelated;
@@ -10,8 +9,7 @@ public class GarageHandler
 {
 	private readonly IConsoleUI _consoleUI;
 	private Dictionary<int, IGarage<VehicleBase>> _garages;
-	private IGarage<VehicleBase> _currentGarage;
-
+	
 	public GarageHandler(IConsoleUI consoleUI)
 	{
 		_consoleUI = consoleUI;
@@ -32,10 +30,11 @@ public class GarageHandler
 					GarageCreation(); 
 					break;
 				case 2:
-					SelectGarage();
+					GarageHandlingMenuSelection(garageKey: SelectGarage());
 					break;
 				case 0:
-					return;
+					exitProgram = true;
+					break;
 				default:
 					break;
 			}
@@ -43,7 +42,49 @@ public class GarageHandler
 		} while (!exitProgram);
 	}
 
-	private void SelectGarage()
+	private void GarageHandlingMenuSelection(int garageKey)
+	{
+		bool exitGarageHandlingMenu = false;
+	
+		do
+		{
+			int menuOption = _consoleUI.RegisterGarageHandlingMenuSelection(garageKey);
+
+			switch (menuOption)
+			{
+				case 1:
+					AddMixedSetOfVehiclesToGarage(garageKey);
+					break;
+				case 0:
+					exitGarageHandlingMenu = true;
+					break;
+				default:
+					break;
+			}
+
+		} while (!exitGarageHandlingMenu);
+	}
+
+	
+		
+	
+
+	private void AddMixedSetOfVehiclesToGarage(int garageKey)
+	{
+		try
+		{
+			_garages[garageKey].Add40VehiclesToCollection();
+			_consoleUI.ShowFeedbackMessage("40 vehicles added to the garage.");
+		}
+		catch (InvalidOperationException e)
+		{
+			_consoleUI.ShowError($"{e}, test vehicles can only be added once per garage!");
+		}
+	}
+
+
+
+	private int SelectGarage()
 	{
 		bool isValid = false;
 		int chosenGarage = 0;
@@ -59,8 +100,6 @@ public class GarageHandler
 				if (_garages.ContainsKey(chosenGarage)) isValid = true;
 				
 			} while (!isValid);
-
-			_currentGarage = _garages[chosenGarage];
 			
 			_consoleUI.ShowFeedbackMessage(message: $"Garage {chosenGarage} selected.");
 		}
@@ -68,6 +107,8 @@ public class GarageHandler
 		{
 			_consoleUI.ShowError("There are no created garages yet!");
 		}
+
+		return chosenGarage;
 	}
 
 	/// <summary>
