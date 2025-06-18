@@ -1,6 +1,6 @@
 ﻿using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 using LexiconExercise5_Garage.Vehicles;
-using LexiconExercise5_Garage.Vehicles.Boat;
+using LexiconExercise5_Garage.Vehicles.Boats;
 
 
 namespace LexiconExcercise5.Garage.TestProject.Vehicles;

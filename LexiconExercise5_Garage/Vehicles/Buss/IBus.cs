@@ -1,7 +1,7 @@
-﻿namespace LexiconExercise5_Garage.Vehicles.Bus;
+﻿namespace LexiconExercise5_Garage.Vehicles.Buss;
 
 /// <summary>
-/// Defines a contract for Bus-specific properties.
+/// Defines a contract for Buss-specific properties.
 /// </summary>
 public interface IBus
 {

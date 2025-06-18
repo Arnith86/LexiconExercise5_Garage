@@ -1,5 +1,5 @@
 ﻿
-namespace LexiconExercise5_Garage.Vehicles.Bus;
+namespace LexiconExercise5_Garage.Vehicles.Buss;
 
 public class Bus : VehicleBase, IBus
 {

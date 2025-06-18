@@ -1,5 +1,5 @@
 ﻿
-namespace LexiconExercise5_Garage.Vehicles.Boat
+namespace LexiconExercise5_Garage.Vehicles.Boats
 {
 	/// <summary>
 	/// Defines a contract for boat-specific properties in the garage system.

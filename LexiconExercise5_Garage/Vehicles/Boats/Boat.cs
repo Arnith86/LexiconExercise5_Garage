@@ -1,4 +1,4 @@
-﻿namespace LexiconExercise5_Garage.Vehicles.Boat;
+﻿namespace LexiconExercise5_Garage.Vehicles.Boats;
 
 /// <summary>
 /// Represents a boat vehicle.

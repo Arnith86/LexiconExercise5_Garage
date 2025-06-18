@@ -1,5 +1,5 @@
 ﻿
-namespace LexiconExercise5_Garage.Vehicles.Motorcycle;
+namespace LexiconExercise5_Garage.Vehicles.Motorcycles;
 
 /// <summary>
 /// Represents a motorcycle vehicle.

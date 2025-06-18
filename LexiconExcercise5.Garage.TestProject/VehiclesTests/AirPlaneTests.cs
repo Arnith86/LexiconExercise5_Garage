@@ -1,6 +1,6 @@
 ﻿using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 using LexiconExercise5_Garage.Vehicles;
-using LexiconExercise5_Garage.Vehicles.FlyingVehicles;
+using LexiconExercise5_Garage.Vehicles.AirPlains;
 
 namespace LexiconExcercise5.Garage.TestProject.Vehicles;
 

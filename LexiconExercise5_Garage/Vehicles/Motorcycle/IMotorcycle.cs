@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace LexiconExercise5_Garage.Vehicles.Motorcycle;
+namespace LexiconExercise5_Garage.Vehicles.Motorcycles;
 
 /// <summary>
 /// Defines a contract for motorcycle-specific properties.

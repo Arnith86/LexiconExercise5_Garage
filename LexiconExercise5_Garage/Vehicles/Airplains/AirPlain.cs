@@ -1,6 +1,6 @@
 ﻿using LexiconExercise5_Garage.Vehicles;
 
-namespace LexiconExercise5_Garage.Vehicles.FlyingVehicles;
+namespace LexiconExercise5_Garage.Vehicles.AirPlains;
 
 /// <summary>
 /// Represents an airplane vehicle with a specified number of engines.

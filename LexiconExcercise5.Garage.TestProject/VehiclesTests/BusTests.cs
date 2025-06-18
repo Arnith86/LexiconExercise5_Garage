@@ -1,4 +1,4 @@
-﻿using LexiconExercise5_Garage.Vehicles.Bus;
+﻿using LexiconExercise5_Garage.Vehicles.Buss;
 using LexiconExercise5_Garage.Vehicles;
 using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 

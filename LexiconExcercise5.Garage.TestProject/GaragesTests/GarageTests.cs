@@ -1,11 +1,11 @@
 ﻿using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 using LexiconExercise5_Garage.Garages;
 using LexiconExercise5_Garage.Vehicles;
-using LexiconExercise5_Garage.Vehicles.Boat;
-using LexiconExercise5_Garage.Vehicles.Bus;
+using LexiconExercise5_Garage.Vehicles.Boats;
+using LexiconExercise5_Garage.Vehicles.Buss;
 using LexiconExercise5_Garage.Vehicles.Cars;
-using LexiconExercise5_Garage.Vehicles.FlyingVehicles;
-using LexiconExercise5_Garage.Vehicles.Motorcycle;
+using LexiconExercise5_Garage.Vehicles.AirPlains;
+using LexiconExercise5_Garage.Vehicles.Motorcycles;
 
 namespace LexiconExcercise5.Garage.TestProject.GaragesTests;
 
