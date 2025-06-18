@@ -14,7 +14,7 @@ namespace LexiconExercise5_Garage.Garages;
 /// Manages capacity dynamically using an internal array with power-of-two sizing logic.
 /// </summary>
 /// <typeparam name="T">Types that inherit from VehicleBase.</typeparam>
-public class Garage<T> : IEnumerable<T> where T : VehicleBase
+public class Garage<T> : IEnumerable<T>, IGarage<T> where T : VehicleBase
 {
 	// Upper and lower limits for the garage size
 	private const int _c_GARAGE_SIZE_UPPER_LIMIT = 524288;
