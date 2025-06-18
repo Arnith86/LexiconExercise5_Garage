@@ -25,13 +25,11 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : VehicleBase
 	private int _garageVehicleLimit = 0;
 	private int _usedSpaces = 0;
 
-	/// <summary>
-	/// Gets the current capacity of the garage's internal array.
-	/// Expands the array size if the new capacity exceeds the current one.
-	/// </summary>
+	/// <inheritdoc/>
 	public int Capacity
 	{
 		get => _capacity;
+		// Set expands the array size if the new capacity exceeds the current one.
 		private set
 		{
 			if (IsWithinGarageMinMaxRange(value))
@@ -43,9 +41,7 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : VehicleBase
 		}
 	}
 
-	/// <summary>
-	/// Gets the maximum number of vehicles that can be added to the garage.
-	/// </summary>
+	/// <inheritdoc/>
 	public int GarageVehicleLimit
 	{
 		get => _garageVehicleLimit;
@@ -56,9 +52,7 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : VehicleBase
 		}
 	}
 
-	/// <summary>
-	/// Gets the number of currently occupied spaces in the garage.
-	/// </summary>
+	/// <inheritdoc/>
 	public int UsedSpaces
 	{
 		get => _usedSpaces;
@@ -134,12 +128,7 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : VehicleBase
 		return true;
 	}
 
-	/// <summary>
-	/// Adds a vehicle to the garage.
-	/// Automatically resizes the internal array if necessary.
-	/// </summary>
-	/// <param name="vehicle">The vehicle to add.</param>
-	/// <returns>True if the vehicle was successfully added.</returns>
+	/// <inheritdoc/>
 	/// <exception cref="ArgumentOutOfRangeException">Thrown if garage is full.</exception>
 	public bool AddVehicle(T vehicle)
 	{
@@ -166,13 +155,7 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : VehicleBase
 	private bool IsSlotEmpty(int nextIndex) =>
 		_vehicles[nextIndex] != null;
 
-
-	/// <summary>
-	/// Checks if specified <see cref="VehicleBase"/> with <c>LicensePlate</c> can be found in the garage.
-	/// And returns a string representation of the vehicle.
-	/// </summary>
-	/// <param name="licensePlate">String representing the license plate of a <see cref="VehicleBase"/>.</param>
-	/// <returns>A string representation of the vehicle if found, otherwise null.</returns>
+	/// <inheritdoc/>
 	public string? GetVehicleInformation(string licensePlate)
 	{
 		// ToDo: validate inputted licensePlate value
@@ -188,24 +171,14 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : VehicleBase
 			)?.ToString();
 	}
 
-	/// <summary>
-	/// Retrieves the string representation of all vehicles in the garage.
-	/// </summary>
-	/// <returns>
-	/// An <see cref="IEnumerable{string}"/> with string representations of all vehicles in garage.
-	/// If empty then no vehicles were found.
-	/// </returns>
+	/// <inheritdoc/>
 	public IEnumerable<string> GetAllVehiclesInformation()
 	{
 		return _vehicles.Where(vehicle => vehicle != null)
 			.Select(vehicle => vehicle.ToString());
 	}
 
-	/// <summary>
-	/// Removes and returns specified vehicle from the garage.
-	/// </summary>
-	/// <param name="licensePlate">Unique identifier of the vehicle to be removed.</param>
-	/// <returns>A <see cref="T"/> if found, otherwise null.</returns>
+	/// <inheritdoc/>
 	public T? RemoveVehicle(string licensePlate)
 	{
 		// ToDo: validate inputted licensePlate value
@@ -232,9 +205,7 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : VehicleBase
 		return null;
 	}
 
-	/// <summary>
-	/// Returns an enumerator that iterates through the garage's stored vehicles.
-	/// </summary>
+	/// <inheritdoc/>
 	public IEnumerator<T> GetEnumerator()
 	{
 		// return a single value, then yield until next operation 
@@ -246,15 +217,14 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : VehicleBase
 
 		//return ((IEnumerable<T>)_vehicles).GetEnumerator();
 	}
-
+	
+	/// <inheritdoc/>
 	IEnumerator IEnumerable.GetEnumerator()
 	{
 		return GetEnumerator();
 	}
 
-	/// <summary>
-	/// Fills the garage with vehicles of every kind with different properties.
-	/// </summary>
+	/// <inheritdoc/>
 	public void Add40VehiclesToCollection()
 	{
 		List<VehicleBase> collectionOfDifferentVehicles = new List<VehicleBase>()
