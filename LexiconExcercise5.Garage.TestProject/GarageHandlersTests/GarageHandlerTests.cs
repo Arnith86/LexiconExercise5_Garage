@@ -143,4 +143,37 @@ public class GarageHandlerTests
 		mockConsoleUI.Verify(cUI => cUI.ShowError(It.IsAny<string>()), Times.Once);
 	}
 
+	[Fact]
+	public void GarageHandlingMenuSelection_AddMixedSetOfVehiclesToGarage_FirstTime_ShouldPass()
+	{
+		// Arrange
+		Mock<IConsoleUI> mockConsoleUI = new();
+		mockConsoleUI.SetupSequence(cUI => cUI.RegisterMainMenuSelection())
+			.Returns(_c_GarageCreation_1)
+			.Returns(_c_SelectGarage_2)
+			.Returns(_c_ExitProgram_0);
+
+		mockConsoleUI.Setup(cUI => cUI.GetGarageSize()).Returns(_c_ArraySize64);
+
+		List<int> garageNumbers = new List<int>() { 0 };
+
+		mockConsoleUI.Setup(cUI => 
+			cUI.SelectGarage(garageNumbers))
+			.Returns(_c_Garage0Selected);
+
+		mockConsoleUI.SetupSequence(cUI => 
+			cUI.RegisterGarageHandlingMenuSelection(_c_Garage0Selected))
+			.Returns(_c_AddMixedSetOfVehicles_1)
+			.Returns(_c_ExitMenu_0);
+
+
+		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object);
+
+		// Act
+		garageHandler.MainMenuSelection();
+
+		// Assert
+		// Once on garage creation, and once on successful garage selection, and lastly for adding the vehicles
+		mockConsoleUI.Verify(cUI => cUI.ShowFeedbackMessage(It.IsAny<string>()), Times.Exactly(3));
+	}
 }
