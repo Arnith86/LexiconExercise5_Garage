@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using LexiconExercise5_Garage.ConsoleRelated.CWritePrint;
 using LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.ErrorMessages;
+using LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.FeedbackMessage;
 using LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.MenuMessages;
 using LexiconExercise5_Garage.GaragesHandler;
 using LexiconExercise5_GarageAssignment.ConsoleRelated;
@@ -23,6 +24,8 @@ internal class Program
 				services.AddSingleton<IConsoleWritePrint, ConsoleWritePrint>();
 				services.AddSingleton<IDisplayErrorMessages, DisplayErrorMessages>();
 				services.AddSingleton<IDisplayMenuMessages, DisplayMenuMessages>();
+				services.AddSingleton<IDisplayFeedbackMessage, DisplayFeedBackMessage>();
+				
 
 				services.AddSingleton<GarageHandler>();
 				
