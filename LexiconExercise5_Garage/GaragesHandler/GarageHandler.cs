@@ -3,18 +3,58 @@
 using LexiconExercise5_Garage.Garages;
 using LexiconExercise5_Garage.Vehicles;
 using LexiconExercise5_GarageAssignment.ConsoleRelated;
-using System.Linq.Expressions;
 
 namespace LexiconExercise5_Garage.GaragesHandler;
 
 public class GarageHandler
 {
 	private readonly IConsoleUI _consoleUI;
-	private IGarage<VehicleBase> _garage;
+	private Dictionary<int, IGarage<VehicleBase>> _garages;
+	private IGarage<VehicleBase> _currentGarage;
 
 	public GarageHandler(IConsoleUI consoleUI)
 	{
 		_consoleUI = consoleUI;
+		_garages = new Dictionary<int, IGarage<VehicleBase>>();
+	}
+
+	public void MainMenuSelection()
+	{
+		int menuOption = _consoleUI.RegisterMainMenuSelection();
+
+		switch (menuOption)
+		{
+			case 1: 
+				GarageCreation(); 
+				break;
+			case 2:
+				SelectGarage();
+				break;
+			case 0:
+				return;
+			default:
+				break;
+		}
+	}
+
+	private void SelectGarage()
+	{
+		bool isValid = false;
+		int chosenGarage = 0;
+
+		if (_garages.Count > 0)
+		{
+			do
+			{
+				chosenGarage = _consoleUI.SelectGarage();
+			} while (!isValid);
+
+			_currentGarage = _garages[chosenGarage];
+		}
+		else
+		{
+			_consoleUI.ShowError("There are no created garages yet!");
+		}
 	}
 
 	/// <summary>
@@ -31,7 +71,9 @@ public class GarageHandler
 
 			try
 			{
-				_garage = new Garage<VehicleBase>(size);
+				int newKey = _garages.Any() ? _garages.Keys.Max() + 1 : 0;
+				_garages.Add(newKey, new Garage<VehicleBase>(size));
+				
 				isValid = true;
 			}
 			catch (ArgumentOutOfRangeException e)
@@ -40,9 +82,9 @@ public class GarageHandler
 			}
 
 		} while (!isValid);
-		
 
 		_consoleUI.GarageCreated(size);
-
 	}
+
+	
 }
