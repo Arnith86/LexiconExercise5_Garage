@@ -20,21 +20,27 @@ public class GarageHandler
 
 	public void MainMenuSelection()
 	{
-		int menuOption = _consoleUI.RegisterMainMenuSelection();
+		bool exitProgram = false;
 
-		switch (menuOption)
+		do 
 		{
-			case 1: 
-				GarageCreation(); 
-				break;
-			case 2:
-				SelectGarage();
-				break;
-			case 0:
-				return;
-			default:
-				break;
-		}
+			int menuOption = _consoleUI.RegisterMainMenuSelection();
+
+			switch (menuOption)
+			{
+				case 1: 
+					GarageCreation(); 
+					break;
+				case 2:
+					SelectGarage();
+					break;
+				case 0:
+					return;
+				default:
+					break;
+			}
+
+		} while (!exitProgram);
 	}
 
 	private void SelectGarage()
@@ -42,14 +48,21 @@ public class GarageHandler
 		bool isValid = false;
 		int chosenGarage = 0;
 
+		var garageNumbers = _garages.Keys.ToList();
+
 		if (_garages.Count > 0)
 		{
 			do
 			{
-				chosenGarage = _consoleUI.SelectGarage();
+				chosenGarage = _consoleUI.SelectGarage(garageNumbers);
+
+				if (_garages.ContainsKey(chosenGarage)) isValid = true;
+				
 			} while (!isValid);
 
 			_currentGarage = _garages[chosenGarage];
+			
+			_consoleUI.ShowFeedbackMessage(message: $"Garage {chosenGarage} selected.");
 		}
 		else
 		{
@@ -83,7 +96,7 @@ public class GarageHandler
 
 		} while (!isValid);
 
-		_consoleUI.GarageCreated(size);
+		_consoleUI.ShowFeedbackMessage($"Garage of size {size} created!"); 
 	}
 
 	

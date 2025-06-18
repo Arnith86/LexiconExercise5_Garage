@@ -3,8 +3,9 @@
 	public interface IConsoleUI
 	{
 		int GetGarageSize();
-		void GarageCreated(int garageSize);
 		void ShowError(string message);
 		int RegisterMainMenuSelection();
+		int SelectGarage(List<int> garageNumbers);
+		void ShowFeedbackMessage(string message);
 	}
 }

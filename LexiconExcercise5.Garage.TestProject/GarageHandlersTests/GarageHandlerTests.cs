@@ -26,6 +26,11 @@ public class GarageHandlerTests
 
 	// Main menu options
 	private const int _c_GarageCreation_1 = 1;
+	private const int _c_SelectGarage_2 = 2;
+	private const int _c_ExitProgram_0 = 0;
+
+	// Garage Selection
+	private const int _c_Garage0Selected = 0;
 
 
 	[Theory]
@@ -42,7 +47,7 @@ public class GarageHandlerTests
 		garageHandler.GarageCreation();
 
 		// Assert
-		mockConsoleUI.Verify(ui => ui.GarageCreated(size), Times.Once);
+		mockConsoleUI.Verify(ui => ui.ShowFeedbackMessage(It.IsAny<string>()), Times.Once);
 	}
 
 	[Theory]
@@ -63,15 +68,18 @@ public class GarageHandlerTests
 
 		// Assert
 		mockConsoleUI.Verify(cUI => cUI.ShowError(It.IsAny<string>()), Times.Once); // Exception was registered, message sent ConsoleUI.
-		mockConsoleUI.Verify(cUI => cUI.GarageCreated(validSize), Times.Once);	// Valid input registered
+		mockConsoleUI.Verify(cUI => cUI.ShowFeedbackMessage(It.IsAny<string>()), Times.Once);	// Valid input registered
 	}
 
 	[Fact]
-	public void MainMenuSelection_GarageCreationSelected_ShouldPass()
+	public void MainMenuSelection_GarageCreationSelected_GarageIsCreated_ShouldPass()
 	{
 		// Arrange
 		Mock<IConsoleUI> mockConsoleUI = new();
-		mockConsoleUI.Setup(cUI => cUI.RegisterMainMenuSelection()).Returns(_c_GarageCreation_1);
+		mockConsoleUI.SetupSequence(cUI => cUI.RegisterMainMenuSelection())
+			.Returns(_c_GarageCreation_1)
+			.Returns(_c_ExitProgram_0);
+
 		mockConsoleUI.Setup(cUI => cUI.GetGarageSize()).Returns(_c_ArraySizeBeforeLimit4);
 		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object);
 
@@ -79,7 +87,31 @@ public class GarageHandlerTests
 		garageHandler.MainMenuSelection();
 
 		// Assert
-		mockConsoleUI.Verify(cUI => cUI.GarageCreated(4), Times.Once);
+		mockConsoleUI.Verify(cUI => cUI.ShowFeedbackMessage(It.IsAny<string>()), Times.Once);
 	}
-	
+
+	[Fact]
+	public void MainMenuSelection_SelectGarageSelected_GarageSelected_ShouldPass()
+	{
+		// Arrange
+		Mock<IConsoleUI> mockConsoleUI = new();
+		mockConsoleUI.SetupSequence(cUI => cUI.RegisterMainMenuSelection())
+			.Returns(_c_GarageCreation_1)
+			.Returns(_c_SelectGarage_2);
+
+		mockConsoleUI.Setup(cUI => cUI.GetGarageSize()).Returns(_c_ArraySizeBeforeLimit4);
+
+		List<int> garageNumbers = new List<int>() { 0 };
+
+		mockConsoleUI.Setup(cUI => cUI.SelectGarage(garageNumbers)).Returns(_c_Garage0Selected);
+
+		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object);
+
+		// Act
+		garageHandler.MainMenuSelection();
+
+		// Assert
+		// Once on garage creation, and once on successful garage selection.
+		mockConsoleUI.Verify(cUI => cUI.ShowFeedbackMessage(It.IsAny<string>()), Times.Exactly(2));
+	}
 }
