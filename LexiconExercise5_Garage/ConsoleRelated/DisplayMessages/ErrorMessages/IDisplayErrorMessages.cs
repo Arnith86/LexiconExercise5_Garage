@@ -1,4 +1,4 @@
-﻿namespace LexiconExercise5_Garage.ConsoleRelated.DisplayMessages
+﻿namespace LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.ErrorMessages
 {
 	/// <summary>
 	/// Defines a set of methods for displaying standardized error messages to the console.
