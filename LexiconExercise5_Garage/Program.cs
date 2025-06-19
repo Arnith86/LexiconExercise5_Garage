@@ -2,8 +2,10 @@
 using LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.ErrorMessages;
 using LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.FeedbackMessage;
 using LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.MenuMessages;
+using LexiconExercise5_Garage.Garages.GarageFactory;
 using LexiconExercise5_Garage.GaragesHandler;
 using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
+using LexiconExercise5_Garage.Vehicles.VehicleBase;
 using LexiconExercise5_Garage.Vehicles.VehicleFactories;
 using LexiconExercise5_GarageAssignment.ConsoleRelated;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +31,9 @@ internal class Program
 				services.AddSingleton<IDisplayFeedbackMessage, DisplayFeedBackMessage>();
 				services.AddSingleton<ILicensePlateRegistry, LicensePlateRegistry>(); 
 				services.AddSingleton<IVehicleFactory, VehicleFactory>(); 
-				
+				services.AddSingleton<IGarageCreator<Vehicle>, GarageMixedCreator<Vehicle>>();
+				services.AddSingleton<BuildVehicle>();
+							
 				
 
 				services.AddSingleton<GarageHandler>();

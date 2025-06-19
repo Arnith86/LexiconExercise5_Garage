@@ -24,6 +24,13 @@ namespace LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.ErrorMessages
 		public void InvalidInputEmpty() =>
 			DisplayErrorMessage("Input cannot be empty! Please try again.");
 
+		/// <inheritdoc/>
+		public void InvalidInputOutsideOfMenuRange() =>
+			DisplayErrorMessage("Input is outside menu range! Please try again.");
+
+		/// <inheritdoc/>
+		public void InvalidInputNotNumber() =>
+			DisplayErrorMessage("Only numbers are accepted in menu selection! Please try again.");
 
 		/// <inheritdoc/>
 		public void DisplayErrorMessage(string message)

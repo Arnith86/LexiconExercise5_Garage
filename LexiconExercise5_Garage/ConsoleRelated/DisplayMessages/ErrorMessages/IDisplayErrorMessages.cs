@@ -14,6 +14,16 @@
 		void DisplayErrorMessage(string message);
 
 		/// <summary>
+		/// Displays an error message stating that supplied number is outside of menu range.
+		/// </summary>
+		public void InvalidInputOutsideOfMenuRange();
+
+		/// <summary>
+		/// Displays an error message stating that only numbers are accepted.
+		/// </summary>
+		public void InvalidInputNotNumber();
+
+		/// <summary>
 		/// Displays an error message indicating that the input was empty.
 		/// </summary>
 		void InvalidInputEmpty();
