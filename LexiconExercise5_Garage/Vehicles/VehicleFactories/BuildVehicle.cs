@@ -27,14 +27,26 @@ namespace LexiconExercise5_Garage.Vehicles.VehicleFactories
 		public IVehicle GetVehicle(int vehicle)
 		{
 			string licensePlate = RegisterLicensePlate();
+			_consoleUI.ShowFeedbackMessage($"License plate {licensePlate} registered!");
 
-			VehicleColor color = _consoleUI.RegisterColorInput();
+			int color = _consoleUI.RegisterColorInput();
+			_consoleUI.ShowFeedbackMessage($"The color {(VehicleColor)color} was selected!");
+			
 			uint wheels = _consoleUI.RegisterNrOfWheelsInput();
+			_consoleUI.ShowFeedbackMessage($"{wheels} wheels chosen!");
 
 			switch (vehicle)
 			{
 				case 1:
-					return BuildAirPlain(licensePlate, color, wheels);
+					return BuildAirPlain(licensePlate, (VehicleColor)color, wheels);
+				//case 2:
+				//	return BuildBoat(licensePlate, color, wheels);
+				//case 3:
+				//	return BuildBus(licensePlate, color, wheels);
+				//case 4:
+				//	return BuildCar(licensePlate, color, wheels);
+				//case 5:
+				//	return BuildMotorcycle(licensePlate, color, wheels);
 				default:
 					break;
 			}
@@ -66,14 +78,13 @@ namespace LexiconExercise5_Garage.Vehicles.VehicleFactories
 
 			} while (!validLicensePlate);
 
-			_consoleUI.ShowFeedbackMessage("License plate registered!");
-
 			return licensePlate;
 		}
 
 		private IVehicle BuildAirPlain(string licensePlate, VehicleColor color, uint wheels)
 		{
 			uint numberOfEngines = _consoleUI.RegisterNumberOfEnginesInput();
+			_consoleUI.ShowFeedbackMessage($"{numberOfEngines} engines chosen!");
 
 			return _vehicleFactory.CreateAirPlain(
 				_licensePlateRegistry.IsValidLicensePlate, 
@@ -83,3 +94,57 @@ namespace LexiconExercise5_Garage.Vehicles.VehicleFactories
 				numberOfEngines
 			);
 		}
+
+		//private IVehicle BuildBoat(string licensePlate, VehicleColor color, uint wheels)
+		//{
+		//	FuelType fuelType = _consoleUI.RegisterFuelTypeInput();
+
+		//	return _vehicleFactory.CreateBoat(
+		//		_licensePlateRegistry.IsValidLicensePlate,
+		//		licensePlate,
+		//		color,
+		//		wheels,
+		//		fuelType
+		//	);
+		//}
+
+		//private IVehicle BuildBus(string licensePlate, VehicleColor color, uint wheels)
+		//{
+		//	uint nrOfDoors = _consoleUI.RegisterNrOfDoorsInput();
+
+		//	return _vehicleFactory.CreateBus(
+		//		_licensePlateRegistry.IsValidLicensePlate,
+		//		licensePlate,
+		//		color,
+		//		wheels,
+		//		nrOfDoors
+		//	);
+		//}
+
+		//private IVehicle BuildCar(string licensePlate, VehicleColor color, uint wheels)
+		//{
+		//	uint nrOfSeats = _consoleUI.RegisteruintNrOfSeatsInput();
+
+		//	return _vehicleFactory.CreateCar(
+		//		_licensePlateRegistry.IsValidLicensePlate,
+		//		licensePlate,
+		//		color,
+		//		wheels,
+		//		nrOfSeats
+		//	);
+		//}
+
+		//private IVehicle BuildMotorcycle(string licensePlate, VehicleColor color, uint wheels)
+		//{
+		//	bool hasSidecar = _consoleUI.RegisterHasSidecarInput();
+
+		//	return _vehicleFactory.CreateMotorcycle(
+		//		_licensePlateRegistry.IsValidLicensePlate,
+		//		licensePlate,
+		//		color,
+		//		wheels,
+		//		hasSidecar
+		//	);
+		//}
+	}
+}

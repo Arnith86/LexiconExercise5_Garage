@@ -11,10 +11,9 @@ namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 		void ShowFeedbackMessage(string message);
 		int RegisterGarageHandlingMenuSelection(int garageKey);
 		string RegisterLicensePlateInput();
-		VehicleColor RegisterColorInput();
+		int RegisterColorInput();
 		uint RegisterNrOfWheelsInput();
 		uint RegisterNumberOfEnginesInput();
 		int RegisterWhatVehicleToCreateMenu();
-		void ShowBuildableVehicles();
 	}
 }
