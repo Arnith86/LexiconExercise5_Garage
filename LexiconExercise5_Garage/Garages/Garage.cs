@@ -5,6 +5,7 @@ using LexiconExercise5_Garage.Vehicles.Cars;
 using LexiconExercise5_Garage.Vehicles.AirPlains;
 using LexiconExercise5_Garage.Vehicles.Motorcycles;
 using System.Collections;
+using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 
 namespace LexiconExercise5_Garage.Garages;
 
@@ -19,7 +20,7 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : VehicleBase
 	// Upper and lower limits for the garage size
 	private const int _c_GARAGE_SIZE_UPPER_LIMIT = 524288;
 	private const int _c_GARAGE_SIZE_LOWER_LIMIT = 1;
-
+	private readonly ILicensePlateRegistry _licensePlateRegistry;
 	private T[] _vehicles = new T[0];
 	private int _capacity = 0;
 	private int _garageVehicleLimit = 0;
@@ -64,9 +65,10 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : VehicleBase
 	/// Initializes a new instance of the <see cref="Garage{T}"/> class with a specified size limit.
 	/// </summary>
 	/// <param name="size">Initial size limit for the garage.</param>
-	public Garage(int size)
+	public Garage(int size, ILicensePlateRegistry licensePlateRegistry)
 	{
 		Capacity = size;
+		_licensePlateRegistry = licensePlateRegistry;
 		GarageVehicleLimit = size;
 	}
 
@@ -227,52 +229,54 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : VehicleBase
 	/// <inheritdoc/>
 	public void Add40VehiclesToCollection()
 	{
+		
+
 		List<VehicleBase> collectionOfDifferentVehicles = new List<VehicleBase>()
 		{
-			new AirPlain(LPR => true, "abc111", VehicleColor.Red, 4, 2),
-			new AirPlain(LPR => true, "abc112", VehicleColor.Blue, 6, 4),
-			new AirPlain(LPR => true, "abc113", VehicleColor.Green, 8, 4),
-			new AirPlain(LPR => true, "abc114", VehicleColor.Yellow, 6, 2),
-			new AirPlain(LPR => true, "abc115", VehicleColor.Red, 8, 1),
-			new AirPlain(LPR => true, "abc116", VehicleColor.Blue, 12, 1),
-			new AirPlain(LPR => true, "abc117", VehicleColor.Green, 6, 3),
-			new AirPlain(LPR => true, "abc118", VehicleColor.Red, 9, 3),
+			new AirPlain(_licensePlateRegistry.IsValidLicensePlate, "abc111", VehicleColor.Red, 4, 2),
+			new AirPlain(_licensePlateRegistry.IsValidLicensePlate, "abc112", VehicleColor.Blue, 6, 4),
+			new AirPlain(_licensePlateRegistry.IsValidLicensePlate, "abc113", VehicleColor.Green, 8, 4),
+			new AirPlain(_licensePlateRegistry.IsValidLicensePlate, "abc114", VehicleColor.Yellow, 6, 2),
+			new AirPlain(_licensePlateRegistry.IsValidLicensePlate, "abc115", VehicleColor.Red, 8, 1),
+			new AirPlain(_licensePlateRegistry.IsValidLicensePlate, "abc116", VehicleColor.Blue, 12, 1),
+			new AirPlain(_licensePlateRegistry.IsValidLicensePlate, "abc117", VehicleColor.Green, 6, 3),
+			new AirPlain(_licensePlateRegistry.IsValidLicensePlate, "abc118", VehicleColor.Red, 9, 3),
 
-			new Boat(LPR => true, "abc119", VehicleColor.Red, 0, FuelType.Diesel),
-			new Boat(LPR => true, "abc120", VehicleColor.Green, 0, FuelType.Gasoline),
-			new Boat(LPR => true, "abc121", VehicleColor.Blue, 0, FuelType.Gasoline),
-			new Boat(LPR => true, "abc122", VehicleColor.Yellow, 0, FuelType.Electric),
-			new Boat(LPR => true, "abc123", VehicleColor.Blue, 0, FuelType.None),
-			new Boat(LPR => true, "abc124", VehicleColor.Red, 0, FuelType.None),
-			new Boat(LPR => true, "abc125", VehicleColor.Green, 0, FuelType.Diesel),
-			new Boat(LPR => true, "abc126", VehicleColor.Green, 0, FuelType.Gasoline),
+			new Boat(_licensePlateRegistry.IsValidLicensePlate, "abc119", VehicleColor.Red, 0, FuelType.Diesel),
+			new Boat(_licensePlateRegistry.IsValidLicensePlate, "abc120", VehicleColor.Green, 0, FuelType.Gasoline),
+			new Boat(_licensePlateRegistry.IsValidLicensePlate, "abc121", VehicleColor.Blue, 0, FuelType.Gasoline),
+			new Boat(_licensePlateRegistry.IsValidLicensePlate, "abc122", VehicleColor.Yellow, 0, FuelType.Electric),
+			new Boat(_licensePlateRegistry.IsValidLicensePlate, "abc123", VehicleColor.Blue, 0, FuelType.None),
+			new Boat(_licensePlateRegistry.IsValidLicensePlate, "abc124", VehicleColor.Red, 0, FuelType.None),
+			new Boat(_licensePlateRegistry.IsValidLicensePlate, "abc125", VehicleColor.Green, 0, FuelType.Diesel),
+			new Boat(_licensePlateRegistry.IsValidLicensePlate, "abc126", VehicleColor.Green, 0, FuelType.Gasoline),
 
-			new Bus(LPR => true, "abc127", VehicleColor.Green, 4, 1),
-			new Bus(LPR => true, "abc128", VehicleColor.Red, 6, 2),
-			new Bus(LPR => true, "abc129", VehicleColor.Red, 6, 2),
-			new Bus(LPR => true, "abc130", VehicleColor.Green, 4, 1),
-			new Bus(LPR => true, "abc131", VehicleColor.Blue, 8, 2),
-			new Bus(LPR => true, "abc132", VehicleColor.Blue, 4, 2),
-			new Bus(LPR => true, "abc133", VehicleColor.Yellow, 12, 2),
-			new Bus(LPR => true, "abc134", VehicleColor.Yellow, 12, 2),
+			new Bus(_licensePlateRegistry.IsValidLicensePlate, "abc127", VehicleColor.Green, 4, 1),
+			new Bus(_licensePlateRegistry.IsValidLicensePlate, "abc128", VehicleColor.Red, 6, 2),
+			new Bus(_licensePlateRegistry.IsValidLicensePlate, "abc129", VehicleColor.Red, 6, 2),
+			new Bus(_licensePlateRegistry.IsValidLicensePlate, "abc130", VehicleColor.Green, 4, 1),
+			new Bus(_licensePlateRegistry.IsValidLicensePlate, "abc131", VehicleColor.Blue, 8, 2),
+			new Bus(_licensePlateRegistry.IsValidLicensePlate, "abc132", VehicleColor.Blue, 4, 2),
+			new Bus(_licensePlateRegistry.IsValidLicensePlate, "abc133", VehicleColor.Yellow, 12, 2),
+			new Bus(_licensePlateRegistry.IsValidLicensePlate, "abc134", VehicleColor.Yellow, 12, 2),
 
-			new Car(LPR => true, "abc135", VehicleColor.Red, 4, 5),
-			new Car(LPR => true, "abc136", VehicleColor.Red, 4, 6),
-			new Car(LPR => true, "abc137", VehicleColor.Green, 4, 6),
-			new Car(LPR => true, "abc138", VehicleColor.Blue, 4, 7),
-			new Car(LPR => true, "abc139", VehicleColor.Blue, 4, 7),
-			new Car(LPR => true, "abc140", VehicleColor.Yellow, 4, 2),
-			new Car(LPR => true, "abc141", VehicleColor.Yellow, 4, 2),
-			new Car(LPR => true, "abc142", VehicleColor.Green, 4, 5),
+			new Car(_licensePlateRegistry.IsValidLicensePlate, "abc135", VehicleColor.Red, 4, 5),
+			new Car(_licensePlateRegistry.IsValidLicensePlate, "abc136", VehicleColor.Red, 4, 6),
+			new Car(_licensePlateRegistry.IsValidLicensePlate, "abc137", VehicleColor.Green, 4, 6),
+			new Car(_licensePlateRegistry.IsValidLicensePlate, "abc138", VehicleColor.Blue, 4, 7),
+			new Car(_licensePlateRegistry.IsValidLicensePlate, "abc139", VehicleColor.Blue, 4, 7),
+			new Car(_licensePlateRegistry.IsValidLicensePlate, "abc140", VehicleColor.Yellow, 4, 2),
+			new Car(_licensePlateRegistry.IsValidLicensePlate, "abc141", VehicleColor.Yellow, 4, 2),
+			new Car(_licensePlateRegistry.IsValidLicensePlate, "abc142", VehicleColor.Green, 4, 5),
 
-			new Motorcycle(LPR => true, "abc143", VehicleColor.Red, 2, false),
-			new Motorcycle(LPR => true, "abc144", VehicleColor.Red, 2, false),
-			new Motorcycle(LPR => true, "abc145", VehicleColor.Green, 2, false),
-			new Motorcycle(LPR => true, "abc146", VehicleColor.Blue, 2, false),
-			new Motorcycle(LPR => true, "abc147", VehicleColor.Blue, 2, true),
-			new Motorcycle(LPR => true, "abc148", VehicleColor.Yellow, 2, true),
-			new Motorcycle(LPR => true, "abc149", VehicleColor.Yellow, 2, true),
-			new Motorcycle(LPR => true, "abc150", VehicleColor.Green, 2, true),
+			new Motorcycle(_licensePlateRegistry.IsValidLicensePlate, "abc143", VehicleColor.Red, 2, false),
+			new Motorcycle(_licensePlateRegistry.IsValidLicensePlate, "abc144", VehicleColor.Red, 2, false),
+			new Motorcycle(_licensePlateRegistry.IsValidLicensePlate, "abc145", VehicleColor.Green, 2, false),
+			new Motorcycle(_licensePlateRegistry.IsValidLicensePlate, "abc146", VehicleColor.Blue, 2, false),
+			new Motorcycle(_licensePlateRegistry.IsValidLicensePlate, "abc147", VehicleColor.Blue, 2, true),
+			new Motorcycle(_licensePlateRegistry.IsValidLicensePlate, "abc148", VehicleColor.Yellow, 2, true),
+			new Motorcycle(_licensePlateRegistry.IsValidLicensePlate, "abc149", VehicleColor.Yellow, 2, true),
+			new Motorcycle(_licensePlateRegistry.IsValidLicensePlate, "abc150", VehicleColor.Green, 2, true),
 		};
 
 		foreach (var vehicle in collectionOfDifferentVehicles)

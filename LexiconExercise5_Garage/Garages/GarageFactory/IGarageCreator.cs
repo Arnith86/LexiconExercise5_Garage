@@ -14,6 +14,6 @@ namespace LexiconExercise5_Garage.Garages.GarageFactory
 		/// </summary>
 		/// <param name="size">The maximum number of vehicles the garage can hold.</param>
 		/// <returns>An instance of <see cref="IGarage{T}"/> configured with the given size.</returns>
-		IGarage<T> CreateGarage(int size, ILicensePlateRegistry licensePlateRegistry);
+		IGarage<T> CreateGarage(int size);
 	}
 }

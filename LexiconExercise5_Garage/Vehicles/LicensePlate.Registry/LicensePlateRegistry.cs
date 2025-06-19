@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 
@@ -7,14 +8,22 @@ namespace LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 /// <summary>
 /// Handles validation and registration of vehicle license plates,
 /// ensuring format correctness and uniqueness across the application.
+/// License plates are persisted to a local file.
 /// </summary>
 public class LicensePlateRegistry : ILicensePlateRegistry
 {
 	// Regular expression to validate license plate format (3 letters followed by 3 digits).
 	private readonly Regex _validLicensePlateStructure = new Regex(@"^[a-zA-Z]{3}[0-9]{3}$");
+	private readonly string _storageFilePath;
 	
-	// Todo: extract to a file or SQLite. 
 	protected static HashSet<string> RegisteredLicensePlates = new HashSet<string>();
+
+	public LicensePlateRegistry(string? storageFilePath = null)
+	{
+		_storageFilePath = storageFilePath ?? "licensePlates.json";
+		LoadLicensePlateFromFile();
+	}
+
 
 	///<inheritdoc/>
 	/// <exception cref="ArgumentNullException">Thrown if the license plate is null or whitespace.</exception>
@@ -47,5 +56,42 @@ public class LicensePlateRegistry : ILicensePlateRegistry
 	private void RegisterLicensePlate(string licensePlate)
 	{
 		RegisteredLicensePlates.Add(licensePlate);
+		SaveLicensePlateToFile();
+	}
+
+	/// <inheritdoc/>
+	public void ClearAllLicensePlates()
+	{
+		RegisteredLicensePlates.Clear();
+		SaveLicensePlateToFile();
+	}
+
+	/// <inheritdoc/>
+	public void RemoveLicensePlate(string licensePlate)
+	{
+		RegisteredLicensePlates.Remove(licensePlate);
+		SaveLicensePlateToFile();
+	}
+
+	private void LoadLicensePlateFromFile()
+	{
+		// Creates a new empty file, if no file exists.
+		if (!File.Exists(_storageFilePath))
+		{
+			File.WriteAllText(_storageFilePath, JsonSerializer.Serialize(new HashSet<string>()));
+			return;
+		}
+
+		// Loads license plates from file.
+		var json = File.ReadAllText(_storageFilePath);
+		var loaded = JsonSerializer.Deserialize<HashSet<string>>(json);
+		if (loaded is not null)
+			RegisteredLicensePlates = loaded;
+	}
+
+	private void SaveLicensePlateToFile()
+	{
+		var json = JsonSerializer.Serialize(RegisteredLicensePlates, new JsonSerializerOptions { WriteIndented = true });
+		File.WriteAllText(_storageFilePath, json);
 	}
 }

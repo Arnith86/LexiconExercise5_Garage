@@ -12,14 +12,21 @@ namespace LexiconExercise5_Garage.Garages.GarageFactory
 	/// </typeparam>
 	public class GarageMixedCreator<T> : IGarageCreator<T> where T : VehicleBase
 	{
+		private readonly ILicensePlateRegistry _licensePlateRegistry;
+
+		public GarageMixedCreator(ILicensePlateRegistry licensePlateRegistry)
+		{
+			_licensePlateRegistry = licensePlateRegistry;
+		}
+
 		/// <summary>
 		/// Creates a new instance of <see cref="Garage{T}"/> with the specified size.
 		/// </summary>
 		/// <param name="size">The maximum number of vehicles the garage can hold.</param>
 		/// <param name="licensePlateRegistry">Validates and stores a list of unique license plates</param>
 		/// <returns>A new instance of <see cref="IGarage{T}"/>.</returns>
-		public IGarage<T> CreateGarage(int size, ILicensePlateRegistry licensePlateRegistry) => 
-			new Garage<T>(size, licensePlateRegistry);
+		public IGarage<T> CreateGarage(int size) => 
+			new Garage<T>(size, _licensePlateRegistry);
 
 	}
 }

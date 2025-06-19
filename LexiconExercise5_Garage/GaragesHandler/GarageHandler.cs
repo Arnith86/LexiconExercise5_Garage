@@ -1,5 +1,6 @@
 ﻿
 using LexiconExercise5_Garage.Garages;
+using LexiconExercise5_Garage.Garages.GarageFactory;
 using LexiconExercise5_Garage.Vehicles;
 using LexiconExercise5_GarageAssignment.ConsoleRelated;
 
@@ -8,11 +9,13 @@ namespace LexiconExercise5_Garage.GaragesHandler;
 public class GarageHandler
 {
 	private readonly IConsoleUI _consoleUI;
+	private readonly IGarageCreator<VehicleBase> _garageCreator;
 	private Dictionary<int, IGarage<VehicleBase>> _garages;
 	
-	public GarageHandler(IConsoleUI consoleUI)
+	public GarageHandler(IConsoleUI consoleUI, IGarageCreator<VehicleBase> garageCreator)
 	{
 		_consoleUI = consoleUI;
+		_garageCreator = garageCreator;
 		_garages = new Dictionary<int, IGarage<VehicleBase>>();
 	}
 
@@ -55,6 +58,10 @@ public class GarageHandler
 				case 1:
 					AddMixedSetOfVehiclesToGarage(garageKey);
 					break;
+				case 2:
+					//WhatVehicleToCreateMenu(garageKey);
+					//ParkAVehicleInGarage(garageKey);
+					break;
 				case 0:
 					exitGarageHandlingMenu = true;
 					break;
@@ -82,6 +89,15 @@ public class GarageHandler
 		}
 	}
 
+	
+
+	
+	//"2: Park a vehicle in garage.\n" +
+	//"3: Remove a vehicle, from garage.\n" +
+	//"4: Get vehicle information of a single vehicle, currently parked in garage.\n" +
+	//"5: Get vehicle information of all vehicles, currently parked in garage.\n" +
+	//"6: Get filtered information of all vehicles.\n" +
+	//"0: Exit garage handling menu.\n\n"
 
 
 	private int SelectGarage()
@@ -126,7 +142,7 @@ public class GarageHandler
 			try
 			{
 				int newKey = _garages.Any() ? _garages.Keys.Max() + 1 : 0;
-				_garages.Add(newKey, new Garage<VehicleBase>(size));
+				_garages.Add(newKey, _garageCreator.CreateGarage(size));
 				
 				isValid = true;
 			}

@@ -1,6 +1,7 @@
 ﻿
 using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 using LexiconExercise5_Garage.Vehicles;
+using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 using LexiconExercise5_Garage.Vehicles.Motorcycles;
 
 namespace LexiconExcercise5.Garage.TestProject.Vehicles;
@@ -12,8 +13,6 @@ namespace LexiconExcercise5.Garage.TestProject.Vehicles;
 [Collection("NonParallelGroup")] // Ensures these tests do not run in parallel with other test classes in the same collection.
 public class MotorcycleTests
 {
-	private MockLicensePlateRegistry _c_MockLicensePlateRegistry = new MockLicensePlateRegistry();
-
 	// VALID license plate examples matching expected format (3 letters followed by 3 digits)
 	private const string _c_LicensePlate = "BBK159";
 
@@ -36,9 +35,13 @@ public class MotorcycleTests
 	[InlineData(_c_False)]
 	public void HasSideCar_SetViaConstructor_ValidValues_ShouldPass(bool hasSideCar)
 	{
-		//Arrange & Act
+		//Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+		
+		// Act
 		IMotorcycle motorcycle = new Motorcycle(
-			_c_MockLicensePlateRegistry.IsValidLicensePlate,
+			registry.IsValidLicensePlate,
 			_c_LicensePlate,
 			_c_Color,
 			_c_Wheel,
@@ -48,15 +51,17 @@ public class MotorcycleTests
 		//Assert
 		Assert.Equal(hasSideCar, motorcycle.HasSidecar);
 
-		Dispose();
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	/// <summary>
 	/// Cleans up the mock registry after each test run.
 	/// </summary>
-	public void Dispose()
+	public void Dispose(string tempFile, ILicensePlateRegistry registry)
 	{
-		_c_MockLicensePlateRegistry.ClearRegistry();
-		_c_MockLicensePlateRegistry.IsValidLicensePlate("AAA111");
+		registry.ClearAllLicensePlates();
+		if (File.Exists(tempFile))
+			File.Delete(tempFile);
 	}
 }

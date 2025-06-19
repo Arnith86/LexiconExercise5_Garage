@@ -1,6 +1,7 @@
 ﻿using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 using LexiconExercise5_Garage.Vehicles;
 using LexiconExercise5_Garage.Vehicles.Boats;
+using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 
 
 namespace LexiconExcercise5.Garage.TestProject.Vehicles;
@@ -12,8 +13,6 @@ namespace LexiconExcercise5.Garage.TestProject.Vehicles;
 [Collection("NonParallelGroup")] // Will not run in parallel with any other class in the same collection
 public class BoatTests
 {
-	private MockLicensePlateRegistry _c_MockLicensePlateRegistry = new MockLicensePlateRegistry();
-
 	// VALID base class attributes
 	private const string _c_LicensePlate = "zBY283";
 	private const VehicleColor _c_Color = VehicleColor.Yellow;
@@ -37,9 +36,13 @@ public class BoatTests
 	[InlineData(_c_fuelTypeElectric)]
 	public void FuelType_SetViaConstructor_ValidValues_ShouldPass(FuelType fuel)
 	{
-		// Arrange & Act 
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		// Act 
 		IBoat boat = new Boat(
-			_c_MockLicensePlateRegistry.IsValidLicensePlate,
+			registry.IsValidLicensePlate,
 			_c_LicensePlate, 
 			_c_Color, 
 			_c_Wheel, 
@@ -49,15 +52,17 @@ public class BoatTests
 		// Assert
 		Assert.Equal(fuel, boat.FuelType);
 
-		Dispose();
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	/// <summary>
 	/// Cleans up the mock registry after each test run.
 	/// </summary>
-	public void Dispose()
+	public void Dispose(string tempFile, ILicensePlateRegistry registry)
 	{
-		_c_MockLicensePlateRegistry.ClearRegistry();
-		_c_MockLicensePlateRegistry.IsValidLicensePlate("AAA111");
+		registry.ClearAllLicensePlates();
+		if (File.Exists(tempFile))
+			File.Delete(tempFile);
 	}
 }

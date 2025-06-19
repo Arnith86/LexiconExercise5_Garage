@@ -1,10 +1,12 @@
 ﻿using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 using LexiconExercise5_Garage.Garages;
+using LexiconExercise5_Garage.Garages.GarageFactory;
 using LexiconExercise5_Garage.Vehicles;
+using LexiconExercise5_Garage.Vehicles.AirPlains;
 using LexiconExercise5_Garage.Vehicles.Boats;
 using LexiconExercise5_Garage.Vehicles.Buss;
 using LexiconExercise5_Garage.Vehicles.Cars;
-using LexiconExercise5_Garage.Vehicles.AirPlains;
+using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 using LexiconExercise5_Garage.Vehicles.Motorcycles;
 
 namespace LexiconExcercise5.Garage.TestProject.GaragesTests;
@@ -16,7 +18,6 @@ public class GarageTests
 {
 
 	// VALID Vehicle base class attributes
-	private MockLicensePlateRegistry _c_MockLicensePlateRegistry = new MockLicensePlateRegistry();
 	private const string _c_LicensePlate = "BBK159";
 	private const VehicleColor _c_Color = VehicleColor.Blue;
 	private const uint _c_Wheel = 4;
@@ -42,7 +43,7 @@ public class GarageTests
 		new Motorcycle(LPR => true, "abc143", VehicleColor.Red, 2, false)
 	};
 
-
+		
 	/// <summary>
 	/// Verifies that various valid sizes result in a properly set internal capacity.
 	/// Expected capacity: 4
@@ -53,17 +54,25 @@ public class GarageTests
 	[InlineData(_c_ArraySizeBeforeLimit4)]
 	public void Vehicles_CapacityArraySize_SetViaConstructor_ValidValues_ShouldPass_Expected_UsedSpaces0_Capacity4(int size)
 	{
-		//Arrange & Act
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		// Act
+		IGarageCreator<TestVehicle> garageCreator = new GarageMixedCreator<TestVehicle>(registry);
+
 		int expectedUsedSpaces = 0;
 		int expectedCapacity = 4;
 
-		Garage<TestVehicle> garage = new Garage<TestVehicle>(size);
+		IGarage<TestVehicle> garage = garageCreator.CreateGarage(size);
 
 		//Assert
 		Assert.Equal(expectedCapacity, garage.Capacity);
 		Assert.Equal(expectedUsedSpaces, garage.UsedSpaces);
-	}
 
+		//Cleanup
+		Dispose(tempFile, registry);
+	}
 
 	/// <summary>
 	/// Verifies that a size just over a power-of-two boundary sets capacity to 8.
@@ -71,15 +80,24 @@ public class GarageTests
 	[Fact]
 	public void Vehicles_CapacityArraySize_SetViaConstructor_ValidValues_ShouldPass_UsedSpaces0_Capacity8()
 	{
-		//Arrange & Act
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		// Act
+		IGarageCreator<TestVehicle> garageCreator = new GarageMixedCreator<TestVehicle>(registry);
+
 		int expectedUsedSpaces = 0;
 		int expectedCapacity = 8;
 
-		Garage<TestVehicle> garage = new Garage<TestVehicle>(_c_ArraySizeAfterLimit5);
+		IGarage<TestVehicle> garage = garageCreator.CreateGarage(_c_ArraySizeAfterLimit5);
 
 		//Assert
 		Assert.Equal(expectedCapacity, garage.Capacity);
 		Assert.Equal(expectedUsedSpaces, garage.UsedSpaces);
+
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	/// <summary>
@@ -88,15 +106,24 @@ public class GarageTests
 	[Fact]
 	public void Vehicles_CapacityArraySize_SetViaConstructor_ValidValues_ShouldPass_Expected_UsedSpaces0_Capacity524288()
 	{
-		//Arrange & Act
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		// Act
+		IGarageCreator<TestVehicle> garageCreator = new GarageMixedCreator<TestVehicle>(registry);
+
 		int expectedUsedSpaces = 0;
 		int expectedCapacity = 524288;
 
-		Garage<TestVehicle> garage = new Garage<TestVehicle>(_c_ArraySizeEdgeCaseHighestValue);
+		IGarage<TestVehicle> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
 
 		//Assert
 		Assert.Equal(expectedCapacity, garage.Capacity);
 		Assert.Equal(expectedUsedSpaces, garage.UsedSpaces);
+
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 
@@ -108,17 +135,31 @@ public class GarageTests
 	[InlineData(_c_ArraySizeOverUpperLimit524289)]
 	public void Vehicles_CapacityArraySize_SetViaConstructor_InValidValues_ShouldThrowArgumentOutOfRangeException(int size)
 	{
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		IGarageCreator<TestVehicle> garageCreator = new GarageMixedCreator<TestVehicle>(registry); 
+
 		// Act & Assert
 		Assert.Throws<ArgumentOutOfRangeException>(() =>
-			new Garage<TestVehicle>(size)
+			garageCreator.CreateGarage(size)
 		);
+
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	[Fact]
 	public void GetVehicleInformation_IfHasSpecifiedVehicle_ValidValue_ShouldPass_Expected_String()
 	{
-		//Arrange
-		Garage<VehicleBase> garage = new(_c_ArraySizeEdgeCaseHighestValue);
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+
+		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
 
 		foreach (var vehicle in oneVehiclesOfEveryKind)
 		{
@@ -130,14 +171,22 @@ public class GarageTests
 		{
 			Assert.Equal(garage.GetVehicleInformation(vehicle.LicensePlate), vehicle.ToString());
 		}
+
+		// Cleanup 
+		Dispose(tempFile, registry);
 	}
 
 
 	[Fact]
 	public void GetVehicleInformation_IfSpecifiedVehicleNotInGarage_ValidValue_ShouldPass_Expected_null()
 	{
-		//Arrange
-		Garage<VehicleBase> garage = new(_c_ArraySizeEdgeCaseHighestValue);
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+
+		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
 
 		foreach (var vehicle in oneVehiclesOfEveryKind)
 		{
@@ -146,13 +195,21 @@ public class GarageTests
 
 		//Act & Assert
 		Assert.Null(garage.GetVehicleInformation("zzz999"));
+
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	[Fact]
 	public void GetAllVehiclesInformation_VerifiesAllInformationIsRetrieved_ShouldPass_Returns_StringCollection()
 	{
-		//Arrange
-		Garage<VehicleBase> garage = new(_c_ArraySizeEdgeCaseHighestValue);
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+
+		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
 
 		foreach (var vehicle in oneVehiclesOfEveryKind)
 		{
@@ -166,30 +223,49 @@ public class GarageTests
 		//Act & Assert
 		foreach (var vehicle in oneVehiclesOfEveryKind)
 		{
-			Assert.Contains(vehicle.ToString(), toStringCollection[index++] );
-		}	
+			Assert.Contains(vehicle.ToString(), toStringCollection[index++]);
+		}
+
+		// Cleanup
+		Dispose(tempFile,registry);
 	}
 
 	[Fact]
 	public void GetAllVehiclesInformation_GarageEmpty_ValidValue_ShouldPass_Returns_EmptyStringCollection()
 	{
-		//Arrange
-		Garage<VehicleBase> garage = new(_c_ArraySizeEdgeCaseHighestValue);
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
+		
 		//Act
 		List<string> toStringCollection = garage.GetAllVehiclesInformation()!.ToList();
+		
 		//Assert
-		Assert.True(toStringCollection.Count == 0);	
+		Assert.True(toStringCollection.Count == 0);
+
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	[Fact]
 	public void AddVehicle_EmptyGarage_ShouldPass_Expected_UsedSpaces2_Capacity4()
 	{
-		//Arrange & Act
+		// Arrange
 		int expectedUsedSpaces = 2;
 		int expectedCapacity = 4;
 
-		Garage<TestVehicle> garage = new Garage<TestVehicle>(_c_ArraySizeBeforeLimit4);
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
 
+		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+				
+		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeBeforeLimit4);
+
+
+		// Act
 		for (int i = 0; i < 2; i++)
 		{
 			garage.AddVehicle(
@@ -205,14 +281,20 @@ public class GarageTests
 		//Assert
 		Assert.Equal(expectedCapacity, garage.Capacity);
 		Assert.Equal(expectedUsedSpaces, garage.UsedSpaces);
+
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	[Fact]
 	public void AddVehicle_FullGarage_ShouldThrowArgumentOutOfRangeException()
 	{
-		//Arrange & Act
-		Garage<TestVehicle> garage = new Garage<TestVehicle>(_c_ArraySizeEdgeCaseHighestValue);
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
 
+		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
 
 		for (int i = 0; i < 524288; i++)
 		{
@@ -226,7 +308,7 @@ public class GarageTests
 			);
 		}
 
-		//Assert
+		// Act and Assert
 		Assert.Throws<ArgumentOutOfRangeException>(() =>
 			garage.AddVehicle(
 				new TestVehicle(
@@ -236,22 +318,28 @@ public class GarageTests
 				_c_Wheel)
 			)
 		);
+
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	[Fact]
 	public void AddVehicle_GarageUpperLimitReached_ShouldThrowArgumentOutOfRangeException()
 	{
-		//Arrange & Act
-		Garage<VehicleBase> garage = new Garage<VehicleBase>(_c_ArraySizeAfterLimit5);
+		//Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
 
+		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
 
-		// Act
+		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeAfterLimit5);
+
 		foreach (var vehicle in oneVehiclesOfEveryKind)
 		{
 			garage.AddVehicle(vehicle);
 		}
 
-		//Assert
+		// Act & Assert
 		Assert.Throws<ArgumentOutOfRangeException>(() =>
 			garage.AddVehicle(
 				new TestVehicle(
@@ -261,6 +349,9 @@ public class GarageTests
 				_c_Wheel)
 			)
 		);
+
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	[Fact]
@@ -270,7 +361,12 @@ public class GarageTests
 		int expectedUsedSpaces = 5;
 		int expectedCapacity = 8;
 
-		Garage<VehicleBase> garage = new Garage<VehicleBase>(_c_ArraySizeAfterLimit5);
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+
+		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeAfterLimit5);
 
 		// Act
 		foreach (var vehicle in oneVehiclesOfEveryKind)
@@ -281,19 +377,27 @@ public class GarageTests
 		//Assert
 		Assert.Equal(expectedCapacity, garage.Capacity);
 		Assert.Equal(expectedUsedSpaces, garage.UsedSpaces);
+
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	[Fact]
- 	public void AddVehicle_ChecksIfVehicleIsAddedToEmptySpaceAfterRemove_ValidValues_ShouldPass()
+	public void AddVehicle_ChecksIfVehicleIsAddedToEmptySpaceAfterRemove_ValidValues_ShouldPass()
 	{
 		//Arrange
 		int expectedUsedSpaces = 4;
-		Garage<VehicleBase> garage = new(_c_ArraySizeBeforeLimit4);
+
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+		
+		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeBeforeLimit4);
 
 		// Adds 4 vehicles with valid values (and unique license plates)
 		for (int i = 0; i < 4; i++)
 			garage.AddVehicle(oneVehiclesOfEveryKind[i]);
-		
+
 		// Act
 		// Removes vehicle from _vehicle[1].
 		garage.RemoveVehicle(oneVehiclesOfEveryKind[1].LicensePlate);
@@ -303,6 +407,8 @@ public class GarageTests
 		// Assert
 		// Only one a single index with null value 
 		Assert.Equal(expectedUsedSpaces, garage.UsedSpaces);
+
+		Dispose(tempFile, registry);
 	}
 
 	[Fact]
@@ -311,7 +417,11 @@ public class GarageTests
 		//Arrange
 		int expectedUsedSpaces = 4;
 
-		Garage<VehicleBase> garage = new(_c_ArraySizeEdgeCaseHighestValue);
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+		
+		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
 
 		// Act
 		foreach (var vehicle in oneVehiclesOfEveryKind)
@@ -330,5 +440,18 @@ public class GarageTests
 		Assert.Null(
 			garage.GetVehicleInformation(oneVehiclesOfEveryKind[1].LicensePlate)
 		);
+
+		// Cleanup
+		Dispose(tempFile, registry);
+	}
+
+	/// <summary>
+	/// Cleans up the mock registry after each test run.
+	/// </summary>
+	public void Dispose(string tempFile, ILicensePlateRegistry registry)
+	{
+		registry.ClearAllLicensePlates();
+		if (File.Exists(tempFile))
+			File.Delete(tempFile);
 	}
 }

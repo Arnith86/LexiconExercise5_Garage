@@ -1,15 +1,14 @@
 ﻿using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 using LexiconExercise5_Garage.Vehicles;
 using LexiconExercise5_Garage.Vehicles.AirPlains;
+using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 
 namespace LexiconExcercise5.Garage.TestProject.Vehicles;
 
 // Will not run in parallel with any other class in the same collection
 [Collection("NonParallelGroup")]
-public class AirPlaneTests : IDisposable
+public class AirPlaneTests 
 {
-	private MockLicensePlateRegistry _c_MockLicensePlateRegistry = new MockLicensePlateRegistry();
-
 	// VALID base class attributes
 	private const string _c_LicensePlate = "BBK159";
 	private const VehicleColor _c_Color = VehicleColor.Yellow;
@@ -36,9 +35,13 @@ public class AirPlaneTests : IDisposable
 	[InlineData(_c_EdgeCaseMax10Engines)]
 	public void NumberOfEngines_SetViaConstructor_ValidValues_ShouldPass(uint engines)
 	{
-		//Arrange & Act
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		// Act
 		IAirPlain airPlain = new AirPlain(
-			_c_MockLicensePlateRegistry.IsValidLicensePlate,
+			registry.IsValidLicensePlate,
 			_c_LicensePlate, 
 			_c_Color, 
 			_c_Wheel, 
@@ -48,16 +51,21 @@ public class AirPlaneTests : IDisposable
 		//Assert
 		Assert.Equal(engines, airPlain.NumberOfEngines);
 
-		Dispose();
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	[Fact]
 	public void NumberOfEngines_SetViaConstructor_InValidValues_ShouldThrowOutOfRangeException()
 	{
+		// Assigne
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
 		// Act & Assert
 		Assert.Throws<ArgumentOutOfRangeException>(() =>
 			new AirPlain(
-				_c_MockLicensePlateRegistry.IsValidLicensePlate,
+				registry.IsValidLicensePlate,
 				_c_LicensePlate,
 				_c_Color,
 				_c_Wheel,
@@ -65,16 +73,17 @@ public class AirPlaneTests : IDisposable
 			)
 		);
 
-		Dispose();
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	/// <summary>
-	/// Used to clean up after finished test. 
+	/// Cleans up the mock registry after each test run.
 	/// </summary>
-	public void Dispose()
+	public void Dispose(string tempFile, ILicensePlateRegistry registry)
 	{
-		_c_MockLicensePlateRegistry.ClearRegistry();
-		_c_MockLicensePlateRegistry.IsValidLicensePlate("AAA111");
+		registry.ClearAllLicensePlates();
+		if (File.Exists(tempFile))
+			File.Delete(tempFile);
 	}
-
 }

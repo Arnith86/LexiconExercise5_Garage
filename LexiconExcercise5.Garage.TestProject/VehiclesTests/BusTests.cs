@@ -1,6 +1,7 @@
-﻿using LexiconExercise5_Garage.Vehicles.Buss;
+﻿using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 using LexiconExercise5_Garage.Vehicles;
-using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
+using LexiconExercise5_Garage.Vehicles.Buss;
+using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 
 namespace LexiconExcercise5.Garage.TestProject.Vehicles;
 
@@ -11,8 +12,6 @@ namespace LexiconExcercise5.Garage.TestProject.Vehicles;
 [Collection("NonParallelGroup")] // Ensures these tests do not run in parallel with other test classes in the same collection.
 public class BusTests
 {
-	private MockLicensePlateRegistry _c_MockLicensePlateRegistry = new MockLicensePlateRegistry();
-
 	// VALID base class attributes
 	private const string _c_LicensePlate = "abk421";
 	private const VehicleColor _c_Color = VehicleColor.Red;
@@ -34,9 +33,13 @@ public class BusTests
 	[InlineData(_c_MaxNrOfDoors2)]
 	public void NumberOfDoors_SetViaConstructor_ValidValues_ShouldPass(uint doors)
 	{
-		// Assign & Act
+		// Assign
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		// Act
 		IBus bus = new Bus(
-			_c_MockLicensePlateRegistry.IsValidLicensePlate,
+			registry.IsValidLicensePlate,
 			_c_LicensePlate, 
 			_c_Color, 
 			_c_Wheel, 
@@ -46,7 +49,7 @@ public class BusTests
 		// Assert
 		Assert.Equal(doors, bus.NrOfDoors);
 
-		Dispose();
+		Dispose(tempFile, registry);
 	}
 
 	/// <summary>
@@ -55,26 +58,32 @@ public class BusTests
 	[Fact]
 	public void NumberOfDoors_SetViaConstructor_InValidValues_ShouldThrowArgumentOutOfRangeException()
 	{
-		// Assert & Act
+		// Assert
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		// Act
 		Assert.Throws<ArgumentOutOfRangeException>(() =>
 			new Bus(
-				_c_MockLicensePlateRegistry.IsValidLicensePlate,
+				registry.IsValidLicensePlate,
 				_c_LicensePlate,
 				_c_Color, 
 				_c_Wheel, 
 				_c_OutsideOfRangeNrOfDoors3
 			)
 		);
-
-		Dispose();
+		
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	/// <summary>
 	/// Cleans up the mock registry after each test run.
 	/// </summary>
-	public void Dispose()
+	public void Dispose(string tempFile, ILicensePlateRegistry registry)
 	{
-		_c_MockLicensePlateRegistry.ClearRegistry();
-		_c_MockLicensePlateRegistry.IsValidLicensePlate("AAA111");
+		registry.ClearAllLicensePlates();
+		if (File.Exists(tempFile))
+			File.Delete(tempFile);
 	}
 }

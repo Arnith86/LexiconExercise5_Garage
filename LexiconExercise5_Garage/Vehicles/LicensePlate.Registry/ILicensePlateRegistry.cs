@@ -13,4 +13,15 @@ public interface ILicensePlateRegistry
 	/// <param name="licensePlate">The license plate to validate and register.</param>
 	/// <returns><c>true</c> if the license plate is valid and successfully registered; otherwise <c>false</c>.</returns>
 	bool IsValidLicensePlate(string licensePlate);
+
+	/// <summary>
+	/// Removes a specific license Plate from register.
+	/// </summary>
+	/// <param name="licensePlate">The license plate to remove from register.</param>
+	public void RemoveLicensePlate(string licensePlate);
+
+	/// <summary>
+	/// Empties the registry.
+	/// </summary>
+	public void ClearAllLicensePlates();
 }

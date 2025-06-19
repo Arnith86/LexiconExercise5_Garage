@@ -1,5 +1,6 @@
 using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 using LexiconExercise5_Garage.Vehicles;
+using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 
 namespace LexiconExcercise5.Garage.TestProject.Vehicles;
 
@@ -7,10 +8,8 @@ namespace LexiconExcercise5.Garage.TestProject.Vehicles;
 /// Contains unit tests for the <see cref="VehicleBase"/> class,
 /// </summary>
 [Collection("NonParallelGroup")] // Will not run in parallel with any other class in the same collection
-public class VehicleBaseClassTest : IDisposable
+public class VehicleBaseClassTest
 {
-	private MockLicensePlateRegistry _c_MockLicensePlateRegistry = new MockLicensePlateRegistry();
-
 	// VALID unique license plate examples matching expected format (3 letters followed by 3 digits)
 	private const string _c_LicensePlateCaps = "BBK159";
 	private const string _c_LicensePlateLow = "azm129";
@@ -65,9 +64,13 @@ public class VehicleBaseClassTest : IDisposable
 	[InlineData(_c_LicensePlateMix)]
 	public void LicensePlate_SetViaConstructor_ValidValues_ShouldPass(string licensePlate)
 	{
-		// Arrange & Act 
+		// Arrange: create a unique file path
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		// & Act 
 		var testVehicle = new TestVehicle(
-			_c_MockLicensePlateRegistry.IsValidLicensePlate,
+			registry.IsValidLicensePlate,
 			licensePlate,
 			_c_GREEN,
 			_c_4Wheel
@@ -76,7 +79,8 @@ public class VehicleBaseClassTest : IDisposable
 		// Assert
 		Assert.Equal(licensePlate, testVehicle.LicensePlate);
 
-		Dispose();
+		// Cleanup 
+		Dispose(tempFile, registry);
 	}
 
 	/// <summary>
@@ -86,14 +90,17 @@ public class VehicleBaseClassTest : IDisposable
 	public void LicensePlate_SetViaConstructor_Unique_ValidValue_ShouldPass()
 	{
 		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		var registry = new MockLicensePlateRegistry(tempFile);
+
 		string expectedLicensePlate = _c_LicensePlateUnique;
 
 		// "uRE832", "azm129", "BBK159", added to registry 
-		_c_MockLicensePlateRegistry.FillRegistry();
+		registry.FillRegistry();
 
 		// Act 
 		var testVehicle = new TestVehicle(
-			_c_MockLicensePlateRegistry.IsValidLicensePlate,
+			registry.IsValidLicensePlate,
 			expectedLicensePlate,
 			_c_GREEN,
 			_c_4Wheel
@@ -102,7 +109,8 @@ public class VehicleBaseClassTest : IDisposable
 		// Assert
 		Assert.Equal(expectedLicensePlate, testVehicle.LicensePlate);
 
-		Dispose();
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	/// <summary>
@@ -112,20 +120,23 @@ public class VehicleBaseClassTest : IDisposable
 	public void LicensePlate_SetViaConstructor_NotUnique_InValidValue_ShouldThrowInvalidOperationException()
 	{
 		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		var registry = new MockLicensePlateRegistry(tempFile);
+
 		// "uRE832", "azm129", "BBK159", added to registry. 
-		_c_MockLicensePlateRegistry.FillRegistry();
+		registry.FillRegistry();
 
 		// Act & Assert
 		Assert.Throws<InvalidOperationException>(() =>
 			new TestVehicle(
-				_c_MockLicensePlateRegistry.IsValidLicensePlate,
+				registry.IsValidLicensePlate,
 				_c_LicensePlateDuplicate,
 				_c_GREEN,
 				_c_4Wheel
 			)
 		);
 
-		Dispose();
+		Dispose(tempFile, registry);
 	}
 
 	/// <summary>
@@ -136,17 +147,22 @@ public class VehicleBaseClassTest : IDisposable
 	[InlineData(_c_LicensePlateIsEmpty)]
 	public void LicensePlate_SetViaConstructor_InValidValues_ShouldThrowArgumentNullException(string licensePlate)
 	{
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+		
 		// Act & Assert
 		Assert.Throws<ArgumentNullException>(() =>
 			new TestVehicle(
-				_c_MockLicensePlateRegistry.IsValidLicensePlate,
+				registry.IsValidLicensePlate,
 				licensePlate,
 				_c_GREEN,
 				_c_4Wheel
 			)
 		);
 
-		Dispose();
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	/// <summary>
@@ -157,17 +173,22 @@ public class VehicleBaseClassTest : IDisposable
 	[InlineData(_c_LicensePlateToShort)]
 	public void LicensePlate_SetViaConstructor_InValidValues_ShouldThrowArgumentOutOfRangeException(string licensePlate)
 	{
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
 		// Act & Assert
 		Assert.Throws<ArgumentOutOfRangeException>(() =>
 			new TestVehicle(
-				_c_MockLicensePlateRegistry.IsValidLicensePlate,
+				registry.IsValidLicensePlate,
 				licensePlate,
 				_c_GREEN,
 				_c_4Wheel
 			)
 		);
 
-		Dispose();
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	/// <summary>
@@ -178,17 +199,22 @@ public class VehicleBaseClassTest : IDisposable
 	[InlineData(_c_LicensePlateMixedPlacements)]
 	public void LicensePlate_SetViaConstructor_InValidValues_ShouldThrowArgumentException(string licensePlate)
 	{
+		// Assign
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
 		// Act & Assert
 		Assert.Throws<ArgumentException>(() =>
 			new TestVehicle(
-				_c_MockLicensePlateRegistry.IsValidLicensePlate,
+				registry.IsValidLicensePlate,
 				licensePlate,
 				_c_GREEN,
 				_c_4Wheel
 			)
 		);
 
-		Dispose();
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 
@@ -202,9 +228,13 @@ public class VehicleBaseClassTest : IDisposable
 	[InlineData(_c_YELLOW)]
 	public void Color_SetViaConstructor_ValidValues_ShouldPass(VehicleColor color)
 	{
-		// Arrange & Act 
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+		
+		// Act 
 		var testVehicle = new TestVehicle(
-			_c_MockLicensePlateRegistry.IsValidLicensePlate,
+			registry.IsValidLicensePlate,
 			_c_LicensePlateCaps,
 			color,
 			_c_4Wheel
@@ -213,7 +243,8 @@ public class VehicleBaseClassTest : IDisposable
 		// Assert
 		Assert.Equal(color, testVehicle.Color);
 
-		Dispose();
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	/// <summary>
@@ -229,9 +260,13 @@ public class VehicleBaseClassTest : IDisposable
 	[InlineData(_c_EdgeCaseMax56Wheel)]
 	public void Wheels_SetViaConstructor_ValidValues_ShouldPass(uint wheels)
 	{
-		// Arrange & Act 
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		// Act 
 		var testVehicle = new TestVehicle(
-			_c_MockLicensePlateRegistry.IsValidLicensePlate,
+			registry.IsValidLicensePlate,
 			_c_LicensePlateCaps,
 			_c_RED,
 			wheels
@@ -240,7 +275,7 @@ public class VehicleBaseClassTest : IDisposable
 		// Assert
 		Assert.Equal(wheels, testVehicle.Wheels);
 
-		Dispose();
+		Dispose(tempFile, registry);
 	}
 
 	/// <summary>
@@ -250,25 +285,31 @@ public class VehicleBaseClassTest : IDisposable
 	[InlineData(_c_ExcessiveWheel57)]
 	public void Wheels_SetViaConstructor_InValidValues_ShouldThrowArgumentOutOfRangeException(uint wheels)
 	{
+		// Arrange 
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
 		// Act & Assert
 		Assert.Throws<ArgumentOutOfRangeException>(() =>
 			new TestVehicle(
-				_c_MockLicensePlateRegistry.IsValidLicensePlate,
+				registry.IsValidLicensePlate,
 				_c_LicensePlateCaps,
 				_c_RED,
 				wheels
 			)
 		);
 
-		Dispose();
+		// Cleanup
+		Dispose(tempFile, registry);
 	}
 
 	/// <summary>
 	/// Cleans up the mock registry after each test run.
 	/// </summary>
-	public void Dispose()
+	public void Dispose(string tempFile, ILicensePlateRegistry registry)
 	{
-		_c_MockLicensePlateRegistry.ClearRegistry();
-		_c_MockLicensePlateRegistry.IsValidLicensePlate("AAA111");
+		registry.ClearAllLicensePlates();
+		if (File.Exists(tempFile))
+			File.Delete(tempFile);
 	}
 }
