@@ -16,8 +16,9 @@ namespace LexiconExercise5_Garage.Vehicles.VehicleFactories;
 /// This centralized factory simplifies vehicle creation and enforces consistent instantiation logic 
 /// across different vehicle types.
 /// </summary>
-public class VehicleFactory
+public class VehicleFactory : IVehicleFactory
 {
+	/// <inheritdoc/>
 	public VehicleBase CreateAirPlain(
 		Func<string, bool> licensePlateValidator,
 		string licensePlate,
@@ -34,6 +35,7 @@ public class VehicleFactory
 		);
 	}
 
+	/// <inheritdoc/>
 	public VehicleBase CreateBoat(
 		Func<string, bool> licensePlateValidator,
 		string licensePlate,
@@ -50,6 +52,7 @@ public class VehicleFactory
 		);
 	}
 
+	/// <inheritdoc/>
 	public VehicleBase CreateBus(
 		Func<string, bool> licensePlateValidator,
 		string licensePlate,
@@ -66,6 +69,7 @@ public class VehicleFactory
 		);
 	}
 
+	/// <inheritdoc/>
 	public VehicleBase CreateCar(
 		Func<string, bool> licensePlateValidator,
 		string licensePlate,
@@ -82,6 +86,7 @@ public class VehicleFactory
 		);
 	}
 
+	/// <inheritdoc/>
 	public VehicleBase CreateMotorcycle(
 		Func<string, bool> licensePlateValidator,
 		string licensePlate,
