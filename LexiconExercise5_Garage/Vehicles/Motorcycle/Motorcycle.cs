@@ -1,11 +1,12 @@
-﻿
+﻿using LexiconExercise5_Garage.Vehicles.VehicleBase;
+
 namespace LexiconExercise5_Garage.Vehicles.Motorcycles;
 
 /// <summary>
 /// Represents a motorcycle vehicle.
 /// Inherits from <see cref="VehicleBase"/> and implements <see cref="IMotorcycle"/>.
 /// </summary>
-public class Motorcycle : VehicleBase, IMotorcycle
+public class Motorcycle : Vehicle, IMotorcycle
 {
 	///<inheritdoc/>
 	public bool HasSidecar { get; }

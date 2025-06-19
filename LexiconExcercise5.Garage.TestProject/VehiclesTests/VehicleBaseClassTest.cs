@@ -1,11 +1,12 @@
 using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 using LexiconExercise5_Garage.Vehicles;
 using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
+using LexiconExercise5_Garage.Vehicles.VehicleBase;
 
 namespace LexiconExcercise5.Garage.TestProject.Vehicles;
 
 /// <summary>
-/// Contains unit tests for the <see cref="VehicleBase"/> class,
+/// Contains unit tests for the <see cref="Vehicle"/> class,
 /// </summary>
 [Collection("NonParallelGroup")] // Will not run in parallel with any other class in the same collection
 public class VehicleBaseClassTest

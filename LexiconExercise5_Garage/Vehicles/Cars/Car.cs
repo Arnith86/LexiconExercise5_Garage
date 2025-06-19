@@ -1,11 +1,12 @@
-﻿
+﻿using LexiconExercise5_Garage.Vehicles.VehicleBase;
+
 namespace LexiconExercise5_Garage.Vehicles.Cars;
 
 /// <summary>
 /// Represents a Car vehicle.
 /// Inherits from <see cref="VehicleBase"/> and implements <see cref="ICar"/>.
 /// </summary>
-public class Car : VehicleBase, ICar
+public class Car : Vehicle, ICar
 {
 	private uint _nrOfSeats = 0;
 

@@ -1,12 +1,12 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace LexiconExercise5_Garage.Vehicles;
+namespace LexiconExercise5_Garage.Vehicles.VehicleBase;
 
 /// <summary>
 /// Abstract base class representing a general vehicle. 
 /// Provides common functionality such as license plate validation, color, and wheel count constraints.
 /// </summary>
-public abstract class VehicleBase
+public abstract class Vehicle : IVehicle
 {
 	private string _licensePlate;
 	private readonly Func<string, bool> _licensePlateValidator;
@@ -54,7 +54,7 @@ public abstract class VehicleBase
 	}
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="VehicleBase"/> class with specified license plate, color, and wheels.
+	/// Initializes a new instance of the <see cref="Vehicle"/> class with specified license plate, color, and wheels.
 	/// </summary>
 	/// <param name="licensePlateValidator">Validates license plates entries</param>
 	/// <param name="licensePlate">The vehicle's license plate.</param>
@@ -63,7 +63,7 @@ public abstract class VehicleBase
 	/// <exception cref="ArgumentNullException">Thrown if the license plate is null or whitespace.</exception>
 	/// <exception cref="ArgumentOutOfRangeException">Thrown if the license plate has incorrect length or if wheels are out of range.</exception>
 	/// <exception cref="ArgumentException">Thrown if the license plate has an invalid structure.</exception>
-	public VehicleBase(
+	public Vehicle(
 		Func<string, bool> licensePlateValidator,
 		string licensePlate,
 		VehicleColor color,
@@ -89,5 +89,5 @@ public abstract class VehicleBase
 	/// </summary>
 	/// <returns>A string representing the vehicle types property.</returns>
 	public abstract override string ToString();
-	
+
 }

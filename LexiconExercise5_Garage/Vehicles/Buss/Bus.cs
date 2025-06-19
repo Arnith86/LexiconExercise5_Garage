@@ -1,7 +1,8 @@
-﻿
+﻿using LexiconExercise5_Garage.Vehicles.VehicleBase;
+
 namespace LexiconExercise5_Garage.Vehicles.Buss;
 
-public class Bus : VehicleBase, IBus
+public class Bus : Vehicle, IBus
 {
 	private uint _nrOfDoors = 0;
 

@@ -1,5 +1,5 @@
-﻿using LexiconExercise5_Garage.Vehicles;
-using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
+﻿using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
+using LexiconExercise5_Garage.Vehicles.VehicleBase;
 
 namespace LexiconExercise5_Garage.Garages.GarageFactory
 {
@@ -7,10 +7,10 @@ namespace LexiconExercise5_Garage.Garages.GarageFactory
 	/// A concrete factory class responsible for creating mixed-type garages that store vehicles of type <typeparamref name="T"/>.
 	/// </summary>
 	/// <typeparam name="T">
-	/// The type of vehicle to be stored in the garage. Must inherit from <see cref="VehicleBase"/> 
+	/// The type of vehicle to be stored in the garage. Must inherit from <see cref="Vehicle"/> 
 	/// and implement <see cref="IGarageCreator{T}"/>.
 	/// </typeparam>
-	public class GarageMixedCreator<T> : IGarageCreator<T> where T : VehicleBase
+	public class GarageMixedCreator<T> : IGarageCreator<T> where T : Vehicle
 	{
 		private readonly ILicensePlateRegistry _licensePlateRegistry;
 

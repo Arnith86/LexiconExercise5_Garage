@@ -1,8 +1,8 @@
 ﻿using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 using LexiconExercise5_Garage.Garages.GarageFactory;
 using LexiconExercise5_Garage.GaragesHandler;
-using LexiconExercise5_Garage.Vehicles;
 using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
+using LexiconExercise5_Garage.Vehicles.VehicleBase;
 using LexiconExercise5_GarageAssignment.ConsoleRelated;
 using Moq;
 

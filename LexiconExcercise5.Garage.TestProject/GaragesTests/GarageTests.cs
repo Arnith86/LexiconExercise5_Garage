@@ -8,6 +8,7 @@ using LexiconExercise5_Garage.Vehicles.Buss;
 using LexiconExercise5_Garage.Vehicles.Cars;
 using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 using LexiconExercise5_Garage.Vehicles.Motorcycles;
+using LexiconExercise5_Garage.Vehicles.VehicleBase;
 
 namespace LexiconExcercise5.Garage.TestProject.GaragesTests;
 
@@ -17,7 +18,7 @@ namespace LexiconExcercise5.Garage.TestProject.GaragesTests;
 public class GarageTests
 {
 
-	// VALID Vehicle base class attributes
+	// VALID VehicleBase base class attributes
 	private const string _c_LicensePlate = "BBK159";
 	private const VehicleColor _c_Color = VehicleColor.Blue;
 	private const uint _c_Wheel = 4;
@@ -34,7 +35,7 @@ public class GarageTests
 	private const int _c_ArraySizeOverUpperLimit524289 = 524289;
 
 	// Valid collection with a vehicle of every kind
-	List<VehicleBase> oneVehiclesOfEveryKind = new List<VehicleBase>()
+	List<Vehicle> oneVehiclesOfEveryKind = new List<Vehicle>()
 	{
 		new AirPlain(LPR => true, "abc111", VehicleColor.Red, 4, 2),
 		new Boat(LPR => true, "abc119", VehicleColor.Red, 0, FuelType.Diesel),
@@ -157,9 +158,9 @@ public class GarageTests
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
 
-		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
 
-		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
+		IGarage<Vehicle> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
 
 		foreach (var vehicle in oneVehiclesOfEveryKind)
 		{
@@ -184,9 +185,9 @@ public class GarageTests
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
 
-		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
 
-		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
+		IGarage<Vehicle> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
 
 		foreach (var vehicle in oneVehiclesOfEveryKind)
 		{
@@ -207,9 +208,9 @@ public class GarageTests
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
 
-		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
 
-		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
+		IGarage<Vehicle> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
 
 		foreach (var vehicle in oneVehiclesOfEveryKind)
 		{
@@ -237,8 +238,8 @@ public class GarageTests
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
 
-		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
-		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
+		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
+		IGarage<Vehicle> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
 		
 		//Act
 		List<string> toStringCollection = garage.GetAllVehiclesInformation()!.ToList();
@@ -260,9 +261,9 @@ public class GarageTests
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
 
-		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
 				
-		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeBeforeLimit4);
+		IGarage<Vehicle> garage = garageCreator.CreateGarage(_c_ArraySizeBeforeLimit4);
 
 
 		// Act
@@ -293,8 +294,8 @@ public class GarageTests
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
 
-		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
-		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
+		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
+		IGarage<Vehicle> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
 
 		for (int i = 0; i < 524288; i++)
 		{
@@ -330,9 +331,9 @@ public class GarageTests
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
 
-		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
 
-		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeAfterLimit5);
+		IGarage<Vehicle> garage = garageCreator.CreateGarage(_c_ArraySizeAfterLimit5);
 
 		foreach (var vehicle in oneVehiclesOfEveryKind)
 		{
@@ -364,9 +365,9 @@ public class GarageTests
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
 
-		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
 
-		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeAfterLimit5);
+		IGarage<Vehicle> garage = garageCreator.CreateGarage(_c_ArraySizeAfterLimit5);
 
 		// Act
 		foreach (var vehicle in oneVehiclesOfEveryKind)
@@ -390,9 +391,9 @@ public class GarageTests
 
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
-		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
 		
-		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeBeforeLimit4);
+		IGarage<Vehicle> garage = garageCreator.CreateGarage(_c_ArraySizeBeforeLimit4);
 
 		// Adds 4 vehicles with valid values (and unique license plates)
 		for (int i = 0; i < 4; i++)
@@ -419,9 +420,9 @@ public class GarageTests
 
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
-		IGarageCreator<VehicleBase> garageCreator = new GarageMixedCreator<VehicleBase>(registry);
+		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
 		
-		IGarage<VehicleBase> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
+		IGarage<Vehicle> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
 
 		// Act
 		foreach (var vehicle in oneVehiclesOfEveryKind)

@@ -1,10 +1,12 @@
-﻿namespace LexiconExercise5_Garage.Vehicles.Boats;
+﻿using LexiconExercise5_Garage.Vehicles.VehicleBase;
+
+namespace LexiconExercise5_Garage.Vehicles.Boats;
 
 /// <summary>
 /// Represents a boat vehicle.
 /// Inherits from <see cref="VehicleBase"/> and implements <see cref="IBoat"/>.
 /// </summary>
-public class Boat : VehicleBase, IBoat
+public class Boat : Vehicle, IBoat
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Boat"/> class with specified attributes.

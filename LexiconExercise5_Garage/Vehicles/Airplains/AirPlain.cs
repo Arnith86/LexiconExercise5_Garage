@@ -1,4 +1,4 @@
-﻿using LexiconExercise5_Garage.Vehicles;
+﻿using LexiconExercise5_Garage.Vehicles.VehicleBase;
 
 namespace LexiconExercise5_Garage.Vehicles.AirPlains;
 
@@ -6,7 +6,7 @@ namespace LexiconExercise5_Garage.Vehicles.AirPlains;
 /// Represents an airplane vehicle with a specified number of engines.
 /// Inherits from <see cref="VehicleBase"/> and implements <see cref="IAirPlain"/>.
 /// </summary>
-public class AirPlain : VehicleBase, IAirPlain
+public class AirPlain : Vehicle, IAirPlain
 {
 	private uint _numberOfEngines = 0;
 

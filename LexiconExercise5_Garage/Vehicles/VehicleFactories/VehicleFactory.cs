@@ -19,7 +19,7 @@ namespace LexiconExercise5_Garage.Vehicles.VehicleFactories;
 public class VehicleFactory : IVehicleFactory
 {
 	/// <inheritdoc/>
-	public VehicleBase CreateAirPlain(
+	public IAirPlain CreateAirPlain(
 		Func<string, bool> licensePlateValidator,
 		string licensePlate,
 		VehicleColor color,
@@ -36,7 +36,7 @@ public class VehicleFactory : IVehicleFactory
 	}
 
 	/// <inheritdoc/>
-	public VehicleBase CreateBoat(
+	public IBoat CreateBoat(
 		Func<string, bool> licensePlateValidator,
 		string licensePlate,
 		VehicleColor color,
@@ -53,7 +53,7 @@ public class VehicleFactory : IVehicleFactory
 	}
 
 	/// <inheritdoc/>
-	public VehicleBase CreateBus(
+	public IBus CreateBus(
 		Func<string, bool> licensePlateValidator,
 		string licensePlate,
 		VehicleColor color,
@@ -70,7 +70,7 @@ public class VehicleFactory : IVehicleFactory
 	}
 
 	/// <inheritdoc/>
-	public VehicleBase CreateCar(
+	public ICar CreateCar(
 		Func<string, bool> licensePlateValidator,
 		string licensePlate,
 		VehicleColor color,
@@ -87,7 +87,7 @@ public class VehicleFactory : IVehicleFactory
 	}
 
 	/// <inheritdoc/>
-	public VehicleBase CreateMotorcycle(
+	public IMotorcycle CreateMotorcycle(
 		Func<string, bool> licensePlateValidator,
 		string licensePlate,
 		VehicleColor color,

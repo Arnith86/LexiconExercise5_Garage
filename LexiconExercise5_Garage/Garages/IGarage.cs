@@ -1,12 +1,12 @@
-﻿using LexiconExercise5_Garage.Vehicles;
+﻿using LexiconExercise5_Garage.Vehicles.VehicleBase;
 
 namespace LexiconExercise5_Garage.Garages
 {
 	/// <summary>
 	/// Defines the contract for a garage that stores vehicles of type <typeparamref name="T"/>.
 	/// </summary>
-	/// <typeparam name="T">A type that inherits from <see cref="VehicleBase"/>.</typeparam>
-	public interface IGarage<T> where T : VehicleBase
+	/// <typeparam name="T">A type that inherits from <see cref="Vehicle"/>.</typeparam>
+	public interface IGarage<T> where T : Vehicle
 	{
 		/// <summary>
 		/// Gets the current capacity of the internal array used to store vehicles.
