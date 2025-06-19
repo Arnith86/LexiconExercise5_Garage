@@ -2,21 +2,30 @@
 using LexiconExercise5_Garage.Garages;
 using LexiconExercise5_Garage.Garages.GarageFactory;
 using LexiconExercise5_Garage.Vehicles;
+using LexiconExercise5_Garage.Vehicles.VehicleBase;
+using LexiconExercise5_Garage.Vehicles.VehicleFactories;
 using LexiconExercise5_GarageAssignment.ConsoleRelated;
+using System.Collections.Generic;
 
 namespace LexiconExercise5_Garage.GaragesHandler;
 
 public class GarageHandler
 {
 	private readonly IConsoleUI _consoleUI;
-	private readonly IGarageCreator<VehicleBase> _garageCreator;
-	private Dictionary<int, IGarage<VehicleBase>> _garages;
+	private readonly IGarageCreator<Vehicle> _garageCreator;
+	private readonly BuildVehicle _buildVehicle;
 	
-	public GarageHandler(IConsoleUI consoleUI, IGarageCreator<VehicleBase> garageCreator)
+	private Dictionary<int, IGarage<Vehicle>> _garages;
+
+	public GarageHandler(
+		IConsoleUI consoleUI, 
+		IGarageCreator<Vehicle> garageCreator,
+		BuildVehicle buildVehicle)
 	{
 		_consoleUI = consoleUI;
 		_garageCreator = garageCreator;
-		_garages = new Dictionary<int, IGarage<VehicleBase>>();
+		_buildVehicle = buildVehicle;
+		_garages = new Dictionary<int, IGarage<Vehicle>>();
 	}
 
 	public void MainMenuSelection()
@@ -33,7 +42,7 @@ public class GarageHandler
 					GarageCreation(); 
 					break;
 				case 2:
-					GarageHandlingMenuSelection(garageKey: SelectGarage());
+					if (AnyGaragesExist()) GarageHandlingMenuSelection(garageKey: SelectGarage());
 					break;
 				case 0:
 					exitProgram = true;
@@ -43,6 +52,15 @@ public class GarageHandler
 			}
 
 		} while (!exitProgram);
+	}
+
+	private bool AnyGaragesExist()
+	{
+		if (_garages.Count > 0)	return true;
+		
+		_consoleUI.ShowError("There are no created garages yet!");
+		
+		return false;
 	}
 
 	private void GarageHandlingMenuSelection(int garageKey)
@@ -59,7 +77,7 @@ public class GarageHandler
 					AddMixedSetOfVehiclesToGarage(garageKey);
 					break;
 				case 2:
-					//WhatVehicleToCreateMenu(garageKey);
+					WhatVehicleToCreateMenu(garageKey);
 					//ParkAVehicleInGarage(garageKey);
 					break;
 				case 0:
@@ -72,9 +90,20 @@ public class GarageHandler
 		} while (!exitGarageHandlingMenu);
 	}
 
-	
-		
-	
+	private void WhatVehicleToCreateMenu(int garageKey)
+	{
+		int selectedVehicle = _consoleUI.RegisterWhatVehicleToCreateMenu();
+
+		ParkAVehicleInGarage(
+			garageKey,
+			_buildVehicle.GetVehicle(selectedVehicle)
+		);
+	}
+
+	private void ParkAVehicleInGarage(int garageKey, IVehicle vehicle)
+	{
+		throw new NotImplementedException();
+	}
 
 	private void AddMixedSetOfVehiclesToGarage(int garageKey)
 	{
@@ -85,7 +114,8 @@ public class GarageHandler
 		}
 		catch (InvalidOperationException e)
 		{
-			_consoleUI.ShowError($"{e}, test vehicles can only be added once per garage!");
+			// ToDo : log exception
+			_consoleUI.ShowError($"Test vehicles can only be added once per garage!");
 		}
 	}
 
@@ -103,27 +133,21 @@ public class GarageHandler
 	private int SelectGarage()
 	{
 		bool isValid = false;
-		int chosenGarage = 0;
+		int chosenGarage = -1;
 
 		var garageNumbers = _garages.Keys.ToList();
-
-		if (_garages.Count > 0)
+		
+		do
 		{
-			do
-			{
-				chosenGarage = _consoleUI.SelectGarage(garageNumbers);
+			chosenGarage = _consoleUI.SelectGarage(garageNumbers);
 
-				if (_garages.ContainsKey(chosenGarage)) isValid = true;
-				
-			} while (!isValid);
+			if (_garages.ContainsKey(chosenGarage)) isValid = true;
+			else _consoleUI.ShowError("No garage with that ID, chose another!");
+		
+		} while (!isValid);
 			
-			_consoleUI.ShowFeedbackMessage(message: $"Garage {chosenGarage} selected.");
-		}
-		else
-		{
-			_consoleUI.ShowError("There are no created garages yet!");
-		}
-
+		_consoleUI.ShowFeedbackMessage(message: $"Garage {chosenGarage} selected.");
+	
 		return chosenGarage;
 	}
 

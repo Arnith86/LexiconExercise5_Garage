@@ -14,7 +14,7 @@ namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 		VehicleColor RegisterColorInput();
 		uint RegisterNrOfWheelsInput();
 		uint RegisterNumberOfEnginesInput();
-		VehicleType RegisterWhatVehicleToCreateMenu();
+		int RegisterWhatVehicleToCreateMenu();
 		void ShowBuildableVehicles();
 	}
 }
