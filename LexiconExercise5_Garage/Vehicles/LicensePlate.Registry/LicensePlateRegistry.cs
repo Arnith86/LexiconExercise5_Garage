@@ -41,11 +41,6 @@ public class LicensePlateRegistry : ILicensePlateRegistry
 		if (!_validLicensePlateStructure.IsMatch(licensePlate))
 			throw new ArgumentException(nameof(licensePlate), "A license plate value must only contain letters and digits in this format aaa123 or AAA123.");
 
-		//if (!IsUniqueLicensePlate(licensePlate))
-		//	throw new InvalidOperationException("License plate already exists.");
-
-		//RegisterLicensePlateInput(licensePlate);
-
 		return true;
 	}
 
