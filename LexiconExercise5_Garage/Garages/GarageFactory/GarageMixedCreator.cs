@@ -7,10 +7,10 @@ namespace LexiconExercise5_Garage.Garages.GarageFactory
 	/// A concrete factory class responsible for creating mixed-type garages that store vehicles of type <typeparamref name="T"/>.
 	/// </summary>
 	/// <typeparam name="T">
-	/// The type of vehicle to be stored in the garage. Must inherit from <see cref="Vehicle"/> 
+	/// The type of vehicle to be stored in the garage. Must inherit from <see cref="IVehicle"/> 
 	/// and implement <see cref="IGarageCreator{T}"/>.
 	/// </typeparam>
-	public class GarageMixedCreator<T> : IGarageCreator<T> where T : Vehicle
+	public class GarageMixedCreator<T> : IGarageCreator<T> where T : IVehicle
 	{
 		private readonly ILicensePlateRegistry _licensePlateRegistry;
 

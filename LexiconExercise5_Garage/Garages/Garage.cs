@@ -16,7 +16,7 @@ namespace LexiconExercise5_Garage.Garages;
 /// Manages capacity dynamically using an internal array with power-of-two sizing logic.
 /// </summary>
 /// <typeparam name="T">Types that inherit from VehicleBase.</typeparam>
-public class Garage<T> : IEnumerable<T>, IGarage<T> where T : Vehicle
+public class Garage<T> : IEnumerable<T>, IGarage<T> where T : IVehicle
 {
 	// Upper and lower limits for the garage size
 	private const int _c_GARAGE_SIZE_UPPER_LIMIT = 524288;
@@ -199,13 +199,13 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : Vehicle
 		{
 			T returnVehicle = _vehicles[index];
 
-			_vehicles[index] = null!;
+			_vehicles[index] = default(T)!;
 			UsedSpaces--;
 
 			return returnVehicle;
 		}
 
-		return null;
+		return default(T);
 	}
 
 	/// <inheritdoc/>
@@ -217,8 +217,6 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : Vehicle
 			if (vehicle != null)
 				yield return vehicle;
 		}
-
-		//return ((IEnumerable<T>)_vehicles).GetEnumerator();
 	}
 	
 	/// <inheritdoc/>
@@ -232,7 +230,7 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : Vehicle
 	{
 		
 
-		List<Vehicle> collectionOfDifferentVehicles = new List<Vehicle>()
+		List<IVehicle> collectionOfDifferentVehicles = new List<IVehicle>()
 		{
 			new AirPlain(_licensePlateRegistry.IsValidLicensePlate, "abc111", VehicleColor.Red, 4, 2),
 			new AirPlain(_licensePlateRegistry.IsValidLicensePlate, "abc112", VehicleColor.Blue, 6, 4),

@@ -50,7 +50,7 @@ public class GarageHandlerTests
 		// Arrange
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
-		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
+		IGarageCreator<IVehicle> garageCreator = new GarageMixedCreator<IVehicle>(registry);
 
 		Mock<IConsoleUI> mockConsoleUI = new();
 		mockConsoleUI.Setup(cUI => cUI.GetGarageSize()).Returns(size);
@@ -78,7 +78,7 @@ public class GarageHandlerTests
 		// Arrange
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
-		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
+		IGarageCreator<IVehicle> garageCreator = new GarageMixedCreator<IVehicle>(registry);
 
 		Mock<IConsoleUI> mockConsoleUI = new();
 
@@ -107,7 +107,7 @@ public class GarageHandlerTests
 		// Arrange
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
-		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
+		IGarageCreator<IVehicle> garageCreator = new GarageMixedCreator<IVehicle>(registry);
 
 		Mock<IConsoleUI> mockConsoleUI = new();
 
@@ -137,7 +137,7 @@ public class GarageHandlerTests
 		// Arrange
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
-		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
+		IGarageCreator<IVehicle> garageCreator = new GarageMixedCreator<IVehicle>(registry);
 
 		Mock<IConsoleUI> mockConsoleUI = new();
 
@@ -172,7 +172,7 @@ public class GarageHandlerTests
 		// Arrange
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
-		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
+		IGarageCreator<IVehicle> garageCreator = new GarageMixedCreator<IVehicle>(registry);
 
 		Mock<IConsoleUI> mockConsoleUI = new();
 
@@ -204,7 +204,7 @@ public class GarageHandlerTests
 		// Arrange
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
-		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
+		IGarageCreator<IVehicle> garageCreator = new GarageMixedCreator<IVehicle>(registry);
 
 		Mock<IConsoleUI> mockConsoleUI = new();
 
@@ -248,7 +248,7 @@ public class GarageHandlerTests
 		// Arrange
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
 		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
-		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
+		IGarageCreator<IVehicle> garageCreator = new GarageMixedCreator<IVehicle>(registry);
 
 		Mock<IConsoleUI> mockConsoleUI = new();
 
