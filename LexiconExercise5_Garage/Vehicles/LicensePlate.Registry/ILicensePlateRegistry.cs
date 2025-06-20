@@ -15,6 +15,19 @@ public interface ILicensePlateRegistry
 	bool IsValidLicensePlate(string licensePlate);
 
 	/// <summary>
+	/// Registers license plate to registry.
+	/// </summary>
+	/// <param name="licensePlate">A string representing the license plate.</param>
+	void RegisterLicensePlate(string licensePlate);
+
+	/// <summary>
+	/// Verifies if license plate is unique.
+	/// </summary>
+	/// <param name="licensePlate">A string representing the license plate.</param>
+	/// <returns>True, if not found in registry, otherwise false.</returns>
+	bool IsUniqueLicensePlate(string licensePlate);
+
+	/// <summary>
 	/// Removes a specific license Plate from register.
 	/// </summary>
 	/// <param name="licensePlate">The license plate to remove from register.</param>

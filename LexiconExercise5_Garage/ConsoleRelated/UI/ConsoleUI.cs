@@ -48,7 +48,7 @@ namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 					_displayErrorMessages.InvalidInputEmpty();
 				if (!int.TryParse(input, out int intInput))
 					_displayErrorMessages.InvalidInputNotNumber();
-				else if (intInput < rangeMin && intInput > rangeMax)
+				else if (intInput < rangeMin || intInput > rangeMax)
 					_displayErrorMessages.InvalidInputOutsideOfMenuRange();
 				else
 				{
@@ -137,12 +137,9 @@ namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 			return _consoleWP.ReadLine();
 		}
 
-		public int RegisterColorInput() =>
-			RegisterInputFromEnumOptions<VehicleColor>();
-
-
-		private int RegisterInputFromEnumOptions<TEnum>() where TEnum : Enum
+		public int RegisterInputFromEnumOptions<TEnum>(string? message = null) where TEnum : Enum
 		{
+			if (message != null) _consoleWP.WriteLine($"{message}");
 			ShowEnumValuesAsOptions<TEnum>();
 
 			int minOption = Enum.GetValues(typeof(TEnum)).Cast<int>().Min();
@@ -151,7 +148,7 @@ namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 			return ValidateNumericInput(rangeMin: minOption, rangeMax: maxOptions);
 		}
 
-		public void ShowEnumValuesAsOptions<TEnum>() where TEnum : Enum
+		private void ShowEnumValuesAsOptions<TEnum>() where TEnum : Enum
 		{
 			_consoleWP.WriteLine("");
 
@@ -159,21 +156,13 @@ namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 				_consoleWP.WriteLine($"{(int)item} : {item}");
 		}
 
-		public uint RegisterNrOfWheelsInput()
-		{
-			_consoleWP.Write("How many wheels does the vehicle have: ");
-
-			return (uint)ValidateNumericInput(rangeMin: 0, rangeMax: 56);
-		}
-
-		public uint RegisterNumberOfEnginesInput()
-		{
-			_consoleWP.Write("How many Engines does the airplane have: ");
-
-			return (uint)ValidateNumericInput(rangeMin: 0, rangeMax: 10);
-		}
-
 		public int RegisterWhatVehicleToCreateMenu() =>
 			RegisterInputFromEnumOptions<VehicleType>();
+		
+		public uint RegisterNumericUintInput(string message, int rangeMin, int rangeMax)
+		{
+			_consoleWP.Write(message);
+			return (uint)ValidateNumericInput(rangeMin, rangeMax);
+		}
 	}
 }

@@ -41,19 +41,26 @@ public class LicensePlateRegistry : ILicensePlateRegistry
 		if (!_validLicensePlateStructure.IsMatch(licensePlate))
 			throw new ArgumentException(nameof(licensePlate), "A license plate value must only contain letters and digits in this format aaa123 or AAA123.");
 
-		if (!IsUniqueLicensePlate(licensePlate))
-			throw new InvalidOperationException("License plate already exists.");
+		//if (!IsUniqueLicensePlate(licensePlate))
+		//	throw new InvalidOperationException("License plate already exists.");
 
-		RegisterLicensePlate(licensePlate);
+		//RegisterLicensePlateInput(licensePlate);
 
 		return true;
 	}
 
 	// ToDo: use contains instead. more efficient 
-	private bool IsUniqueLicensePlate(string licensePlate) =>
-		!RegisteredLicensePlates.Any(l => l == licensePlate);
+	/// <inheritdoc/>
+	public bool IsUniqueLicensePlate(string licensePlate)
+	{
+		if (RegisteredLicensePlates.Any(l => l == licensePlate))
+			throw new InvalidOperationException("License plate already exists.");
+		
+		return true; 
+	}
 
-	private void RegisterLicensePlate(string licensePlate)
+	/// <inheritdoc/>
+	public void RegisterLicensePlate(string licensePlate)
 	{
 		RegisteredLicensePlates.Add(licensePlate);
 		SaveLicensePlateToFile();

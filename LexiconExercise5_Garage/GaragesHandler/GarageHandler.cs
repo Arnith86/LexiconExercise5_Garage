@@ -94,6 +94,8 @@ public class GarageHandler
 	{
 		int selectedVehicle = _consoleUI.RegisterWhatVehicleToCreateMenu();
 
+		_consoleUI.ShowFeedbackMessage($"Lets build a {(VehicleType)selectedVehicle}!");
+
 		ParkAVehicleInGarage(
 			garageKey,
 			_buildVehicle.GetVehicle(selectedVehicle)

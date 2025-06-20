@@ -1,14 +1,26 @@
 ﻿
+using LexiconExercise5_Garage.ConsoleRelated;
 using LexiconExercise5_Garage.Vehicles.AirPlains;
 using LexiconExercise5_Garage.Vehicles.Cars;
 using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 using LexiconExercise5_Garage.Vehicles.VehicleBase;
 using LexiconExercise5_GarageAssignment.ConsoleRelated;
+using Microsoft.VisualBasic.FileIO;
 
 namespace LexiconExercise5_Garage.Vehicles.VehicleFactories
 {
 	public class BuildVehicle
 	{
+		private const int _c_VEHICLE_WHEELS_MIN = 0;
+		private const int _c_VEHICLE_WHEELS_MAX = 56;
+		private const int _c_AIRPLANE_ENGINES_MIN = 0;
+		private const int _c_AIRPLANE_ENGINES_MAX = 10;
+		private const int _c_BUS_DOORS_MIN = 1;
+		private const int _c_BUS_DOORS_MAX = 2;
+		private const int _c_CAR_SEATS_MIN = 1;
+		private const int _c_CAR_SEATS_MAX = 7;
+
+
 		private readonly IVehicleFactory _vehicleFactory;
 		private readonly ILicensePlateRegistry _licensePlateRegistry;
 		private readonly IConsoleUI _consoleUI;
@@ -26,35 +38,51 @@ namespace LexiconExercise5_Garage.Vehicles.VehicleFactories
 
 		public IVehicle GetVehicle(int vehicle)
 		{
-			string licensePlate = RegisterLicensePlate();
-			_consoleUI.ShowFeedbackMessage($"License plate {licensePlate} registered!");
+			IVehicle builtVehicle = null!;
 
-			int color = _consoleUI.RegisterColorInput();
+			string licensePlate = RegisterLicensePlateInput();
+			_consoleUI.ShowFeedbackMessage($"Unique license plate {licensePlate} chosen!");
+
+			int color = _consoleUI.RegisterInputFromEnumOptions<VehicleColor>(
+				message: "What color is the vehicle: "
+			);
 			_consoleUI.ShowFeedbackMessage($"The color {(VehicleColor)color} was selected!");
 			
-			uint wheels = _consoleUI.RegisterNrOfWheelsInput();
+			uint wheels = _consoleUI.RegisterNumericUintInput(
+				message: "How many wheels does the vehicle have (0 to 56): ",
+				rangeMin: _c_VEHICLE_WHEELS_MIN,
+				rangeMax: _c_VEHICLE_WHEELS_MAX
+			);
+
 			_consoleUI.ShowFeedbackMessage($"{wheels} wheels chosen!");
 
 			switch (vehicle)
 			{
 				case 1:
-					return BuildAirPlain(licensePlate, (VehicleColor)color, wheels);
-				//case 2:
-				//	return BuildBoat(licensePlate, color, wheels);
-				//case 3:
-				//	return BuildBus(licensePlate, color, wheels);
-				//case 4:
-				//	return BuildCar(licensePlate, color, wheels);
-				//case 5:
-				//	return BuildMotorcycle(licensePlate, color, wheels);
+					builtVehicle = BuildAirPlain(licensePlate, (VehicleColor)color, wheels);
+					break;
+				case 2:
+					builtVehicle = BuildBoat(licensePlate, (VehicleColor)color, wheels);
+					break;
+				case 3:
+					builtVehicle = BuildBus(licensePlate, (VehicleColor)color, wheels);
+					break;
+				case 4:
+					builtVehicle = BuildCar(licensePlate, (VehicleColor)color, wheels);
+					break;
+				case 5:
+					builtVehicle = BuildMotorcycle(licensePlate, (VehicleColor)color, wheels);
+					break;
 				default:
 					break;
 			}
 
-			return null;
+			_licensePlateRegistry.RegisterLicensePlate(licensePlate);
+
+			return builtVehicle;
 		}
 
-		private string RegisterLicensePlate()
+		private string RegisterLicensePlateInput()
 		{
 			bool validLicensePlate = false;
 			string licensePlate = string.Empty;
@@ -83,7 +111,12 @@ namespace LexiconExercise5_Garage.Vehicles.VehicleFactories
 
 		private IVehicle BuildAirPlain(string licensePlate, VehicleColor color, uint wheels)
 		{
-			uint numberOfEngines = _consoleUI.RegisterNumberOfEnginesInput();
+			uint numberOfEngines = _consoleUI.RegisterNumericUintInput(
+				message: "How many Engines does the airplane have (0 to 10): ",
+				rangeMin: _c_AIRPLANE_ENGINES_MIN,
+				rangeMax: _c_AIRPLANE_ENGINES_MAX
+			);
+
 			_consoleUI.ShowFeedbackMessage($"{numberOfEngines} engines chosen!");
 
 			return _vehicleFactory.CreateAirPlain(
@@ -95,56 +128,75 @@ namespace LexiconExercise5_Garage.Vehicles.VehicleFactories
 			);
 		}
 
-		//private IVehicle BuildBoat(string licensePlate, VehicleColor color, uint wheels)
-		//{
-		//	FuelType fuelType = _consoleUI.RegisterFuelTypeInput();
+		private IVehicle BuildBoat(string licensePlate, VehicleColor color, uint wheels)
+		{
+			int fuelType = _consoleUI.RegisterInputFromEnumOptions<FuelType>(
+				message: "What fuel does the boat use: "
+			);
+			_consoleUI.ShowFeedbackMessage($"The boat uses {fuelType}!");
 
-		//	return _vehicleFactory.CreateBoat(
-		//		_licensePlateRegistry.IsValidLicensePlate,
-		//		licensePlate,
-		//		color,
-		//		wheels,
-		//		fuelType
-		//	);
-		//}
+			return _vehicleFactory.CreateBoat(
+				_licensePlateRegistry.IsValidLicensePlate,
+				licensePlate,
+				color,
+				wheels,
+				(FuelType)fuelType
+			);
+		}
 
-		//private IVehicle BuildBus(string licensePlate, VehicleColor color, uint wheels)
-		//{
-		//	uint nrOfDoors = _consoleUI.RegisterNrOfDoorsInput();
+		private IVehicle BuildBus(string licensePlate, VehicleColor color, uint wheels)
+		{
+			uint nrOfDoors = _consoleUI.RegisterNumericUintInput(
+				message: "How many doors does the bus have (1 or 2): ",
+				rangeMin: _c_BUS_DOORS_MIN,
+				rangeMax: _c_BUS_DOORS_MAX
+			);
 
-		//	return _vehicleFactory.CreateBus(
-		//		_licensePlateRegistry.IsValidLicensePlate,
-		//		licensePlate,
-		//		color,
-		//		wheels,
-		//		nrOfDoors
-		//	);
-		//}
+			_consoleUI.ShowFeedbackMessage($"The bus has {nrOfDoors} doors!");
 
-		//private IVehicle BuildCar(string licensePlate, VehicleColor color, uint wheels)
-		//{
-		//	uint nrOfSeats = _consoleUI.RegisteruintNrOfSeatsInput();
+			return _vehicleFactory.CreateBus(
+				_licensePlateRegistry.IsValidLicensePlate,
+				licensePlate,
+				color,
+				wheels,
+				nrOfDoors
+			);
+		}
 
-		//	return _vehicleFactory.CreateCar(
-		//		_licensePlateRegistry.IsValidLicensePlate,
-		//		licensePlate,
-		//		color,
-		//		wheels,
-		//		nrOfSeats
-		//	);
-		//}
+		private IVehicle BuildCar(string licensePlate, VehicleColor color, uint wheels)
+		{
+			uint nrOfSeats = _consoleUI.RegisterNumericUintInput(
+				message: "How many seats does the car have (1 or 7): ",
+				rangeMin: _c_CAR_SEATS_MIN,
+				rangeMax: _c_CAR_SEATS_MAX
+			);
 
-		//private IVehicle BuildMotorcycle(string licensePlate, VehicleColor color, uint wheels)
-		//{
-		//	bool hasSidecar = _consoleUI.RegisterHasSidecarInput();
+			_consoleUI.ShowFeedbackMessage($"The car will have {nrOfSeats} seats");
 
-		//	return _vehicleFactory.CreateMotorcycle(
-		//		_licensePlateRegistry.IsValidLicensePlate,
-		//		licensePlate,
-		//		color,
-		//		wheels,
-		//		hasSidecar
-		//	);
-		//}
+			return _vehicleFactory.CreateCar(
+				_licensePlateRegistry.IsValidLicensePlate,
+				licensePlate,
+				color,
+				wheels,
+				nrOfSeats
+			);
+		}
+
+		private IVehicle BuildMotorcycle(string licensePlate, VehicleColor color, uint wheels)
+		{
+			bool hasSidecar = Convert.ToBoolean( 
+				_consoleUI.RegisterInputFromEnumOptions<YesNoEnum>(
+					message: "Does the motorcycle have a sidecar?: "
+				) 
+			);
+
+			return _vehicleFactory.CreateMotorcycle(
+				_licensePlateRegistry.IsValidLicensePlate,
+				licensePlate,
+				color,
+				wheels,
+				hasSidecar
+			);
+		}
 	}
 }

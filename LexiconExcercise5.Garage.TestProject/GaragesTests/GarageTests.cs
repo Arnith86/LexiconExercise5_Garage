@@ -15,6 +15,7 @@ namespace LexiconExcercise5.Garage.TestProject.GaragesTests;
 /// <summary>
 /// Contains unit tests for the <see cref="Garage{T}"/> class
 /// </summary>
+[Collection("NonParallelGroup")] // Will not run in parallel with any other class in the same collection
 public class GarageTests
 {
 
