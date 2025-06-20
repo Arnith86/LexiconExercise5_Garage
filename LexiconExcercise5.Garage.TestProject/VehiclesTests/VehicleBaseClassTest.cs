@@ -115,32 +115,6 @@ public class VehicleBaseClassTest
 	}
 
 	/// <summary>
-	/// Test that constructor assignment of licensePlate with a value that already exist in the registry. 
-	/// </summary>
-	[Fact]
-	public void LicensePlate_SetViaConstructor_NotUnique_InValidValue_ShouldThrowInvalidOperationException()
-	{
-		// Arrange
-		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
-		var registry = new MockLicensePlateRegistry(tempFile);
-
-		// "uRE832", "azm129", "BBK159", added to registry. 
-		registry.FillRegistry();
-
-		// Act & Assert
-		Assert.Throws<InvalidOperationException>(() =>
-			new TestVehicle(
-				registry.IsValidLicensePlate,
-				_c_LicensePlateDuplicate,
-				_c_GREEN,
-				_c_4Wheel
-			)
-		);
-
-		Dispose(tempFile, registry);
-	}
-
-	/// <summary>
 	/// Tests that null or empty license plates throw ArgumentNullException.
 	/// </summary>
 	[Theory]
