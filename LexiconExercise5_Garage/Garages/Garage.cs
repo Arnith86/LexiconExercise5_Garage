@@ -282,7 +282,11 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : Vehicle
 
 		foreach (var vehicle in collectionOfDifferentVehicles)
 		{
-			_licensePlateRegistry.RegisterLicensePlate(vehicle.LicensePlate);
+			if (_licensePlateRegistry.IsUniqueLicensePlate(vehicle.LicensePlate))
+			{
+				_licensePlateRegistry.RegisterLicensePlate(vehicle.LicensePlate);
+			}
+
 			AddVehicle((T)vehicle);
 		}
 	}
