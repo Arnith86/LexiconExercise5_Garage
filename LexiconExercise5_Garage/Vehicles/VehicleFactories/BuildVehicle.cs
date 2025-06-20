@@ -1,14 +1,15 @@
 ﻿
 using LexiconExercise5_Garage.ConsoleRelated;
-using LexiconExercise5_Garage.Vehicles.AirPlains;
-using LexiconExercise5_Garage.Vehicles.Cars;
 using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 using LexiconExercise5_Garage.Vehicles.VehicleBase;
 using LexiconExercise5_GarageAssignment.ConsoleRelated;
-using Microsoft.VisualBasic.FileIO;
 
 namespace LexiconExercise5_Garage.Vehicles.VehicleFactories
 {
+	/// <summary>
+	/// Handles the process of creating vehicles by gathering input from the user
+	/// and delegating object creation to the appropriate vehicle factory methods.
+	/// </summary>
 	public class BuildVehicle
 	{
 		private const int _c_VEHICLE_WHEELS_MIN = 0;
@@ -26,8 +27,14 @@ namespace LexiconExercise5_Garage.Vehicles.VehicleFactories
 		private readonly IConsoleUI _consoleUI;
 
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BuildVehicle"/> class.
+		/// </summary>
+		/// <param name="vehicleFactory">The factory responsible for constructing vehicle instances.</param>
+		/// <param name="licensePlateRegistry">The registry used to validate and store license plates.</param>
+		/// <param name="consoleUI">The UI interface for user interaction.</param>
 		public BuildVehicle(
-			IVehicleFactory vehicleFactory, 
+			IVehicleFactory vehicleFactory,
 			ILicensePlateRegistry licensePlateRegistry,
 			IConsoleUI consoleUI)
 		{
@@ -36,6 +43,11 @@ namespace LexiconExercise5_Garage.Vehicles.VehicleFactories
 			_consoleUI = consoleUI;
 		}
 
+		/// <summary>
+		/// Builds a vehicle of the specified type based on user input.
+		/// </summary>
+		/// <param name="vehicle">An integer corresponding to a specific vehicle type.</param>
+		/// <returns>The constructed vehicle instance.</returns>
 		public IVehicle GetVehicle(int vehicle)
 		{
 			IVehicle builtVehicle = null!;
@@ -47,7 +59,7 @@ namespace LexiconExercise5_Garage.Vehicles.VehicleFactories
 				message: "What color is the vehicle: "
 			);
 			_consoleUI.ShowFeedbackMessage($"The color {(VehicleColor)color} was selected!");
-			
+
 			uint wheels = _consoleUI.RegisterNumericUintInput(
 				message: "How many wheels does the vehicle have (0 to 56): ",
 				rangeMin: _c_VEHICLE_WHEELS_MIN,
@@ -120,7 +132,7 @@ namespace LexiconExercise5_Garage.Vehicles.VehicleFactories
 			_consoleUI.ShowFeedbackMessage($"{numberOfEngines} engines chosen!");
 
 			return _vehicleFactory.CreateAirPlain(
-				_licensePlateRegistry.IsValidLicensePlate, 
+				_licensePlateRegistry.IsValidLicensePlate,
 				licensePlate,
 				color,
 				wheels,
@@ -184,10 +196,10 @@ namespace LexiconExercise5_Garage.Vehicles.VehicleFactories
 
 		private IVehicle BuildMotorcycle(string licensePlate, VehicleColor color, uint wheels)
 		{
-			bool hasSidecar = Convert.ToBoolean( 
+			bool hasSidecar = Convert.ToBoolean(
 				_consoleUI.RegisterInputFromEnumOptions<YesNoEnum>(
 					message: "Does the motorcycle have a sidecar?: "
-				) 
+				)
 			);
 
 			return _vehicleFactory.CreateMotorcycle(
