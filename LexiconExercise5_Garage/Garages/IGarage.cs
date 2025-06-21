@@ -30,11 +30,11 @@ namespace LexiconExercise5_Garage.Garages
 		/// <returns>True if the vehicle was successfully added; otherwise, false.</returns>
 		bool AddVehicle(T vehicle);
 
-		/// <summary>
-		/// Gets a collection containing string representations of license plates of all vehicles in the garage.
-		/// </summary>
-		/// <returns>An enumerable of strings each vehicle license plates.</returns>
-		IEnumerable<string> ListAllVehiclesLicensePlates();
+		///// <summary>
+		///// Gets a collection containing string representations of license plates of all vehicles in the garage.
+		///// </summary>
+		///// <returns>An enumerable of strings each vehicle license plates.</returns>
+		//IEnumerable<string> ListAllVehiclesLicensePlates();
 
 		/// <summary>
 		/// Returns an enumerator that iterates through the vehicles in the garage.
@@ -60,5 +60,21 @@ namespace LexiconExercise5_Garage.Garages
 		/// Fills the garage with a predefined set of 40 sample vehicles for testing or demonstration purposes.
 		/// </summary>
 		void Add40VehiclesToCollection();
+
+		/// <summary>
+		/// Executes a LINQ query on the internal vehicle collection, excluding null entries, and returns the result.
+		/// </summary>
+		/// <typeparam name="TResult">The type of the result elements returned by the query.</typeparam>
+		/// <param name="query">
+		/// A function that defines the LINQ query to perform on the non-null elements of the internal collection.
+		/// </param>
+		/// <returns>
+		/// An <see cref="IEnumerable{TResult}"/> containing the results of the query.
+		/// </returns>
+		public IEnumerable<TResult> PerformedLinqQuery<TResult>(
+			Func< 
+				IEnumerable<T>, 
+				IEnumerable<TResult> 
+				> query);
 	}
 }
