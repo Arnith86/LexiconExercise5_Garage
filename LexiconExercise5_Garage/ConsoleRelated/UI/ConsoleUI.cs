@@ -91,7 +91,8 @@ namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 				"3: Remove a vehicle, from garage.\n" +
 				"4: Get vehicle information of a single vehicle, currently parked in garage.\n" +
 				"5: Show all vehicle currently parked in garage.\n" +
-				"6: Get filtered information of all vehicles.\n" +
+				"6: List how many of each type of vehicle is parked in garage.\n" +
+				"7: Get filtered information of all vehicles.\n" +
 				"0: Exit garage handling menu.\n\n"
 			);
 

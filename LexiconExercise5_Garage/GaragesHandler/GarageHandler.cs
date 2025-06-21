@@ -6,6 +6,7 @@ using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 using LexiconExercise5_Garage.Vehicles.VehicleBase;
 using LexiconExercise5_Garage.Vehicles.VehicleFactories;
 using LexiconExercise5_GarageAssignment.ConsoleRelated;
+using Microsoft.Extensions.Primitives;
 using System.Text;
 
 namespace LexiconExercise5_Garage.GaragesHandler;
@@ -101,6 +102,9 @@ public class GarageHandler
 				case 5:
 					ListAllVehicles(garageKey);
 					break;
+				case 6:
+					ListHowManyOfEachType(garageKey);
+					break;
 				case 0:
 					exitGarageHandlingMenu = true;
 					break;
@@ -110,18 +114,33 @@ public class GarageHandler
 
 		} while (!exitGarageHandlingMenu);
 	}
-	//"5: Get licensePlate information of all vehicles, currently parked in garage.\n" +
+
+	private void ListHowManyOfEachType(int garageKey)
+	{
+		var vehicleTypeCounter = _garages[garageKey].PerformedLinqQuery( vehicles =>
+			vehicles
+				.GroupBy(vehicle => vehicle.GetType().Name)
+				.Select(group => $"{group.Key}: {group.Count()}")
+		);
+
+		foreach (var item in vehicleTypeCounter)
+			_stringBuilder.Append($"{item}\n");
+
+		_consoleUI.DisplayInformation( _stringBuilder.ToString());
+
+		_stringBuilder.Clear();
+	}
+
 	//"6: Get filtered information of all vehicles.\n" +
 	//"0: Exit garage handling menu.\n\n"
 	private void ListAllVehicles(int garageKey)
 	{
 		var vehicleLicensePlates = _garages[garageKey].ListAllVehiclesLicensePlates();
 
-
 		foreach (var licensePlate in vehicleLicensePlates)
-			_stringBuilder.Append(licensePlate);
+			_stringBuilder.Append($"{licensePlate}\n");
 			
-		_consoleUI.DisplayInformation($"{_stringBuilder.ToString()}\n");
+		_consoleUI.DisplayInformation(_stringBuilder.ToString());
 
 		_stringBuilder.Clear();
 	}
