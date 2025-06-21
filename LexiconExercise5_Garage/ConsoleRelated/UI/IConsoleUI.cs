@@ -11,7 +11,7 @@ namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 		void ShowFeedbackMessage(string message);
 		int RegisterGarageHandlingMenuSelection(int garageKey);
 		int RegisterInputFromEnumOptions<TEnum>(string? message = null) where TEnum : Enum;
-		string RegisterLicensePlateInput();
+		string RegisterLicensePlateInput(string? message = null);
 		int RegisterWhatVehicleToCreateMenu();
 		public uint RegisterNumericUintInput(string message, int rangeMin, int rangeMax);
 	}

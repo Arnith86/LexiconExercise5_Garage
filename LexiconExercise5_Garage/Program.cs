@@ -31,7 +31,7 @@ internal class Program
 				services.AddSingleton<IDisplayFeedbackMessage, DisplayFeedBackMessage>();
 				services.AddSingleton<ILicensePlateRegistry, LicensePlateRegistry>(); 
 				services.AddSingleton<IVehicleFactory, VehicleFactory>(); 
-				services.AddSingleton<IGarageCreator<Vehicle>, GarageMixedCreator<Vehicle>>();
+				services.AddSingleton<IGarageCreator<IVehicle>, GarageMixedCreator<IVehicle>>();
 				services.AddSingleton<BuildVehicle>();
 							
 				

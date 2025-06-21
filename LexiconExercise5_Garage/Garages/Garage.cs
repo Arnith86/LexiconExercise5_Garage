@@ -184,9 +184,11 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : IVehicle
 	/// <inheritdoc/>
 	public T? RemoveVehicle(string licensePlate)
 	{
-		// ToDo: validate inputted licensePlate value
-
-		int index = Array.FindIndex(_vehicles, vehicle =>
+		// Find first index where vehicle is not null, and licensePlates are same.
+		int index = Array.FindIndex(_vehicles, vehicle => 
+			
+			vehicle != null &&
+			
 			String.Equals(
 				a: licensePlate,
 				b: vehicle.LicensePlate,

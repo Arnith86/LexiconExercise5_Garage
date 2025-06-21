@@ -5,6 +5,7 @@ using LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.ErrorMessages;
 using LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.FeedbackMessage;
 using LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.MenuMessages;
 using LexiconExercise5_Garage.Vehicles;
+using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 using System.Text;
 
 namespace LexiconExercise5_GarageAssignment.ConsoleRelated
@@ -131,9 +132,9 @@ namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 		}
 
 
-		public string RegisterLicensePlateInput()
+		public string RegisterLicensePlateInput(string? message = null)
 		{
-			_consoleWP.Write("Supply a unique license plate input: ");
+			if (message != null) _consoleWP.Write(message);
 			return _consoleWP.ReadLine();
 		}
 

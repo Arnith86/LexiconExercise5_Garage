@@ -2,6 +2,7 @@
 using LexiconExercise5_Garage.Garages;
 using LexiconExercise5_Garage.Garages.GarageFactory;
 using LexiconExercise5_Garage.Vehicles;
+using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 using LexiconExercise5_Garage.Vehicles.VehicleBase;
 using LexiconExercise5_Garage.Vehicles.VehicleFactories;
 using LexiconExercise5_GarageAssignment.ConsoleRelated;
@@ -13,17 +14,19 @@ public class GarageHandler
 	private readonly IConsoleUI _consoleUI;
 	private readonly IGarageCreator<IVehicle> _garageCreator;
 	private readonly BuildVehicle _buildVehicle;
-
+	private readonly ILicensePlateRegistry _licensePlateRegistry;
 	private Dictionary<int, IGarage<IVehicle>> _garages;
 
 	public GarageHandler(
 		IConsoleUI consoleUI,
 		IGarageCreator<IVehicle> garageCreator,
-		BuildVehicle buildVehicle)
+		BuildVehicle buildVehicle, 
+		ILicensePlateRegistry licensePlateRegistry)
 	{
 		_consoleUI = consoleUI;
 		_garageCreator = garageCreator;
 		_buildVehicle = buildVehicle;
+		_licensePlateRegistry = licensePlateRegistry;
 		_garages = new Dictionary<int, IGarage<IVehicle>>();
 	}
 
@@ -118,10 +121,8 @@ public class GarageHandler
 		);
 	}
 
-	private void ParkAVehicleInGarage(int garageKey, IVehicle vehicle)
-	{
+	private void ParkAVehicleInGarage(int garageKey, IVehicle vehicle) =>
 		_garages[garageKey].AddVehicle(vehicle);
-	}
 
 	private void AddMixedSetOfVehiclesToGarage(int garageKey)
 	{
@@ -136,7 +137,6 @@ public class GarageHandler
 			_consoleUI.ShowError($"Test vehicles can only be added once per garage!");
 		}
 	}
-
 
 
 	private int SelectGarage()
@@ -188,6 +188,5 @@ public class GarageHandler
 
 		_consoleUI.ShowFeedbackMessage($"Garage of size {size} created!");
 	}
-
 
 }
