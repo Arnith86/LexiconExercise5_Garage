@@ -40,6 +40,6 @@ public class Bus : Vehicle, IBus
 
 	public override string ToString()
 	{
-		return $"License plate: {LicensePlate}\nColor: {Color}\nNr of wheels: {Wheels}\n Doors: {NrOfDoors}\n)";
+		return $"\nVehicle Type: {this.GetType} \nLicense plate: {LicensePlate}\nColor: {Color}\nNr of wheels: {Wheels}\n Doors: {NrOfDoors}\n)";
 	}
 }

@@ -51,7 +51,7 @@ public class AirPlain : Vehicle, IAirPlain
 
 	public override string ToString()
 	{
-		return $"License plate: {LicensePlate}\nColor: {Color}\nNr of wheels: {Wheels}\n Number of engines: {NumberOfEngines}\n)";
+		return $"\nVehicle Type: {this.GetType} \nLicense plate: {LicensePlate}\nColor: {Color}\nNr of wheels: {Wheels}\n Number of engines: {NumberOfEngines}\n)";
 	}
 }
 

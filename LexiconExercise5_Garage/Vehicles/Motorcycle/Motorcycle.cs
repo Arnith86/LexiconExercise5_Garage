@@ -34,6 +34,6 @@ public class Motorcycle : Vehicle, IMotorcycle
 	/// <inheritdoc/>
 	public override string ToString()
 	{
-		return $"License plate: {LicensePlate}\nColor: {Color}\nNr of wheels: {Wheels}\n Has sidecar: {HasSidecar}\n)";
+		return $"\nVehicle Type: {this.GetType} \nLicense plate: {LicensePlate}\nColor: {Color}\nNr of wheels: {Wheels}\n Has sidecar: {HasSidecar}\n)";
 	}
 }

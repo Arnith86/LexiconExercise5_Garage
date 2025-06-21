@@ -52,6 +52,6 @@ public class Car : Vehicle, ICar
 
 	public override string ToString()
 	{
-		return $"License plate: {LicensePlate}\nColor: {Color}\nNr of wheels: {Wheels}\nSeats: {NrOfSeats}\n)";
+		return $"\nVehicle Type: {this.GetType} \nLicense plate: {LicensePlate}\nColor: {Color}\nNr of wheels: {Wheels}\nSeats: {NrOfSeats}\n)";
 	}
 }

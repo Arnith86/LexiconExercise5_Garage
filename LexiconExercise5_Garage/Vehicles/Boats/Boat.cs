@@ -32,6 +32,6 @@ public class Boat : Vehicle, IBoat
 
 	public override string ToString()
 	{
-		return $"License plate: {LicensePlate}\nColor: {Color}\nNr of wheels: {Wheels}\nFuel Type: {FuelType}\n)";
+		return $"\nVehicle Type: {this.GetType} \nLicense plate: {LicensePlate}\nColor: {Color}\nNr of wheels: {Wheels}\nFuel Type: {FuelType}\n)";
 	}
 }
