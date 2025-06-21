@@ -6,6 +6,7 @@ using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 using LexiconExercise5_Garage.Vehicles.VehicleBase;
 using LexiconExercise5_Garage.Vehicles.VehicleFactories;
 using LexiconExercise5_GarageAssignment.ConsoleRelated;
+using System.Text;
 
 namespace LexiconExercise5_Garage.GaragesHandler;
 
@@ -16,6 +17,7 @@ public class GarageHandler
 	private readonly BuildVehicle _buildVehicle;
 	private readonly ILicensePlateRegistry _licensePlateRegistry;
 	private Dictionary<int, IGarage<IVehicle>> _garages;
+	private readonly StringBuilder _stringBuilder = new StringBuilder();
 
 	public GarageHandler(
 		IConsoleUI consoleUI,
@@ -66,11 +68,11 @@ public class GarageHandler
 	}
 
 	/*
-	  			"1: Park a mixed set of vehicle in garage. (This is your fast forward vehicle adding for testing\n" + // only works ONCE per execution with mixed vehicle garages for now 
-				"2: Park a vehicle in garage.\n" +
-				"3: Remove a vehicle, from garage.\n" +
-				"4: Get vehicle information of a single vehicle, currently parked in garage.\n" +
-				"5: Get vehicle information of all vehicles, currently parked in garage.\n" +
+	  			"1: Park a mixed set of licensePlate in garage. (This is your fast forward licensePlate adding for testing\n" + // only works ONCE per execution with mixed licensePlate garages for now 
+				"2: Park a licensePlate in garage.\n" +
+				"3: Remove a licensePlate, from garage.\n" +
+				"4: Get licensePlate information of a single licensePlate, currently parked in garage.\n" +
+				"5: Get licensePlate information of all vehicles, currently parked in garage.\n" +
 				"6: Get filtered information of all vehicles.\n" +
 				"0: Exit garage handling menu.\n\n"
 	 */
@@ -93,6 +95,12 @@ public class GarageHandler
 				case 3:
 					RemoveAVehicle(garageKey);
 					break;
+				case 4:
+					GetVehicleInformation(garageKey, singleVehicle: true);
+					break;
+				case 5:
+					ListAllVehicles(garageKey);
+					break;
 				case 0:
 					exitGarageHandlingMenu = true;
 					break;
@@ -102,12 +110,98 @@ public class GarageHandler
 
 		} while (!exitGarageHandlingMenu);
 	}
-
-	//"3: Remove a vehicle, from garage.\n" +
-	//"4: Get vehicle information of a single vehicle, currently parked in garage.\n" +
-	//"5: Get vehicle information of all vehicles, currently parked in garage.\n" +
+	//"5: Get licensePlate information of all vehicles, currently parked in garage.\n" +
 	//"6: Get filtered information of all vehicles.\n" +
 	//"0: Exit garage handling menu.\n\n"
+	private void ListAllVehicles(int garageKey)
+	{
+		var vehicleLicensePlates = _garages[garageKey].ListAllVehiclesLicensePlates();
+
+
+		foreach (var licensePlate in vehicleLicensePlates)
+			_stringBuilder.Append(licensePlate);
+			
+		_consoleUI.DisplayInformation($"{_stringBuilder.ToString()}\n");
+
+		_stringBuilder.Clear();
+	}
+
+	private void GetVehicleInformation(int garageKey, bool singleVehicle)
+	{
+		string chosenLicensePlate = string.Empty;
+		bool validLicensePlate = false;
+
+		do
+		{
+			chosenLicensePlate = _consoleUI.RegisterLicensePlateInput(
+				message: "Supply the license plate of the licensePlate you want information on: "
+			);
+
+			try
+			{
+				if (_licensePlateRegistry.IsValidLicensePlate(chosenLicensePlate))
+				{
+					string? vehicleInfo = _garages[garageKey].GetVehicleInformation(chosenLicensePlate);
+
+					if (vehicleInfo == null)
+						_consoleUI.ShowError("No licensePlate with that license plate in garage.");
+					else
+						_consoleUI.DisplayInformation(vehicleInfo);
+
+					validLicensePlate = true;
+				}
+			}
+			catch (Exception ex) when (
+					ex is ArgumentNullException ||
+					ex is ArgumentOutOfRangeException ||
+					ex is ArgumentException ||
+					ex is InvalidOperationException)
+			{
+				_consoleUI.ShowError($"License plate error: {ex.Message}");
+			}
+
+		} while (!validLicensePlate);
+		
+	}
+
+	private void RemoveAVehicle(int garageKey)
+	{
+		string chosenLicensePlate = string.Empty;
+		bool validLicensePlate = false;
+
+		do
+		{
+			chosenLicensePlate = _consoleUI.RegisterLicensePlateInput(
+					message: "Supply the license plate of the licensePlate you want to remove: "
+			);
+
+			try
+			{
+				if (_licensePlateRegistry.IsValidLicensePlate(chosenLicensePlate))
+				{
+					IVehicle? removedVehicle = _garages[garageKey].RemoveVehicle(chosenLicensePlate);
+
+					if (removedVehicle == null)
+						_consoleUI.ShowError("No licensePlate with that license in garage.");
+					else
+						_consoleUI.ShowFeedbackMessage(
+							$"Vehicle with license plate {removedVehicle.LicensePlate} has left the garage.");
+
+					validLicensePlate = true;
+				}
+			}
+			catch (Exception ex) when (
+					ex is ArgumentNullException ||
+					ex is ArgumentOutOfRangeException ||
+					ex is ArgumentException ||
+					ex is InvalidOperationException)
+			{
+				_consoleUI.ShowError($"License plate error: {ex.Message}");
+			}
+
+		} while (!validLicensePlate);
+	}
+
 
 	private void WhatVehicleToCreateMenu(int garageKey)
 	{

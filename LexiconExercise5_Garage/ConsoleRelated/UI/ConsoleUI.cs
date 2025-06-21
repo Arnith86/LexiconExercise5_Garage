@@ -90,7 +90,7 @@ namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 				"2: Park a vehicle in garage.\n" +
 				"3: Remove a vehicle, from garage.\n" +
 				"4: Get vehicle information of a single vehicle, currently parked in garage.\n" +
-				"5: Get vehicle information of all vehicles, currently parked in garage.\n" +
+				"5: Show all vehicle currently parked in garage.\n" +
 				"6: Get filtered information of all vehicles.\n" +
 				"0: Exit garage handling menu.\n\n"
 			);
@@ -164,6 +164,12 @@ namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 		{
 			_consoleWP.Write(message);
 			return (uint)ValidateNumericInput(rangeMin, rangeMax);
+		}
+
+		public void DisplayInformation(string vehicleInfo)
+		{
+			_consoleWP.WriteLine(vehicleInfo);
+			_consoleWP.ReadKey();
 		}
 	}
 }

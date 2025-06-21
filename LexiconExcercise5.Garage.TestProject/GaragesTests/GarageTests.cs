@@ -218,7 +218,7 @@ public class GarageTests
 			garage.AddVehicle(vehicle);
 		}
 
-		List<string> toStringCollection = garage.GetAllVehiclesInformation()!.ToList();
+		List<string> toStringCollection = garage.ListAllVehiclesLicensePlates()!.ToList();
 
 		int index = 0;
 
@@ -243,7 +243,7 @@ public class GarageTests
 		IGarage<Vehicle> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
 		
 		//Act
-		List<string> toStringCollection = garage.GetAllVehiclesInformation()!.ToList();
+		List<string> toStringCollection = garage.ListAllVehiclesLicensePlates()!.ToList();
 		
 		//Assert
 		Assert.True(toStringCollection.Count == 0);

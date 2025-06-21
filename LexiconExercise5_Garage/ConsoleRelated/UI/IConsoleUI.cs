@@ -14,5 +14,6 @@ namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 		string RegisterLicensePlateInput(string? message = null);
 		int RegisterWhatVehicleToCreateMenu();
 		public uint RegisterNumericUintInput(string message, int rangeMin, int rangeMax);
+		void DisplayInformation(string vehicleInfo);
 	}
 }

@@ -175,10 +175,10 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : IVehicle
 	}
 
 	/// <inheritdoc/>
-	public IEnumerable<string> GetAllVehiclesInformation()
+	public IEnumerable<string> ListAllVehiclesLicensePlates()
 	{
 		return _vehicles.Where(vehicle => vehicle != null)
-			.Select(vehicle => vehicle.ToString());
+			.Select(vehicle => vehicle.LicensePlate);
 	}
 
 	/// <inheritdoc/>
