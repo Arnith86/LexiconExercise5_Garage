@@ -1,4 +1,6 @@
-﻿using LexiconExercise5_Garage.Vehicles;
+﻿using LexiconExercise5_Garage.Util;
+using LexiconExercise5_Garage.Vehicles;
+using LexiconExercise5_Garage.Vehicles.VehicleBase;
 
 namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 {
@@ -15,5 +17,8 @@ namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 		int RegisterWhatVehicleToCreateMenu();
 		public uint RegisterNumericUintInput(string message, int rangeMin, int rangeMax);
 		void DisplayInformation(string vehicleInfo);
+		public int RegisterPropertyFiltersInput();
+		public int WhichFilterPropertyFromEnum<TEnum>(string message) where TEnum : Enum;
+		void DisplayFilteredInformation(IEnumerable<IVehicle> result);
 	}
 }

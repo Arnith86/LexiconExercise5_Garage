@@ -4,8 +4,11 @@ using LexiconExercise5_Garage.ConsoleRelated.CWritePrint;
 using LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.ErrorMessages;
 using LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.FeedbackMessage;
 using LexiconExercise5_Garage.ConsoleRelated.DisplayMessages.MenuMessages;
+using LexiconExercise5_Garage.Garages;
+using LexiconExercise5_Garage.Util;
 using LexiconExercise5_Garage.Vehicles;
 using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
+using LexiconExercise5_Garage.Vehicles.VehicleBase;
 using System.Text;
 
 namespace LexiconExercise5_GarageAssignment.ConsoleRelated
@@ -98,7 +101,7 @@ namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 
 			_consoleWP.Write("Chose an option: ");
 
-			return ValidateNumericInput(rangeMin: 0, rangeMax: 6);
+			return ValidateNumericInput(rangeMin: 0, rangeMax: 7);
 		}
 
 		public int SelectGarage(List<int> garageNumbers)
@@ -170,6 +173,36 @@ namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 		public void DisplayInformation(string vehicleInfo)
 		{
 			_consoleWP.WriteLine(vehicleInfo);
+			_consoleWP.ReadKey();
+		}
+
+		public int RegisterPropertyFiltersInput() 
+		{
+			_displayMenuMessages.DisplayMenu(
+				$"Select the properties to filter by.\nOnly one filter per menu option supported.\n" +
+				"1: Vehicle type\n" +
+				"2: Color\n" +
+				"3: Number of wheels\n" +
+				"4: Start filter!\n"+
+				"0: Exit menu\n\n"
+			);
+
+			_consoleWP.Write("Chose an option: ");
+
+			return ValidateNumericInput(rangeMin: 0, rangeMax: 4);
+		}
+
+		public int WhichFilterPropertyFromEnum<TEnum>(string message) where TEnum : Enum
+		{
+			_displayMenuMessages.DisplayMenu(message);
+			return RegisterInputFromEnumOptions<TEnum>();
+		}
+
+		public void DisplayFilteredInformation(IEnumerable<IVehicle> result)
+		{
+			foreach (var vehicle in result)
+				_consoleWP.WriteLine(vehicle.ToString());
+
 			_consoleWP.ReadKey();
 		}
 	}

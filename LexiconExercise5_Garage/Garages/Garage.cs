@@ -174,13 +174,6 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : IVehicle
 			)?.ToString();
 	}
 
-	///// <inheritdoc/>
-	//public IEnumerable<string> ListAllVehiclesLicensePlates()
-	//{
-	//	return _vehicles.Where(vehicle => vehicle != null)
-	//		.Select(vehicle => vehicle.LicensePlate);
-	//}
-
 	// Func< WhatGoesInToFunction<T>, WhatComesOutOfFunction<TResult>>
 	/// <inheritdoc/>
 	public IEnumerable<TResult> PerformedLinqQuery<TResult>(

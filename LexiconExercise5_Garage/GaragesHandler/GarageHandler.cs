@@ -1,12 +1,17 @@
 ﻿
 using LexiconExercise5_Garage.Garages;
 using LexiconExercise5_Garage.Garages.GarageFactory;
+using LexiconExercise5_Garage.Util;
 using LexiconExercise5_Garage.Vehicles;
+using LexiconExercise5_Garage.Vehicles.AirPlains;
+using LexiconExercise5_Garage.Vehicles.Boats;
+using LexiconExercise5_Garage.Vehicles.Buss;
+using LexiconExercise5_Garage.Vehicles.Cars;
 using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
+using LexiconExercise5_Garage.Vehicles.Motorcycles;
 using LexiconExercise5_Garage.Vehicles.VehicleBase;
 using LexiconExercise5_Garage.Vehicles.VehicleFactories;
 using LexiconExercise5_GarageAssignment.ConsoleRelated;
-using Microsoft.Extensions.Primitives;
 using System.Text;
 
 namespace LexiconExercise5_Garage.GaragesHandler;
@@ -17,6 +22,7 @@ public class GarageHandler
 	private readonly IGarageCreator<IVehicle> _garageCreator;
 	private readonly BuildVehicle _buildVehicle;
 	private readonly ILicensePlateRegistry _licensePlateRegistry;
+	private readonly VehiclesFilterFunctions _vehiclesFilterFunctions;
 	private Dictionary<int, IGarage<IVehicle>> _garages;
 	private readonly StringBuilder _stringBuilder = new StringBuilder();
 
@@ -24,12 +30,14 @@ public class GarageHandler
 		IConsoleUI consoleUI,
 		IGarageCreator<IVehicle> garageCreator,
 		BuildVehicle buildVehicle, 
-		ILicensePlateRegistry licensePlateRegistry)
+		ILicensePlateRegistry licensePlateRegistry,
+		VehiclesFilterFunctions vehiclesFilterFunctions)
 	{
 		_consoleUI = consoleUI;
 		_garageCreator = garageCreator;
 		_buildVehicle = buildVehicle;
 		_licensePlateRegistry = licensePlateRegistry;
+		_vehiclesFilterFunctions = vehiclesFilterFunctions;
 		_garages = new Dictionary<int, IGarage<IVehicle>>();
 	}
 
@@ -105,6 +113,9 @@ public class GarageHandler
 				case 6:
 					ListHowManyOfEachType(garageKey);
 					break;
+				case 7:
+					FilterBasedOnProperties(garageKey);
+					break;
 				case 0:
 					exitGarageHandlingMenu = true;
 					break;
@@ -113,6 +124,104 @@ public class GarageHandler
 			}
 
 		} while (!exitGarageHandlingMenu);
+	}
+
+	private void FilterBasedOnProperties(int garageKey)
+	{
+		// Extract to own class 
+		Dictionary<int, Type> VehicleTypeMap = new()
+		{
+			{ 1, typeof(AirPlain) },
+			{ 2, typeof(Boat) },
+			{ 3, typeof(Bus) },
+			{ 4, typeof(Car) },
+			{ 5, typeof(Motorcycle) },
+			// Add more types as needed
+		}; 
+	
+		List<Func<IVehicle, bool>> predicates = new();
+		bool[] chosenOptions = new bool[3];
+
+		int menuOption = -1;
+		
+		do
+		{
+			menuOption = _consoleUI.RegisterPropertyFiltersInput();
+
+			switch (menuOption)
+			{
+				case 1:
+
+					if (chosenOptions[0] == true) OnlyOnce();
+					else
+					{
+						chosenOptions[0] = true;
+						Type chosenType = VehicleTypeMap[_consoleUI.WhichFilterPropertyFromEnum<VehicleType>(message: "Chose the type of vehicle: ")];
+						predicates.Add(_vehiclesFilterFunctions.VehicleTypePredicate(chosenType)); 
+					}
+
+					break;
+				case 2:
+
+					if (chosenOptions[1] == true) OnlyOnce();
+					else
+					{
+						chosenOptions[1] = true;
+						VehicleColor chosenColor = (VehicleColor)_consoleUI.WhichFilterPropertyFromEnum<VehicleColor>(message: "Which color: ");
+						predicates.Add(_vehiclesFilterFunctions.ByColorPredicate(chosenColor));
+					}
+
+					break;
+				case 3:
+
+					if (chosenOptions[2] == true) OnlyOnce();
+					else
+					{
+						chosenOptions[2] = true;
+						CompareOptions chosenOption = (CompareOptions)_consoleUI.WhichFilterPropertyFromEnum<CompareOptions>(message: "Which Compare option do you want: ");
+						int chosenValue = (int)_consoleUI.RegisterNumericUintInput(message: "Against what value: ", rangeMin: 0, rangeMax: 58);
+					
+						predicates.Add(
+							_vehiclesFilterFunctions.ByWheelCountPredicate(
+								_vehiclesFilterFunctions.WhichNumericComparePredicate(chosenOption, chosenValue)
+							)	
+						);
+					}
+
+					break;
+				default:
+					break;
+			}
+		} while (menuOption != 4 && menuOption != 0);
+
+		void OnlyOnce()
+		{
+			_consoleUI.ShowError("Filter already applied once!");
+		}
+
+		if (menuOption == 4)
+		{
+			var filtrableList = _garages[garageKey].PerformedLinqQuery(
+				vehicles => vehicles.ToList()
+			);
+
+			IEnumerable<IVehicle> result = ApplyFilters(filtrableList, predicates);
+
+
+			_consoleUI.DisplayFilteredInformation(result);
+		}
+	}
+
+	private IEnumerable<IVehicle> ApplyFilters(
+		IEnumerable<IVehicle> filtrableList,
+		List<Func<IVehicle, bool>> predicates)
+	{
+		IEnumerable<IVehicle> result = filtrableList;
+
+		foreach (var predicate in predicates)
+			result = result.Where(predicate);
+
+		return result;
 	}
 
 	private void ListHowManyOfEachType(int garageKey)
@@ -131,11 +240,14 @@ public class GarageHandler
 		_stringBuilder.Clear();
 	}
 
-	//"6: Get filtered information of all vehicles.\n" +
-	//"0: Exit garage handling menu.\n\n"
+
 	private void ListAllVehicles(int garageKey)
 	{
-		var vehicleLicensePlates = _garages[garageKey].ListAllVehiclesLicensePlates();
+		var vehicleLicensePlates = _garages[garageKey].PerformedLinqQuery( vehicles => 
+			vehicles 
+				.Where(vehicle => vehicle != null)
+				.Select(vehicle => vehicle.LicensePlate)
+		);
 
 		foreach (var licensePlate in vehicleLicensePlates)
 			_stringBuilder.Append($"{licensePlate}\n");
