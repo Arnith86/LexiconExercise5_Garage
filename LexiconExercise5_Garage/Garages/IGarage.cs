@@ -30,12 +30,6 @@ namespace LexiconExercise5_Garage.Garages
 		/// <returns>True if the vehicle was successfully added; otherwise, false.</returns>
 		bool AddVehicle(T vehicle);
 
-		///// <summary>
-		///// Gets a collection containing string representations of license plates of all vehicles in the garage.
-		///// </summary>
-		///// <returns>An enumerable of strings each vehicle license plates.</returns>
-		//IEnumerable<string> ListAllVehiclesLicensePlates();
-
 		/// <summary>
 		/// Returns an enumerator that iterates through the vehicles in the garage.
 		/// </summary>
