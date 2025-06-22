@@ -200,10 +200,17 @@ namespace LexiconExercise5_GarageAssignment.ConsoleRelated
 
 		public void DisplayFilteredInformation(IEnumerable<IVehicle> result)
 		{
-			foreach (var vehicle in result)
-				_consoleWP.WriteLine(vehicle.ToString());
+			if (result.Count() > 0)
+			{
+				foreach (var vehicle in result)
+					_consoleWP.WriteLine(vehicle.ToString());
+			}
+			else
+			{
+				ShowFeedbackMessage("No matches to your search..");
+			}
 
-			_consoleWP.ReadKey();
+				_consoleWP.ReadKey();
 		}
 	}
 }

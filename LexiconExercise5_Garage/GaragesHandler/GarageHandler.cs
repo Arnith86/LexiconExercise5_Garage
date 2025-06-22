@@ -128,7 +128,7 @@ public class GarageHandler
 
 	private void FilterBasedOnProperties(int garageKey)
 	{
-		// Extract to own class 
+		// ToDo: Extract to own class 
 		Dictionary<int, Type> VehicleTypeMap = new()
 		{
 			{ 1, typeof(AirPlain) },
@@ -157,7 +157,11 @@ public class GarageHandler
 					{
 						chosenOptions[0] = true;
 						Type chosenType = VehicleTypeMap[_consoleUI.WhichFilterPropertyFromEnum<VehicleType>(message: "Chose the type of vehicle: ")];
-						predicates.Add(_vehiclesFilterFunctions.VehicleTypePredicate(chosenType)); 
+						
+						FilterSelectionAdded(
+							message: $"Filter by {chosenType.Name}", 
+							predicate: _vehiclesFilterFunctions.VehicleTypePredicate(chosenType)
+						);
 					}
 
 					break;
@@ -168,7 +172,11 @@ public class GarageHandler
 					{
 						chosenOptions[1] = true;
 						VehicleColor chosenColor = (VehicleColor)_consoleUI.WhichFilterPropertyFromEnum<VehicleColor>(message: "Which color: ");
-						predicates.Add(_vehiclesFilterFunctions.ByColorPredicate(chosenColor));
+						
+						FilterSelectionAdded(
+							message: $"Filter by {chosenColor}",
+							predicate: _vehiclesFilterFunctions.ByColorPredicate(chosenColor)
+						);
 					}
 
 					break;
@@ -180,11 +188,12 @@ public class GarageHandler
 						chosenOptions[2] = true;
 						CompareOptions chosenOption = (CompareOptions)_consoleUI.WhichFilterPropertyFromEnum<CompareOptions>(message: "Which Compare option do you want: ");
 						int chosenValue = (int)_consoleUI.RegisterNumericUintInput(message: "Against what value: ", rangeMin: 0, rangeMax: 58);
-					
-						predicates.Add(
-							_vehiclesFilterFunctions.ByWheelCountPredicate(
+
+						FilterSelectionAdded(
+							message: $"Filter by {EnumHelper.GetEnumDescription(chosenOption)} {chosenValue}",
+							predicate: _vehiclesFilterFunctions.ByWheelCountPredicate(
 								_vehiclesFilterFunctions.WhichNumericComparePredicate(chosenOption, chosenValue)
-							)	
+							)
 						);
 					}
 
@@ -197,6 +206,12 @@ public class GarageHandler
 		void OnlyOnce()
 		{
 			_consoleUI.ShowError("Filter already applied once!");
+		}
+
+		void FilterSelectionAdded(string message, Func<IVehicle, bool> predicate)
+		{
+			_consoleUI.ShowFeedbackMessage(message);
+			predicates.Add(predicate);
 		}
 
 		if (menuOption == 4)
