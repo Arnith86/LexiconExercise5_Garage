@@ -16,6 +16,13 @@ using System.Text;
 
 namespace LexiconExercise5_Garage.GaragesHandler;
 
+/// <summary>
+/// Handles user interactions and operations related to garages and parked vehicles.
+/// Functions as a go between of the garage and user interface. 
+/// </summary>
+/// <remarks>
+/// Provides menu navigation, garage creation, vehicle parking/removal, and filtering operations.
+/// </remarks>
 public class GarageHandler
 {
 	private readonly IConsoleUI _consoleUI;
@@ -23,13 +30,17 @@ public class GarageHandler
 	private readonly BuildVehicle _buildVehicle;
 	private readonly ILicensePlateRegistry _licensePlateRegistry;
 	private readonly VehiclesFilterFunctions _vehiclesFilterFunctions;
+
 	private Dictionary<int, IGarage<IVehicle>> _garages;
 	private readonly StringBuilder _stringBuilder = new StringBuilder();
 
+	/// <summary>
+	/// Initializes a new instance of <see cref="GarageHandler"/> with dependencies.
+	/// </summary>
 	public GarageHandler(
 		IConsoleUI consoleUI,
 		IGarageCreator<IVehicle> garageCreator,
-		BuildVehicle buildVehicle, 
+		BuildVehicle buildVehicle,
 		ILicensePlateRegistry licensePlateRegistry,
 		VehiclesFilterFunctions vehiclesFilterFunctions)
 	{
@@ -41,6 +52,9 @@ public class GarageHandler
 		_garages = new Dictionary<int, IGarage<IVehicle>>();
 	}
 
+	/// <summary>
+	/// Displays the main menu and processes user selections.
+	/// </summary>
 	public void MainMenuSelection()
 	{
 		bool exitProgram = false;
@@ -67,6 +81,35 @@ public class GarageHandler
 		} while (!exitProgram);
 	}
 
+	/// <summary>
+	/// Starts the garage creation process based on user input.
+	/// </summary>
+	public void GarageCreation()
+	{
+		bool isValid = false;
+		int size = 0;
+
+		do
+		{
+			size = _consoleUI.GetGarageSize();
+
+			try
+			{
+				int newKey = _garages.Any() ? _garages.Keys.Max() + 1 : 0;
+				_garages.Add(newKey, _garageCreator.CreateGarage(size));
+
+				isValid = true;
+			}
+			catch (ArgumentOutOfRangeException e)
+			{
+				_consoleUI.ShowError(message: e.Message);
+			}
+
+		} while (!isValid);
+
+		_consoleUI.ShowFeedbackMessage($"Garage of size {size} created!");
+	}
+
 	private bool AnyGaragesExist()
 	{
 		if (_garages.Count > 0) return true;
@@ -76,15 +119,10 @@ public class GarageHandler
 		return false;
 	}
 
-	/*
-	  			"1: Park a mixed set of licensePlate in garage. (This is your fast forward licensePlate adding for testing\n" + // only works ONCE per execution with mixed licensePlate garages for now 
-				"2: Park a licensePlate in garage.\n" +
-				"3: Remove a licensePlate, from garage.\n" +
-				"4: Get licensePlate information of a single licensePlate, currently parked in garage.\n" +
-				"5: Get licensePlate information of all vehicles, currently parked in garage.\n" +
-				"6: Get filtered information of all vehicles.\n" +
-				"0: Exit garage handling menu.\n\n"
-	 */
+	/// <summary>
+	/// Handles operations inside a specific garage, such as parking, removing, or listing vehicles.
+	/// </summary>
+	/// <param name="garageKey">The key (ID) of the garage to operate on.</param>
 	private void GarageHandlingMenuSelection(int garageKey)
 	{
 		bool exitGarageHandlingMenu = false;
@@ -105,13 +143,13 @@ public class GarageHandler
 					RemoveAVehicle(garageKey);
 					break;
 				case 4:
-					GetVehicleInformation(garageKey, singleVehicle: true);
+					GetVehicleInformation(garageKey);
 					break;
 				case 5:
 					ListAllVehicles(garageKey);
 					break;
 				case 6:
-					ListHowManyOfEachType(garageKey);
+					ListHowManyVehiclesOfEachType(garageKey);
 					break;
 				case 7:
 					FilterBasedOnProperties(garageKey);
@@ -126,6 +164,10 @@ public class GarageHandler
 		} while (!exitGarageHandlingMenu);
 	}
 
+	/// <summary>
+	/// Prompts user to apply one or more filters to the vehicle collection and displays the result.
+	/// </summary>
+	/// <param name="garageKey">Garage to filter vehicles in.</param>
 	private void FilterBasedOnProperties(int garageKey)
 	{
 		// ToDo: Extract to own class 
@@ -137,13 +179,13 @@ public class GarageHandler
 			{ 4, typeof(Car) },
 			{ 5, typeof(Motorcycle) },
 			// Add more types as needed
-		}; 
-	
+		};
+
 		List<Func<IVehicle, bool>> predicates = new();
 		bool[] chosenOptions = new bool[3];
 
 		int menuOption = -1;
-		
+
 		do
 		{
 			menuOption = _consoleUI.RegisterPropertyFiltersInput();
@@ -157,9 +199,9 @@ public class GarageHandler
 					{
 						chosenOptions[0] = true;
 						Type chosenType = VehicleTypeMap[_consoleUI.WhichFilterPropertyFromEnum<VehicleType>(message: "Chose the type of vehicle: ")];
-						
+
 						FilterSelectionAdded(
-							message: $"Filter by {chosenType.Name}", 
+							message: $"Filter by {chosenType.Name}",
 							predicate: _vehiclesFilterFunctions.VehicleTypePredicate(chosenType)
 						);
 					}
@@ -172,7 +214,7 @@ public class GarageHandler
 					{
 						chosenOptions[1] = true;
 						VehicleColor chosenColor = (VehicleColor)_consoleUI.WhichFilterPropertyFromEnum<VehicleColor>(message: "Which color: ");
-						
+
 						FilterSelectionAdded(
 							message: $"Filter by {chosenColor}",
 							predicate: _vehiclesFilterFunctions.ByColorPredicate(chosenColor)
@@ -227,6 +269,12 @@ public class GarageHandler
 		}
 	}
 
+	/// <summary>
+	/// Applies a list of filtering predicates to the provided vehicle collection.
+	/// </summary>
+	/// <param name="filtrableList">The collection of vehicles to filter.</param>
+	/// <param name="predicates">Filtering conditions.</param>
+	/// <returns>Filtered vehicle collection.</returns>
 	private IEnumerable<IVehicle> ApplyFilters(
 		IEnumerable<IVehicle> filtrableList,
 		List<Func<IVehicle, bool>> predicates)
@@ -239,9 +287,9 @@ public class GarageHandler
 		return result;
 	}
 
-	private void ListHowManyOfEachType(int garageKey)
+	private void ListHowManyVehiclesOfEachType(int garageKey)
 	{
-		var vehicleTypeCounter = _garages[garageKey].PerformedLinqQuery( vehicles =>
+		var vehicleTypeCounter = _garages[garageKey].PerformedLinqQuery(vehicles =>
 			vehicles
 				.GroupBy(vehicle => vehicle.GetType().Name)
 				.Select(group => $"{group.Key}: {group.Count()}")
@@ -250,29 +298,36 @@ public class GarageHandler
 		foreach (var item in vehicleTypeCounter)
 			_stringBuilder.Append($"{item}\n");
 
-		_consoleUI.DisplayInformation( _stringBuilder.ToString());
+		_consoleUI.DisplayInformation(_stringBuilder.ToString());
 
 		_stringBuilder.Clear();
 	}
 
-
+	/// <summary>
+	/// Displays license plates of all vehicles in the specified garage.
+	/// </summary>
+	/// <param name="garageKey">The ID of the garage.</param>
 	private void ListAllVehicles(int garageKey)
 	{
-		var vehicleLicensePlates = _garages[garageKey].PerformedLinqQuery( vehicles => 
-			vehicles 
+		var vehicleLicensePlates = _garages[garageKey].PerformedLinqQuery(vehicles =>
+			vehicles
 				.Where(vehicle => vehicle != null)
 				.Select(vehicle => vehicle.LicensePlate)
 		);
 
 		foreach (var licensePlate in vehicleLicensePlates)
 			_stringBuilder.Append($"{licensePlate}\n");
-			
+
 		_consoleUI.DisplayInformation(_stringBuilder.ToString());
 
 		_stringBuilder.Clear();
 	}
 
-	private void GetVehicleInformation(int garageKey, bool singleVehicle)
+	/// <summary>
+	/// Displays information for a specific vehicle in a garage.
+	/// </summary>
+	/// <param name="garageKey">The garage ID.</param>
+	private void GetVehicleInformation(int garageKey)
 	{
 		string chosenLicensePlate = string.Empty;
 		bool validLicensePlate = false;
@@ -307,7 +362,7 @@ public class GarageHandler
 			}
 
 		} while (!validLicensePlate);
-		
+
 	}
 
 	private void RemoveAVehicle(int garageKey)
@@ -348,7 +403,10 @@ public class GarageHandler
 		} while (!validLicensePlate);
 	}
 
-
+	/// <summary>
+	/// Displays vehicle creation menu, creates the vehicle, and parks it.
+	/// </summary>
+	/// <param name="garageKey">Garage to park the vehicle in.</param>
 	private void WhatVehicleToCreateMenu(int garageKey)
 	{
 		int selectedVehicle = _consoleUI.RegisterWhatVehicleToCreateMenu();
@@ -378,7 +436,10 @@ public class GarageHandler
 		}
 	}
 
-
+	/// <summary>
+	/// Prompts the user to select an existing garage.
+	/// </summary>
+	/// <returns>The ID of the selected garage.</returns>
 	private int SelectGarage()
 	{
 		bool isValid = false;
@@ -399,34 +460,4 @@ public class GarageHandler
 
 		return chosenGarage;
 	}
-
-	/// <summary>
-	/// Initiates <see cref="Garages"/> creation.
-	/// </summary>
-	public void GarageCreation()
-	{
-		bool isValid = false;
-		int size = 0;
-
-		do
-		{
-			size = _consoleUI.GetGarageSize();
-
-			try
-			{
-				int newKey = _garages.Any() ? _garages.Keys.Max() + 1 : 0;
-				_garages.Add(newKey, _garageCreator.CreateGarage(size));
-
-				isValid = true;
-			}
-			catch (ArgumentOutOfRangeException e)
-			{
-				_consoleUI.ShowError(message: e.Message);
-			}
-
-		} while (!isValid);
-
-		_consoleUI.ShowFeedbackMessage($"Garage of size {size} created!");
-	}
-
 }
