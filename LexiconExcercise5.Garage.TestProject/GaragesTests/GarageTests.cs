@@ -131,6 +131,9 @@ public class GarageTests
 		Dispose(tempFile, registry);
 	}
 
+	/// <summary>
+	/// Verifies that a garage initialized with a vehicle limit of 52 has the correct capacity and limits.
+	/// </summary>
 	[Fact]
 	public void GarageVehicleLimit_SetViaConstructor_ValidValues_ShouldPass_Expected_UsedSpaces0_Capacity64_GarageVehicleLimit52()
 	{
@@ -157,6 +160,9 @@ public class GarageTests
 		Dispose(tempFile, registry);
 	}
 
+	/// <summary>
+	/// Verifies that invalid garage sizes (e.g., too small or too large) throw ArgumentOutOfRangeException.
+	/// </summary>
 	[Theory]
 	[InlineData(_c_ArraySizeOverUpperLimit524289)]
 	[InlineData(_c_ArraySizeBellowLowerLimit0)]
@@ -199,6 +205,9 @@ public class GarageTests
 		Dispose(tempFile, registry);
 	}
 
+	/// <summary>
+	/// Verifies that information is correctly returned for each vehicle present in the garage.
+	/// </summary>
 	[Fact]
 	public void GetVehicleInformation_IfHasSpecifiedVehicle_ValidValue_ShouldPass_Expected_String()
 	{
@@ -226,6 +235,9 @@ public class GarageTests
 	}
 
 
+	/// <summary>
+	/// Verifies that requesting vehicle info for a license plate not in the garage returns null.
+	/// </summary>
 	[Fact]
 	public void GetVehicleInformation_IfSpecifiedVehicleNotInGarage_ValidValue_ShouldPass_Expected_null()
 	{
@@ -249,8 +261,11 @@ public class GarageTests
 		Dispose(tempFile, registry);
 	}
 
+	/// <summary>
+	/// Verifies that all vehicle license plates can be retrieved from the garage via LINQ query.
+	/// </summary>
 	[Fact]
-	public void GetAllVehiclesInformation_VerifiesAllInformationIsRetrieved_ShouldPass_Returns_StringCollection()
+	public void GetAllVehiclesInformation_VerifiesAllInformationIsRetrieved_ShouldPass_Returns_ListOfLicensePlates()
 	{
 		// Arrange
 		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
@@ -285,6 +300,9 @@ public class GarageTests
 		Dispose(tempFile,registry);
 	}
 
+	/// <summary>
+	/// Verifies that retrieving vehicle information from an empty garage returns an empty collection.
+	/// </summary>
 	[Fact]
 	public void GetAllVehiclesInformation_GarageEmpty_ValidValue_ShouldPass_Returns_EmptyStringCollection()
 	{
@@ -309,6 +327,9 @@ public class GarageTests
 		Dispose(tempFile, registry);
 	}
 
+	/// <summary>
+	/// Verifies that vehicles are added correctly to an empty garage and updates UsedSpaces appropriately.
+	/// </summary>
 	[Fact]
 	public void AddVehicle_EmptyGarage_ShouldPass_Expected_UsedSpaces2_Capacity4()
 	{
@@ -345,6 +366,9 @@ public class GarageTests
 		Dispose(tempFile, registry);
 	}
 
+	/// <summary>
+	/// Verifies that adding a vehicle to a full garage throws an ArgumentOutOfRangeException.
+	/// </summary>
 	[Fact]
 	public void AddVehicle_FullGarage_ShouldThrowArgumentOutOfRangeException()
 	{
@@ -382,6 +406,9 @@ public class GarageTests
 		Dispose(tempFile, registry);
 	}
 
+	/// <summary>
+	/// Verifies that adding a vehicle when garage's logical vehicle limit is reached throws ArgumentOutOfRangeException.
+	/// </summary>
 	[Fact]
 	public void AddVehicle_GarageUpperLimitReached_ShouldThrowArgumentOutOfRangeException()
 	{
@@ -413,6 +440,9 @@ public class GarageTests
 		Dispose(tempFile, registry);
 	}
 
+	/// <summary>
+	/// Verifies that every kind of vehicle can be added to the garage and updates UsedSpaces correctly.
+	/// </summary>
 	[Fact]
 	public void AddVehicle_EveryKindOfVehicle_ShouldPass_Expected_UsedSpaces5_Capacity8()
 	{
