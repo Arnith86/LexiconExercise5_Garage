@@ -33,6 +33,7 @@ public class GarageHandler
 
 	private Dictionary<int, IGarage<IVehicle>> _garages;
 	private readonly StringBuilder _stringBuilder = new StringBuilder();
+	private readonly VehicleTypeMap _vehicleTypeMap = VehicleTypeMap.Default;
 
 	/// <summary>
 	/// Initializes a new instance of <see cref="GarageHandler"/> with dependencies.
@@ -170,17 +171,6 @@ public class GarageHandler
 	/// <param name="garageKey">Garage to filter vehicles in.</param>
 	private void FilterBasedOnProperties(int garageKey)
 	{
-		// ToDo: Extract to own class 
-		Dictionary<int, Type> VehicleTypeMap = new()
-		{
-			{ 1, typeof(AirPlain) },
-			{ 2, typeof(Boat) },
-			{ 3, typeof(Bus) },
-			{ 4, typeof(Car) },
-			{ 5, typeof(Motorcycle) },
-			// Add more types as needed
-		};
-
 		List<Func<IVehicle, bool>> predicates = new();
 		bool[] chosenOptions = new bool[3];
 
@@ -198,7 +188,7 @@ public class GarageHandler
 					else
 					{
 						chosenOptions[0] = true;
-						Type chosenType = VehicleTypeMap[_consoleUI.WhichFilterPropertyFromEnum<VehicleType>(message: "Chose the type of vehicle: ")];
+						Type chosenType = _vehicleTypeMap.Map[_consoleUI.WhichFilterPropertyFromEnum<VehicleType>(message: "Chose the type of vehicle: ")];
 
 						FilterSelectionAdded(
 							message: $"Filter by {chosenType.Name}",
@@ -245,27 +235,21 @@ public class GarageHandler
 			}
 		} while (menuOption != 4 && menuOption != 0);
 
-		void OnlyOnce()
+
+		if (menuOption == 4)
 		{
-			_consoleUI.ShowError("Filter already applied once!");
+			var filtrableList = _garages[garageKey].PerformedLinqQuery(	vehicles => vehicles.ToList());
+
+			IEnumerable<IVehicle> result = ApplyFilters(filtrableList, predicates);
+			_consoleUI.DisplayFilteredInformation(result);
 		}
+		
+		void OnlyOnce() => _consoleUI.ShowError("Filter already applied once!");
 
 		void FilterSelectionAdded(string message, Func<IVehicle, bool> predicate)
 		{
 			_consoleUI.ShowFeedbackMessage(message);
 			predicates.Add(predicate);
-		}
-
-		if (menuOption == 4)
-		{
-			var filtrableList = _garages[garageKey].PerformedLinqQuery(
-				vehicles => vehicles.ToList()
-			);
-
-			IEnumerable<IVehicle> result = ApplyFilters(filtrableList, predicates);
-
-
-			_consoleUI.DisplayFilteredInformation(result);
 		}
 	}
 
