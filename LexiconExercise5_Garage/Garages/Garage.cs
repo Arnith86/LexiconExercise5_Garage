@@ -84,10 +84,7 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : IVehicle
 		_capacity = newCapacity;
 	}
 
-	private bool IsCapacityToSmall(int newCapacity)
-	{
-		return _capacity < newCapacity;
-	}
+	private bool IsCapacityToSmall(int newCapacity) => _capacity < newCapacity;
 
 	/// <summary>
 	/// Calculates the array size as a power of two that is equal to or greater than the given size.
