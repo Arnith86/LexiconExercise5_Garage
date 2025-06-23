@@ -66,9 +66,9 @@ namespace LexiconExercise5_Garage.Garages
 		/// An <see cref="IEnumerable{TResult}"/> containing the results of the query.
 		/// </returns>
 		public IEnumerable<TResult> PerformedLinqQuery<TResult>(
-			Func< 
-				IEnumerable<T>, 
-				IEnumerable<TResult> 
+			Func<
+				IEnumerable<T>,
+				IEnumerable<TResult>
 				> query);
 	}
 }
