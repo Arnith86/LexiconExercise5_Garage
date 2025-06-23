@@ -3,12 +3,7 @@ using LexiconExercise5_Garage.Garages;
 using LexiconExercise5_Garage.Garages.GarageFactory;
 using LexiconExercise5_Garage.Util;
 using LexiconExercise5_Garage.Vehicles;
-using LexiconExercise5_Garage.Vehicles.AirPlains;
-using LexiconExercise5_Garage.Vehicles.Boats;
-using LexiconExercise5_Garage.Vehicles.Buss;
-using LexiconExercise5_Garage.Vehicles.Cars;
 using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
-using LexiconExercise5_Garage.Vehicles.Motorcycles;
 using LexiconExercise5_Garage.Vehicles.VehicleBase;
 using LexiconExercise5_Garage.Vehicles.VehicleFactories;
 using LexiconExercise5_GarageAssignment.ConsoleRelated;
@@ -70,7 +65,8 @@ public class GarageHandler
 					GarageCreation();
 					break;
 				case 2:
-					if (AnyGaragesExist()) GarageHandlingMenuSelection(garageKey: SelectGarage());
+					if (AnyGaragesExist())
+						GarageHandlingMenuSelection(garageKey: SelectGarage());
 					break;
 				case 0:
 					exitProgram = true;
@@ -238,12 +234,12 @@ public class GarageHandler
 
 		if (menuOption == 4)
 		{
-			var filtrableList = _garages[garageKey].PerformedLinqQuery(	vehicles => vehicles.ToList());
+			var filtrableList = _garages[garageKey].PerformedLinqQuery(vehicles => vehicles.ToList());
 
 			IEnumerable<IVehicle> result = ApplyFilters(filtrableList, predicates);
 			_consoleUI.DisplayFilteredInformation(result);
 		}
-		
+
 		void OnlyOnce() => _consoleUI.ShowError("Filter already applied once!");
 
 		void FilterSelectionAdded(string message, Func<IVehicle, bool> predicate)
