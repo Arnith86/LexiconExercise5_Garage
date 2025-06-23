@@ -10,6 +10,10 @@ using Moq;
 
 namespace LexiconExcercise5.Garage.TestProject.GarageHandlersTests;
 
+/// <summary>
+/// Unit tests for the <see cref="GarageHandler"/> class, covering garage creation,
+/// main menu interactions, and vehicle handling in garages.
+/// </summary>
 [Collection("NonParallelGroup")] // Will not run in parallel with any other class in the same collection
 public class GarageHandlerTests
 {
@@ -44,6 +48,9 @@ public class GarageHandlerTests
 	private readonly IVehicleFactory _vehicleFactory = new VehicleFactory();
 	private readonly VehiclesFilterFunctions _vehiclesFilterFunctions = new VehiclesFilterFunctions();
 
+	/// <summary>
+	/// Verifies that a garage can be created with valid sizes, and a feedback message is shown once.
+	/// </summary>
 	[Theory]
 	[InlineData(_c_ArraySizeEdgeCaseMin1)]
 	[InlineData(_c_ArraySizeBeforeLimit4)]
@@ -71,7 +78,9 @@ public class GarageHandlerTests
 		Dispose(tempFile, registry);
 	}
 
-
+	/// <summary>
+	/// Verifies that the garage creation loop gracefully handles invalid inputs.
+	/// </summary>
 	[Theory]
 	[InlineData(_c_ArraySizeNegative, _c_ArraySizeBeforeLimit4)]
 	[InlineData(_c_ArraySizeOverUpperLimit524289, _c_ArraySizeBeforeLimit4)]
@@ -103,6 +112,9 @@ public class GarageHandlerTests
 		Dispose(tempFile, registry);
 	}
 
+	/// <summary>
+	/// Verifies that selecting the garage creation option from the main menu results in garage creation.
+	/// </summary>
 	[Fact]
 	public void MainMenuSelection_GarageCreationSelected_GarageIsCreated_ShouldPass()
 	{
@@ -133,6 +145,9 @@ public class GarageHandlerTests
 		Dispose(tempFile, registry);
 	}
 
+	/// <summary>
+	/// Verifies that an existing garage can be selected from the main menu and a feedback message is shown.
+	/// </summary>
 	[Fact]
 	public void MainMenuSelection_SelectGarageSelected_GarageSelected_GarageExists_ShowFeedBackMessage_ShouldPass()
 	{
@@ -168,6 +183,9 @@ public class GarageHandlerTests
 		Dispose(tempFile, registry);
 	}
 
+	/// <summary>
+	/// Verifies that attempting to select a non-existent garage from the main menu triggers an error message.
+	/// </summary>
 	[Fact]
 	public void MainMenuSelection_SelectGarageSelected_GarageSelected_GarageDoesNotExists_ShowError_ShouldPass()
 	{
@@ -200,6 +218,9 @@ public class GarageHandlerTests
 		Dispose(tempFile, registry);
 	}
 
+	/// <summary>
+	/// Verifies that a mixed set of vehicles can be added to a newly created garage, and feedback is shown.
+	/// </summary>
 	[Fact]
 	public void GarageHandlingMenuSelection_AddMixedSetOfVehiclesToGarage_FirstTime_Successful_ShowFeedbackMessage_ShouldPass()
 	{
@@ -244,6 +265,9 @@ public class GarageHandlerTests
 		Dispose(tempFile, registry);
 	}
 
+	/// <summary>
+	/// Verifies that adding a mixed set of vehicles twice to the same garage triggers an error on the second attempt.
+	/// </summary>
 	[Fact]
 	public void GarageHandlingMenuSelection_AddMixedSetOfVehiclesToGarage_SecondTime_Fail_ShowErrorMessage_ShouldPass()
 	{
