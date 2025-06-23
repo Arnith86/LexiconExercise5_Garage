@@ -19,8 +19,8 @@ namespace LexiconExercise5_GarageAssignment;
 
 internal class Program
 {
-    static void Main(string[] args)
-    {
+	static void Main(string[] args)
+	{
 
 		var host = Host.CreateDefaultBuilder(args)
 			.ConfigureServices(services =>
@@ -30,21 +30,21 @@ internal class Program
 				services.AddSingleton<IDisplayErrorMessages, DisplayErrorMessages>();
 				services.AddSingleton<IDisplayMenuMessages, DisplayMenuMessages>();
 				services.AddSingleton<IDisplayFeedbackMessage, DisplayFeedBackMessage>();
-				services.AddSingleton<ILicensePlateRegistry, LicensePlateRegistry>(); 
-				services.AddSingleton<IVehicleFactory, VehicleFactory>(); 
+				services.AddSingleton<ILicensePlateRegistry, LicensePlateRegistry>();
+				services.AddSingleton<IVehicleFactory, VehicleFactory>();
 				services.AddSingleton<IGarageCreator<IVehicle>, GarageMixedCreator<IVehicle>>();
 				services.AddSingleton<VehiclesFilterFunctions>();
 				services.AddSingleton<BuildVehicle>();
-							
-				
+
+
 
 				services.AddSingleton<GarageHandler>();
-				
+
 			})
 			.UseConsoleLifetime()
 			.Build();
 
 		host.Services.GetRequiredService<GarageHandler>().MainMenuSelection();
-	
-    }
+
+	}
 }
