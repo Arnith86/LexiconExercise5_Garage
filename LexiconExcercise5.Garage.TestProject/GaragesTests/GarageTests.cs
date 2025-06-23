@@ -30,9 +30,12 @@ public class GarageTests
 	private const int _c_ArraySizeBeforeLimit4 = 4;
 	private const int _c_ArraySizeAfterLimit5 = 5;
 	private const int _c_ArraySizeEdgeCaseHighestValue = 524288;
+	private const int _c_GarageVehicleLimit_52 = 52;
+
 
 	// Invalid garage sizes.
 	private const int _c_ArraySizeNegative = -1;
+	private const int _c_ArraySizeBellowLowerLimit0 = 0;
 	private const int _c_ArraySizeOverUpperLimit524289 = 524289;
 
 	// Valid collection with a vehicle of every kind
@@ -128,6 +131,50 @@ public class GarageTests
 		Dispose(tempFile, registry);
 	}
 
+	[Fact]
+	public void GarageVehicleLimit_SetViaConstructor_ValidValues_ShouldPass_Expected_UsedSpaces0_Capacity64_GarageVehicleLimit52()
+	{
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		// Act
+		IGarageCreator<TestVehicle> garageCreator = new GarageMixedCreator<TestVehicle>(registry);
+
+		int expectedUsedSpaces = 0;
+		int expectedCapacity = 64;
+		int expectedVehicleLimit = 52;
+		
+
+		IGarage<TestVehicle> garage = garageCreator.CreateGarage(_c_GarageVehicleLimit_52);
+
+		//Assert
+		Assert.Equal(expectedCapacity, garage.Capacity);
+		Assert.Equal(expectedUsedSpaces, garage.UsedSpaces);
+		Assert.Equal(expectedVehicleLimit, garage.GarageVehicleLimit);
+
+		// Cleanup
+		Dispose(tempFile, registry);
+	}
+
+	[Theory]
+	[InlineData(_c_ArraySizeOverUpperLimit524289)]
+	[InlineData(_c_ArraySizeBellowLowerLimit0)]
+	public void GarageVehicleLimit_SetViaConstructor_InValidValues_ShouldThrow_ArgumentOutOfRangeException(int value)
+	{
+		// Arrange
+		string tempFile = Path.Combine(Path.GetTempPath(), $"test-{Guid.NewGuid()}.json");
+		ILicensePlateRegistry registry = new MockLicensePlateRegistry(tempFile);
+
+		// Act
+		IGarageCreator<TestVehicle> garageCreator = new GarageMixedCreator<TestVehicle>(registry);
+		
+		//Assert
+		Assert.Throws<ArgumentOutOfRangeException>(() => garageCreator.CreateGarage(value));
+
+		// Cleanup
+		Dispose(tempFile, registry);
+	}
 
 	/// <summary>
 	/// Verifies that invalid sizes (negative or over max limit) throw ArgumentOutOfRangeException.
