@@ -213,19 +213,25 @@ public class GarageTests
 
 		IGarage<Vehicle> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
 
+		List<string> expected = new List<string>();
+
 		foreach (var vehicle in oneVehiclesOfEveryKind)
 		{
 			garage.AddVehicle(vehicle);
+			expected.Add(vehicle.LicensePlate);
 		}
 
-		List<string> toStringCollection = garage.ListAllVehiclesLicensePlates()!.ToList();
-
-		int index = 0;
-
+		var vehicleLicensePlates = garage.PerformedLinqQuery(vehicles =>
+			vehicles
+				.Where(vehicle => vehicle != null)
+				.Select(vehicle => vehicle.LicensePlate)
+		);
+		
+		
 		//Act & Assert
 		foreach (var vehicle in oneVehiclesOfEveryKind)
 		{
-			Assert.Contains(vehicle.ToString(), toStringCollection[index++]);
+			Assert.Equal(expected, vehicleLicensePlates);
 		}
 
 		// Cleanup
@@ -241,12 +247,16 @@ public class GarageTests
 
 		IGarageCreator<Vehicle> garageCreator = new GarageMixedCreator<Vehicle>(registry);
 		IGarage<Vehicle> garage = garageCreator.CreateGarage(_c_ArraySizeEdgeCaseHighestValue);
-		
+
 		//Act
-		List<string> toStringCollection = garage.ListAllVehiclesLicensePlates()!.ToList();
-		
+		var vehicleLicensePlates = garage.PerformedLinqQuery(vehicles =>
+		vehicles
+			.Where(vehicle => vehicle != null)
+			.Select(vehicle => vehicle.LicensePlate)
+		);
+
 		//Assert
-		Assert.True(toStringCollection.Count == 0);
+		Assert.True(vehicleLicensePlates.Count() == 0);
 
 		// Cleanup
 		Dispose(tempFile, registry);

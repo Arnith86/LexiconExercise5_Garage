@@ -1,6 +1,7 @@
 ﻿using LexiconExcercise5.Garage.TestProject.Vehicles.Mocks;
 using LexiconExercise5_Garage.Garages.GarageFactory;
 using LexiconExercise5_Garage.GaragesHandler;
+using LexiconExercise5_Garage.Util;
 using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
 using LexiconExercise5_Garage.Vehicles.VehicleBase;
 using LexiconExercise5_Garage.Vehicles.VehicleFactories;
@@ -41,7 +42,8 @@ public class GarageHandlerTests
 	private const int _c_ExitMenu_0 = 0;
 
 	private readonly IVehicleFactory _vehicleFactory = new VehicleFactory();
-	
+	private readonly VehiclesFilterFunctions _vehiclesFilterFunctions = new VehiclesFilterFunctions();
+
 	[Theory]
 	[InlineData(_c_ArraySizeEdgeCaseMin1)]
 	[InlineData(_c_ArraySizeBeforeLimit4)]
@@ -55,9 +57,9 @@ public class GarageHandlerTests
 		Mock<IConsoleUI> mockConsoleUI = new();
 		mockConsoleUI.Setup(cUI => cUI.GetGarageSize()).Returns(size);
 
-		BuildVehicle buildVehicle = new BuildVehicle(_vehicleFactory, registry,  mockConsoleUI.Object);
+		BuildVehicle buildVehicle = new BuildVehicle(_vehicleFactory, registry, mockConsoleUI.Object);
 
-		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object, garageCreator, buildVehicle, registry);
+		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object, garageCreator, buildVehicle, registry, _vehiclesFilterFunctions);
 
 		// Act
 		garageHandler.GarageCreation();
@@ -88,7 +90,7 @@ public class GarageHandlerTests
 
 		BuildVehicle buildVehicle = new BuildVehicle(_vehicleFactory, registry, mockConsoleUI.Object);
 
-		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object, garageCreator, buildVehicle, registry);
+		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object, garageCreator, buildVehicle, registry, _vehiclesFilterFunctions);
 
 		// Act
 		garageHandler.GarageCreation();
@@ -119,7 +121,7 @@ public class GarageHandlerTests
 
 		BuildVehicle buildVehicle = new BuildVehicle(_vehicleFactory, registry, mockConsoleUI.Object);
 
-		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object, garageCreator, buildVehicle, registry);
+		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object, garageCreator, buildVehicle, registry, _vehiclesFilterFunctions);
 
 		// Act
 		garageHandler.MainMenuSelection();
@@ -153,7 +155,7 @@ public class GarageHandlerTests
 
 		BuildVehicle buildVehicle = new BuildVehicle(_vehicleFactory, registry, mockConsoleUI.Object);
 
-		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object, garageCreator, buildVehicle, registry);
+		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object, garageCreator, buildVehicle, registry, _vehiclesFilterFunctions);
 
 		// Act
 		garageHandler.MainMenuSelection();
@@ -186,7 +188,7 @@ public class GarageHandlerTests
 
 		BuildVehicle buildVehicle = new BuildVehicle(_vehicleFactory, registry, mockConsoleUI.Object);
 
-		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object, garageCreator, buildVehicle, registry);
+		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object, garageCreator, buildVehicle, registry, _vehiclesFilterFunctions);
 
 		// Act
 		garageHandler.MainMenuSelection();
@@ -229,7 +231,7 @@ public class GarageHandlerTests
 
 		BuildVehicle buildVehicle = new BuildVehicle(_vehicleFactory, registry, mockConsoleUI.Object);
 
-		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object, garageCreator, buildVehicle, registry);
+		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object, garageCreator, buildVehicle, registry, _vehiclesFilterFunctions);
 
 		// Act
 		garageHandler.MainMenuSelection();
@@ -274,7 +276,7 @@ public class GarageHandlerTests
 
 		BuildVehicle buildVehicle = new BuildVehicle(_vehicleFactory, registry, mockConsoleUI.Object);
 
-		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object, garageCreator, buildVehicle, registry);
+		GarageHandler garageHandler = new GarageHandler(mockConsoleUI.Object, garageCreator, buildVehicle, registry, _vehiclesFilterFunctions);
 
 		// Act
 		garageHandler.MainMenuSelection();
