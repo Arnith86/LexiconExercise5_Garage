@@ -1,12 +1,12 @@
 ﻿using LexiconExercise5_Garage.Vehicles;
+using LexiconExercise5_Garage.Vehicles.AirPlains;
 using LexiconExercise5_Garage.Vehicles.Boats;
 using LexiconExercise5_Garage.Vehicles.Buss;
 using LexiconExercise5_Garage.Vehicles.Cars;
-using LexiconExercise5_Garage.Vehicles.AirPlains;
-using LexiconExercise5_Garage.Vehicles.Motorcycles;
-using System.Collections;
 using LexiconExercise5_Garage.Vehicles.LicensePlate.Registry;
+using LexiconExercise5_Garage.Vehicles.Motorcycles;
 using LexiconExercise5_Garage.Vehicles.VehicleBase;
+using System.Collections;
 
 namespace LexiconExercise5_Garage.Garages;
 
@@ -124,7 +124,6 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : IVehicle
 
 	private bool IsWithinGarageMinMaxRange(int size)
 	{
-		// ToDo: Catch and handle this exception.
 		if (size < _c_GARAGE_SIZE_LOWER_LIMIT || size > _c_GARAGE_SIZE_UPPER_LIMIT)
 			throw new ArgumentOutOfRangeException(nameof(size), "Garage size must be within the range of 1 - 524288.");
 
@@ -135,7 +134,6 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : IVehicle
 	/// <exception cref="ArgumentOutOfRangeException">Thrown if garage is full.</exception>
 	public bool AddVehicle(T vehicle)
 	{
-		// ToDo: catch and handle this exception.
 		if (UsedSpaces == GarageVehicleLimit)
 			throw new ArgumentOutOfRangeException(nameof(vehicle), "Garage is full.");
 
@@ -161,8 +159,6 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : IVehicle
 	/// <inheritdoc/>
 	public string? GetVehicleInformation(string licensePlate)
 	{
-		// ToDo: validate inputted licensePlate value
-
 		return _vehicles
 			.Where(vehicle => vehicle != null)  // Guards against null indexes. 
 			.FirstOrDefault(vehicle =>
@@ -179,15 +175,15 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : IVehicle
 	public IEnumerable<TResult> PerformedLinqQuery<TResult>(
 		Func<IEnumerable<T>, IEnumerable<TResult>> query) =>
 		query(_vehicles.Where(vehicle => vehicle != null));
-	
+
 	/// <inheritdoc/>
 	public T? RemoveVehicle(string licensePlate)
 	{
 		// Find first index where vehicle is not null, and licensePlates are same.
-		int index = Array.FindIndex(_vehicles, vehicle => 
-			
+		int index = Array.FindIndex(_vehicles, vehicle =>
+
 			vehicle != null &&
-			
+
 			String.Equals(
 				a: licensePlate,
 				b: vehicle.LicensePlate,
@@ -219,7 +215,7 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : IVehicle
 				yield return vehicle;
 		}
 	}
-	
+
 	/// <inheritdoc/>
 	IEnumerator IEnumerable.GetEnumerator()
 	{
@@ -229,8 +225,6 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : IVehicle
 	/// <inheritdoc/>
 	public void Add40VehiclesToCollection()
 	{
-		
-
 		List<IVehicle> collectionOfDifferentVehicles = new List<IVehicle>()
 		{
 			new AirPlain(_licensePlateRegistry.IsValidLicensePlate, "abc111", VehicleColor.Red, 4, 2),
@@ -282,12 +276,9 @@ public class Garage<T> : IEnumerable<T>, IGarage<T> where T : IVehicle
 		foreach (var vehicle in collectionOfDifferentVehicles)
 		{
 			if (_licensePlateRegistry.IsUniqueLicensePlate(vehicle.LicensePlate))
-			{
 				_licensePlateRegistry.RegisterLicensePlate(vehicle.LicensePlate);
-			}
 
 			AddVehicle((T)vehicle);
 		}
 	}
-
 }
