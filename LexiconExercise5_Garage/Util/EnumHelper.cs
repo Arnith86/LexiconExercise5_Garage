@@ -6,6 +6,9 @@ using System.Reflection;
 
 public static class EnumHelper
 {
+	/// <summary>
+	/// Includes functionality to retrieve the <see cref="DescriptionAttribute"/> of an enum value if present.
+	/// </summary>
 	public static string GetEnumDescription(Enum value)
 	{
 		var field = value.GetType().GetField(value.ToString());

@@ -52,8 +52,8 @@ namespace LexiconExercise5_Garage.Vehicles.VehicleFactories
 		{
 			IVehicle builtVehicle = null!;
 
-			string licensePlate = RegisterLicensePlateInput(); 
-			
+			string licensePlate = RegisterLicensePlateInput();
+
 			_consoleUI.ShowFeedbackMessage($"Unique license plate {licensePlate} chosen!");
 
 			int color = _consoleUI.RegisterInputFromEnumOptions<VehicleColor>(
@@ -107,7 +107,7 @@ namespace LexiconExercise5_Garage.Vehicles.VehicleFactories
 					licensePlate = _consoleUI.RegisterLicensePlateInput(
 						message: "Supply a unique license plate input: "
 					);
-					
+
 					_licensePlateRegistry.IsValidLicensePlate(licensePlate);
 					validLicensePlate = true;
 				}
